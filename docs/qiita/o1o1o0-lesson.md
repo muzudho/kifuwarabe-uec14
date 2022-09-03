@@ -107,4 +107,144 @@ go.work
 
 # Step [O1o1o0g7o0] モジュール作成
 
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go mod init github.com/muzudho/kifuwarabe-uec14
+#           -----------------------------------
+#           1
+# 1. モジュール名。この部分はあなたのレポジトリに合わせて変えてほしい
+```
+
+Output:  
+
+```plaintext
+go: creating new go.mod: module github.com/muzudho/kifuwarabe-uec14
+go: to add module requirements and sums:
+        go mod tidy
+```
+
+👇 以下のファイルが自動生成される  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+👉  ├── 📄 go.mod
+  	└── 📄 go.work
+```
+
+```go
+module github.com/muzudho/kifuwarabe-uec14
+
+go 1.19
+```
+
+# Step [O1o1o0g8o0] ワークスペースズへ登録
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go work use .
+```
+
+👇 以下のファイルが自動で編集されている  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+👉 	└── 📄 go.work
+```
+
+```go
+// ...略...
+
+
+// * 以下の行が自動追加
+use .
+```
+
+# Step [O1o1o0g9o0] エントリーポイント作成
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g9o0]
+
+package main
+
+import (
+	"flag"
+	"fmt"
+)
+
+func main() {
+	flag.Parse()
+	// プログラム名
+	var name = flag.Arg(0)
+
+	if name == "hello" { // [O1o1o0g9o0]
+		fmt.Println("Hello, World!")
+
+		// この上に分岐を挟んでいく
+
+	} else {
+		fmt.Println("go run . {programName}")
+	}
+}
+
+// EOF [O1o1o0g9o0]
+```
+
+# Step [O1o1o0g10o0] tidy
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+```shell
+go mod tidy
+```
+
+# Step [O1o1o0g11o0] 石定義 作成
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	├── 📄 main.go
+👉 	└── 📄 stone.go
+```
+
+```go
+// BOF [O1o1o0g11o0]
+
+package main
+
+type Stone uint
+
+const (
+	Empty Stone = iota
+	Black
+	White
+	Wall
+)
+
+// EOF [O1o1o0g11o0]
+```
+
 .
+
