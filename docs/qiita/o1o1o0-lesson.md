@@ -234,6 +234,8 @@ go mod tidy
 
 package main
 
+import "fmt"
+
 type Stone uint
 
 const (
@@ -243,8 +245,196 @@ const (
 	Wall
 )
 
+// String - 文字列化
+func (s Stone) String() string {
+	switch s {
+	case Empty:
+		return "."
+	case Black:
+		return "x"
+	case White:
+		return "o"
+	case Wall:
+		return "+"
+	default:
+		panic(fmt.Sprintf("%d", int(s)))
+	}
+}
+
 // EOF [O1o1o0g11o0]
 ```
+
+# Step [O1o1o0g12o0] 盤定義 作成
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+👉  ├── 📄 board.go
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	├── 📄 main.go
+ 	└── 📄 stone.go
+```
+
+```go
+// BOF [O1o1o0g12o0]
+
+package main
+
+// MemoryWidth - 枠付きの横幅
+const MemoryWidth int = 19 + 2
+
+// MemoryHeight - 枠付きの縦幅
+const MemoryHeight int = 19 + 2
+
+// MemoryArea - 枠付きの面積
+const MemoryArea int = MemoryWidth * MemoryHeight
+
+// Board - 盤
+type Board struct {
+	// 交点
+	nodes []Stone
+}
+
+// NewBoard - 新規作成
+func NewBoard() *Board {
+	var b = new(Board)
+
+	b.nodes = make([]Stone, MemoryArea)
+
+	// 枠を設定する
+	// 上辺、下辺を引く
+	{
+		var y = 0
+		var y2 = MemoryHeight - 1
+		for x := 0; x < MemoryWidth; x++ {
+			var i = (y * MemoryWidth) + x
+			b.nodes[i] = Wall
+
+			i = (y2 * MemoryWidth) + x
+			b.nodes[i] = Wall
+		}
+	}
+	// 左辺、右辺を引く
+	{
+		var x = 0
+		var x2 = MemoryWidth - 1
+		for y := 1; y < MemoryHeight-1; y++ {
+			var i = (y * MemoryWidth) + x
+			b.nodes[i] = Wall
+
+			i = (y * MemoryWidth) + x2
+			b.nodes[i] = Wall
+		}
+	}
+
+	return b
+}
+
+// ForeachLikeText - 枠を含めた各セル
+func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
+	for y := 0; y < MemoryHeight; y++ {
+		if y != 0 {
+			doNewline()
+		}
+
+		for x := 0; x < MemoryWidth; x++ {
+			var i = (y * MemoryWidth) + x
+			var stone = b.nodes[i]
+			setStone(stone)
+		}
+	}
+}
+
+// EOF [O1o1o0g12o0]
+```
+
+# Step [O1o1o0g13o0] 盤表示 作成
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 board.go
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉  ├── 📄 main.go
+ 	└── 📄 stone.go
+```
+
+```go
+// ...略...
+
+
+	// * 以下を追加
+	} else if name == "board_test" { // [O1o1o0g13o0]
+		fmt.Print(`= board_test
+.`)
+
+		var b = NewBoard()
+		var setStone = func(s Stone) {
+			fmt.Printf("%v", s)
+		}
+		var doNewline = func() {
+			fmt.Printf("\n.")
+		}
+		b.ForeachLikeText(setStone, doNewline)
+
+		// この上に分岐を挟んでいく
+
+
+// ...略...
+```
+
+# Step [O1o1o0g14o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run . board_test
+```
+
+Output:  
+
+```plaintext
+= board_test
+.+++++++++++++++++++++
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+...................+
+.+++++++++++++++++++++
+```
+
+この出力書式は 私の方法であって、公式大会のものではないことに注意されたい  
+
+# 参考にした記事
+
+## Go言語
+
+### 列挙型
+
+📖 [How to make Go print enum fields as string?](https://stackoverflow.com/questions/41480543/how-to-make-go-print-enum-fields-as-string)  
 
 .
 
