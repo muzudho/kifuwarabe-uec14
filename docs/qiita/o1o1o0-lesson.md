@@ -1,5 +1,9 @@
 # Step [O1o1o0g1o0] はじめに
 
+👇 Step の変な数字の説明  
+
+📖 [電脳向量表記](https://qiita.com/muzudho1/items/fdbf31e41dd8c247081f)  
+
 👇 練習編を読み終わってるものとする  
 
 📖 [Go [O1o1o0] 目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会＜練習編＞](https://qiita.com/muzudho1/items/cea62be01f7418bbf150)  
@@ -429,6 +433,8 @@ Output:
 ```
 
 この出力書式は 私の方法であって、公式大会のものではないことに注意されたい  
+
+📖 [思考エンジンの思考ログ仕様（きふわらべ2022年以降）](https://qiita.com/muzudho1/items/ceb6130cf558cd373dd7)  
 
 # 参考にした記事
 
