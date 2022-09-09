@@ -47,7 +47,7 @@ func main() {
 					fmt.Printf("\n. ")
 				}
 				b.ForeachLikeText(setStone, doNewline)
-				fmt.Print("\n. '''")
+				fmt.Print("\n. '''\n")
 				// ★
 
 			case "quit": // [O1o1o0g11o_1o0]

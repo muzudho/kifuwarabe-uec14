@@ -328,6 +328,9 @@ quit
 
 アプリケーションは終了した  
 
+強制終了したいときは、 `[Ctrl]` キーを押しながら `[C]` キーを押してほしい。  
+これを以後 `[Ctrl] + [C]` と表記する  
+
 # Step [O1o1o0g11o0] 石定義 作成
 
 👇 以下のファイルを新規作成してほしい  
@@ -395,17 +398,14 @@ func (s Stone) String() string {
 
 package main
 
-// MemoryWidth - 枠付きの横幅
-const MemoryWidth int = 19 + 2
-
-// MemoryHeight - 枠付きの縦幅
-const MemoryHeight int = 19 + 2
-
-// MemoryArea - 枠付きの面積
-const MemoryArea int = MemoryWidth * MemoryHeight
-
 // Board - 盤
 type Board struct {
+	// 枠付きの横幅
+	memoryWidth int
+
+	// 枠付きの縦幅
+	memoryHeight int
+
 	// 交点
 	nodes []Stone
 }
@@ -414,30 +414,32 @@ type Board struct {
 func NewBoard() *Board {
 	var b = new(Board)
 
-	b.nodes = make([]Stone, MemoryArea)
+	b.memoryWidth = 19 + 2
+	b.memoryHeight = 19 + 2
+	b.nodes = make([]Stone, b.getMemoryArea())
 
 	// 枠を設定する
 	// 上辺、下辺を引く
 	{
 		var y = 0
-		var y2 = MemoryHeight - 1
-		for x := 0; x < MemoryWidth; x++ {
-			var i = (y * MemoryWidth) + x
+		var y2 = b.memoryHeight - 1
+		for x := 0; x < b.memoryWidth; x++ {
+			var i = (y * b.memoryWidth) + x
 			b.nodes[i] = Wall
 
-			i = (y2 * MemoryWidth) + x
+			i = (y2 * b.memoryWidth) + x
 			b.nodes[i] = Wall
 		}
 	}
 	// 左辺、右辺を引く
 	{
 		var x = 0
-		var x2 = MemoryWidth - 1
-		for y := 1; y < MemoryHeight-1; y++ {
-			var i = (y * MemoryWidth) + x
+		var x2 = b.memoryWidth - 1
+		for y := 1; y < b.memoryHeight-1; y++ {
+			var i = (y * b.memoryWidth) + x
 			b.nodes[i] = Wall
 
-			i = (y * MemoryWidth) + x2
+			i = (y * b.memoryWidth) + x2
 			b.nodes[i] = Wall
 		}
 	}
@@ -447,17 +449,22 @@ func NewBoard() *Board {
 
 // ForeachLikeText - 枠を含めた各セル
 func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
-	for y := 0; y < MemoryHeight; y++ {
+	for y := 0; y < b.memoryHeight; y++ {
 		if y != 0 {
 			doNewline()
 		}
 
-		for x := 0; x < MemoryWidth; x++ {
-			var i = (y * MemoryWidth) + x
+		for x := 0; x < b.memoryWidth; x++ {
+			var i = (y * b.memoryWidth) + x
 			var stone = b.nodes[i]
 			setStone(stone)
 		}
 	}
+}
+
+// 枠付き盤の面積
+func (b *Board) getMemoryArea() int {
+	return b.memoryWidth * b.memoryHeight
 }
 
 // EOF [O1o1o0g12o0]
@@ -497,7 +504,7 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 					fmt.Printf("\n. ")
 				}
 				b.ForeachLikeText(setStone, doNewline)
-				fmt.Print("\n. '''")
+				fmt.Print("\n. '''\n")
 
 			// この上にコマンドを挟んでいく
 			// -------------------------
@@ -558,9 +565,19 @@ Output:
 
 📖 [思考エンジンの思考ログ仕様（きふわらべ2022年以降）](https://qiita.com/muzudho1/items/ceb6130cf558cd373dd7)  
 
+`quit` コマンドで 思考エンジンを終了してほしい  
+
+# Step [O1o1o0g15o0] 座標の定義
+
+
+
 # 参考にした記事
 
 ## Go言語
+
+### ファイル分割
+
+📖 [[Go言語] ファイル分割とローカルパッケージ](https://zenn.dev/fm_radio/articles/ca2ff1dfcf89b5)  
 
 ### 列挙型
 
