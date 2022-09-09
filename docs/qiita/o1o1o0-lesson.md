@@ -220,6 +220,14 @@ func main() {
 go mod tidy
 ```
 
+# Step [O1o1o0g10o1o0] ハローワールド
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+```shell
+go run . hello
+```
+
 # Step [O1o1o0g11o0] 石定義 作成
 
 👇 以下のファイルを新規作成してほしい  
