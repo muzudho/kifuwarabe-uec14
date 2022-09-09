@@ -488,6 +488,15 @@ func (b *Board) getMemoryArea() int {
 // ...略...
 
 
+		var board = NewBoard()	// [O1o1o0g13o0]
+		// * 以下の行より上
+		// var scanner = bufio.NewScanner(os.Stdin)
+		// for scanner.Scan() {
+
+
+			//...略...
+
+
 			// この下にコマンドを挟んでいく
 			// -------------------------
 
@@ -503,7 +512,7 @@ func (b *Board) getMemoryArea() int {
 				var doNewline = func() {
 					fmt.Printf("\n. ")
 				}
-				b.ForeachLikeText(setStone, doNewline)
+				board.ForeachLikeText(setStone, doNewline)
 				fmt.Print("\n. '''\n")
 
 			// この上にコマンドを挟んでいく
@@ -569,7 +578,201 @@ Output:
 
 # Step [O1o1o0g15o0] 座標の定義
 
+👇 以下の既存ファイルを新規作成してほしい  
 
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 board.go
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	├── 📄 main.go
+👉  ├── 📄 point.go
+ 	└── 📄 stone.go
+```
+
+```go
+// BOF [O1o1o0g15o0]
+
+package main
+
+// Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
+type Point int
+
+// GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
+func GetXFromFile(file string) int {
+	// 筋
+	var x = file[0] - 'A'
+	if file[0] >= 'I' {
+		x--
+	}
+	return int(x)
+}
+
+// GetYFromRank - '1' ～ '99' を 0 ～ 98 へ変換します
+func GetYFromRank(rank string) int {
+	// 段
+	var y = int(rank[0] - '0')
+	if 1 < len(rank) {
+		y *= 10
+		y += int(rank[1] - '0')
+	}
+	return y - 1
+}
+
+// GetFileFromCode - 座標の符号の筋の部分を抜き出します
+//
+// * `code` - 座標の符号。 Example: "A7" や "J13"
+func GetFileFromCode(code string) string {
+	return code[0:1]
+}
+
+// GetRankFromCode - 座標の符号の段の部分を抜き出します
+//
+// * `code` - 座標の符号。 Example: "A7" や "J13"
+func GetRankFromCode(code string) string {
+	if 2 < len(code) {
+		return code[1:3]
+	}
+
+	return code[1:2]
+}
+
+// EOF [O1o1o0g15o0]
+```
+
+# Step [O1o1o0g16o0] 座標の算出
+
+👇 以下の既存ファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+👉  ├── 📄 board_coord.go
+    ├── 📄 board.go
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	├── 📄 main.go
+  	├── 📄 point.go
+ 	└── 📄 stone.go
+```
+
+```go
+// BOF [O1o1o0g16o0]
+
+package main
+
+// GetPointFromXy - 座標変換 (x,y) → Point
+func (b *Board) GetPointFromXy(x int, y int) Point {
+	// 枠の厚み 1 を考慮
+	return Point((y+1)*b.memoryWidth + x + 1)
+}
+
+// GetPointFromCode - "A7" や "J13" といった符号を Point へ変換します
+//
+// * `code` - 座標の符号。 Example: "A7" や "J13"
+func (b *Board) GetPointFromCode(code string) Point {
+	return b.GetPointFromXy(
+		GetXFromFile(GetFileFromCode(code)),
+		GetYFromRank(GetRankFromCode(code)))
+}
+
+// EOF [O1o1o0g16o0]
+```
+
+# Step [O1o1o0g17o0] 符号変換 作成
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 board.go
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉  ├── 📄 main.go
+ 	└── 📄 stone.go
+```
+
+```go
+// ...略...
+
+
+			// この下にコマンドを挟んでいく
+			// -------------------------
+
+			// * アルファベット順になる位置に、以下のケース文を挿入
+			case "coord": // [O1o1o0g17o0]
+				// Example: "coord A7"
+				var point = board.GetPointFromCode(tokens[1])
+				fmt.Printf("= %d\n", point)
+
+			case "file": // [O1o1o0g17o0]
+				// Example: "file A7"
+				var file = GetFileFromCode(tokens[1])
+				fmt.Printf("= %s\n", file)
+
+			case "rank": // [O1o1o0g17o0]
+				// Example: "rank J13"
+				var rank = GetRankFromCode(tokens[1])
+				fmt.Printf("= %s\n", rank)
+
+			// この上にコマンドを挟んでいく
+			// -------------------------
+
+
+// ...略...
+```
+
+# Step [O1o1o0g18o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+file A1
+```
+
+Output:  
+
+```plaintext
+= A
+```
+
+Input:  
+
+```shell
+rank A1
+```
+
+Output:  
+
+```plaintext
+= 1
+```
+
+Input:  
+
+```shell
+coord A1
+```
+
+Output:  
+
+```plaintext
+= 22
+```
 
 # 参考にした記事
 
