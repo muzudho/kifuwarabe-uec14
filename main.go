@@ -3,8 +3,11 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
+	"os"
+	"strings"
 )
 
 func main() {
@@ -32,7 +35,27 @@ func main() {
 		// この上に分岐を挟んでいく
 
 	} else {
-		fmt.Println("go run . {programName}")
+
+		// fmt.Println("go run . {programName}")
+
+		// コンソール等からの文字列入力
+		var scanner = bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			var command = scanner.Text()
+			var tokens = strings.Split(command, " ")
+			switch tokens[0] {
+
+			case "quit":
+				// os.Exit(0)
+				return
+
+			// この上にコマンドを挟んでいく
+
+			default:
+				fmt.Printf("? unknown_command:%s\n\n", tokens[0])
+			}
+		}
+
 	}
 }
 
