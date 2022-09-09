@@ -265,18 +265,22 @@ import (
 		// fmt.Println("go run . {programName}")
 
 		// * 追加
-		// コンソール等からの文字列入力
+		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
 
-			case "quit":
+			// この下にコマンドを挟んでいく
+			// -------------------------
+
+			case "quit": // [O1o1o0g11o_1o0]
 				// os.Exit(0)
 				return
 
 			// この上にコマンドを挟んでいく
+			// -------------------------
 
 			default:
 				fmt.Printf("? unknown_command:%s\n\n", tokens[0])
@@ -296,7 +300,7 @@ import (
 go run .
 ```
 
-これで、ゲーム内の入力待機ループに入った  
+これで、思考エンジン内の入力待機ループに入った  
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -459,7 +463,7 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 // EOF [O1o1o0g12o0]
 ```
 
-# Step [O1o1o0g13o0] 盤表示 作成
+# Step [O1o1o0g13o0] 盤表示コマンド 作成
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -477,22 +481,26 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 // ...略...
 
 
-	// * 以下を追加
-	} else if name == "board_test" { // [O1o1o0g13o0]
-		fmt.Print(`= board_test'''
+			// この下にコマンドを挟んでいく
+			// -------------------------
+
+			// * アルファベット順になる位置に、以下のケース文を挿入
+			case "board": // [O1o1o0g13o0]
+				fmt.Print(`= board'''
 . `)
 
-		var b = NewBoard()
-		var setStone = func(s Stone) {
-			fmt.Printf("%v", s)
-		}
-		var doNewline = func() {
-			fmt.Printf("\n. ")
-		}
-		b.ForeachLikeText(setStone, doNewline)
-		fmt.Print("\n. '''")
+				var b = NewBoard()
+				var setStone = func(s Stone) {
+					fmt.Printf("%v", s)
+				}
+				var doNewline = func() {
+					fmt.Printf("\n. ")
+				}
+				b.ForeachLikeText(setStone, doNewline)
+				fmt.Print("\n. '''")
 
-		// この上に分岐を挟んでいく
+			// この上にコマンドを挟んでいく
+			// -------------------------
 
 
 // ...略...
@@ -505,7 +513,17 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 Input:  
 
 ```shell
-go run . board_test
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+board
 ```
 
 Output:  
