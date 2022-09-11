@@ -520,8 +520,8 @@ func main() {
 
 
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
-		logg.c.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
-		logg.j.Infow("Welcome!",
+		logg.C.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
+		logg.J.Infow("Welcome!",
 			"name", "nihon taro", "weight", 92.6, "x", 3)
 
 
@@ -539,6 +539,7 @@ func main() {
 Input:  
 
 ```shell
+go get -u
 go mod tidy
 ```
 
@@ -554,6 +555,10 @@ go: downloading github.com/benbjohnson/clock v1.1.0
 go: downloading go.uber.org/goleak v1.1.11
 go: downloading gopkg.in/yaml.v3 v3.0.1
 ```
+
+👇 自分のパッケージはローカルPCにダウンロードされている  
+
+Example: 📂 `C:\Users\むずでょ\go\pkg\mod\github.com\muzudho`  
 
 # Step [O1o1o0g11o__10o4o0] 実行
 
@@ -639,8 +644,8 @@ import (
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
-			logg.c.Infof("# %s", command)
-			logg.j.Infow("Input", "Command", command)
+			logg.C.Infof("# %s", command)             // 人間向けの出力
+			logg.J.Infow("input", "command", command) // コンピューター向けの出力
 
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
@@ -655,9 +660,9 @@ import (
 			// この上にコマンドを挟んでいく
 			// -------------------------
 
-			default:
-				logg.c.Infof("? unknown_command command:'%s'\n", tokens[0])
-				logg.j.Infow("? unknown_command", "command", tokens[0])
+			default: // [O1o1o0g11o_1o0]
+				logg.C.Infof("? unknown_command command:'%s'\n", tokens[0])
+				logg.J.Infow("? unknown_command", "command", tokens[0])
 			}
 		}
 	}

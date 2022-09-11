@@ -55,8 +55,8 @@ func main() {
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
-			logg.c.Infof("# %s", command)             // 人間向けの出力
-			logg.j.Infow("input", "command", command) // コンピューター向けの出力
+			logg.C.Infof("# %s", command)             // 人間向けの出力
+			logg.J.Infow("input", "command", command) // コンピューター向けの出力
 
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
@@ -117,9 +117,9 @@ func main() {
 			// この上にコマンドを挟んでいく
 			// -------------------------
 
-			default:
-				logg.c.Infof("? unknown_command command:'%s'\n", tokens[0])
-				logg.j.Infow("? unknown_command", "command", tokens[0])
+			default: // [O1o1o0g11o_1o0]
+				logg.C.Infof("? unknown_command command:'%s'\n", tokens[0])
+				logg.J.Infow("? unknown_command", "command", tokens[0])
 			}
 		}
 	}
