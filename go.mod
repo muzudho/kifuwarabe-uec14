@@ -2,6 +2,8 @@ module github.com/muzudho/kifuwarabe-uec14
 
 go 1.19
 
+require github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911105808-5a17a869516a
+
 require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect

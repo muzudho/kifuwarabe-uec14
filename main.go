@@ -39,8 +39,8 @@ func main() {
 		// ---------------------
 
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
-		logg.c.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
-		logg.j.Infow("Welcome!",
+		logg.C.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
+		logg.J.Infow("Welcome!",
 			"name", "nihon taro", "weight", 92.6, "x", 3)
 
 		// この上に分岐を挟んでいく

@@ -10,14 +10,16 @@ import (
 )
 
 type SugaredLoggerForGame struct {
-	c *zap.SugaredLogger // for Console
-	j *zap.SugaredLogger // for Json
+	// C is sugared logger for Console
+	C *zap.SugaredLogger
+	// J is sugared logger as JSON
+	J *zap.SugaredLogger
 }
 
 func NewSugaredLoggerForGame(textLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
 	var slog = new(SugaredLoggerForGame) // Sugared LOGger
-	slog.c = createSugaredLoggerForConsole(textLogFile)
-	slog.j = createSugaredLoggerAsJson(jsonLogFile)
+	slog.C = createSugaredLoggerForConsole(textLogFile)
+	slog.J = createSugaredLoggerAsJson(jsonLogFile)
 	return slog
 }
 

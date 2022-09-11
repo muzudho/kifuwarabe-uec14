@@ -382,14 +382,16 @@ import (
 )
 
 type SugaredLoggerForGame struct {
-	c *zap.SugaredLogger // for Console
-	j *zap.SugaredLogger // for Json
+	// C is sugared logger for Console
+	C *zap.SugaredLogger
+	// J is sugared logger as JSON
+	J *zap.SugaredLogger
 }
 
 func NewSugaredLoggerForGame(textLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
 	var slog = new(SugaredLoggerForGame) // Sugared LOGger
-	slog.c = createSugaredLoggerForConsole(textLogFile)
-	slog.j = createSugaredLoggerAsJson(jsonLogFile)
+	slog.C = createSugaredLoggerForConsole(textLogFile)
+	slog.J = createSugaredLoggerAsJson(jsonLogFile)
 	return slog
 }
 
@@ -464,6 +466,11 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 // EOF [O1o1o0g11o__10o2o0]
 ```
 
+## Step [O1o1o0g11o__10o3o_1o0] リモートリポジトリにプッシュ
+
+がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
+リモートリポジトリにプッシュしてほしい  
+
 ## Step [O1o1o0g11o__10o3o0] ファイル編集
 
 👇 以下の既存ファイルを編集してほしい  
@@ -485,7 +492,7 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 
 import (
 	// ...略...
-	"github.com/muzudho/kifuwarabe-uec14/kernel"
+	"github.com/muzudho/kifuwarabe-uec14/kernel" // * あとでリポジトリからダウンロードする
 )
 
 func main() {
@@ -523,6 +530,29 @@ func main() {
 		// ---------------------
 		// ...略...
 	}
+```
+
+# Step [O1o1o0g11o__10o3o0] tidy
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go mod tidy
+```
+
+Output:  
+
+```plaintext
+C:\Users\むずでょ\Documents\GitHub\kifuwarabe-uec14>go mod tidy
+go: finding module for package github.com/muzudho/kifuwarabe-uec14/kernel
+go: downloading github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911105808-5a17a869516a
+go: found github.com/muzudho/kifuwarabe-uec14/kernel in github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911105808-5a17a869516a
+go: downloading github.com/stretchr/testify v1.8.0
+go: downloading github.com/benbjohnson/clock v1.1.0
+go: downloading go.uber.org/goleak v1.1.11
+go: downloading gopkg.in/yaml.v3 v3.0.1
 ```
 
 # Step [O1o1o0g11o__10o4o0] 実行
