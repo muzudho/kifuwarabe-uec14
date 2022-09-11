@@ -252,7 +252,7 @@ Hello, World!
 
 思考エンジンのうち、おおまかに言って **ゲームの知識（ドメイン）以外の部分** を仮にカーネルと呼ぶことにする  
 
-# Step [O1o1o0g11o___100o1p0] フォルダー作成
+## Step [O1o1o0g11o___100o1p0] フォルダー作成
 
 👇 以下のフォルダーを新規作成してほしい  
 
@@ -773,6 +773,43 @@ func (s Stone) String() string {
 
 がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
 リモートリポジトリにプッシュしてほしい  
+
+## Step [O1o1o0g11o2o0] カレントディレクトリーを移動
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+```shell
+cd kernel
+```
+
+## Step [O1o1o0g11o3o0] tidy
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go get -u
+go mod tidy
+```
+
+## Step [O1o1o0g11o4o0] カレントディレクトリーを戻す
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+```shell
+cd ..
+```
+
+## Step [O1o1o0g11o5o0] tidy
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go mod tidy
+```
 
 # Step [O1o1o0g12o0] 盤定義 作成
 
