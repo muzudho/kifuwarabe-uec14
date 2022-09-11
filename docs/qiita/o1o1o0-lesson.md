@@ -80,6 +80,7 @@ go work init
 ```plaintext
   	📂 kifuwarabe-uec14
 👉  └── 📄 go.work
+```
 
 ```go
 go 1.19
@@ -303,9 +304,7 @@ go get -u go.uber.org/zap
 package main
 
 import (
-	"fmt"
 	"os"
-	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -389,29 +388,6 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	var logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
 	// 糖衣構文のインターフェースを取得
 	return logger.Sugar()
-}
-
-func (logg *SugaredLoggerForGame) Infow(msg string, keysAndValues ...interface{}) {
-	var sb strings.Builder
-	if msg != "" {
-		sb.WriteString(msg)
-		sb.WriteString(" ")
-	}
-
-	for i, v := range keysAndValues {
-		if i == 0 {
-			// pass
-		} else if i%2 == 0 {
-			sb.WriteString(" ")
-		} else {
-			sb.WriteString(":")
-		}
-
-		sb.WriteString(fmt.Sprintf("%v", v))
-	}
-	logg.c.Infof("%s", sb.String())
-
-	logg.j.Infow(msg, keysAndValues...)
 }
 
 // EOF [O1o1o0g11o__10o2o0]
