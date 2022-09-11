@@ -9,8 +9,20 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// CreateSugaredLoggerForConsole - ロガーを作成します，コンソール形式
-func CreateSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
+type SugaredLoggerForGame struct {
+	c *zap.SugaredLogger // for Console
+	j *zap.SugaredLogger // for Json
+}
+
+func NewSugaredLoggerForGame(textLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
+	var slog = new(SugaredLoggerForGame) // Sugared LOGger
+	slog.c = createSugaredLoggerForConsole(textLogFile)
+	slog.j = createSugaredLoggerAsJson(jsonLogFile)
+	return slog
+}
+
+// ロガーを作成します，コンソール形式
+func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 	// 設定，コンソール用
 	var configC = zapcore.EncoderConfig{
 		MessageKey: "message",
@@ -47,8 +59,8 @@ func CreateSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 	return logger.Sugar()
 }
 
-// CreateSugaredLoggerAsJson - ロガーを作成します，JSON複数行形式
-func CreateSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
+// ロガーを作成します，JSON複数行形式
+func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	// 設定 > 製品用
 	var config = zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ

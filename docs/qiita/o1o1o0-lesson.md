@@ -309,8 +309,20 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// CreateSugaredLoggerForConsole - ロガーを作成します，コンソール形式
-func CreateSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
+type SugaredLoggerForGame struct {
+	c *zap.SugaredLogger // for Console
+	j *zap.SugaredLogger // for Json
+}
+
+func NewSugaredLoggerForGame(textLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
+	var slog = new(SugaredLoggerForGame) // Sugared LOGger
+	slog.c = createSugaredLoggerForConsole(textLogFile)
+	slog.j = createSugaredLoggerAsJson(jsonLogFile)
+	return slog
+}
+
+// ロガーを作成します，コンソール形式
+func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 	// 設定，コンソール用
 	var configC = zapcore.EncoderConfig{
 		MessageKey: "message",
@@ -347,8 +359,8 @@ func CreateSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 	return logger.Sugar()
 }
 
-// CreateSugaredLoggerAsJson - ロガーを作成します，JSON複数行形式
-func CreateSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
+// ロガーを作成します，JSON複数行形式
+func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	// 設定 > 製品用
 	var config = zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ
@@ -395,8 +407,7 @@ func CreateSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var logc = CreateSugaredLoggerForConsole(textLogFile) // コンソール用
-	var logj = CreateSugaredLoggerAsJson(jsonLogFile)     // JSON複数行用
+	var logg = NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
 
 	// この上に初期設定を追加していく
 	// ---------------------------
@@ -409,8 +420,8 @@ func CreateSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 
 
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
-		logc.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
-		logj.Infow("Welcome!",
+		logg.c.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
+		logg.j.Infow("Welcome!",
 			"a", 1, "b", 2, "c", 3)
 
 
@@ -505,8 +516,8 @@ import (
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
-			logc.Infof("# %s", command)
-			logj.Infow("Input", "Command", command)
+			logg.c.Infof("# %s", command)
+			logg.j.Infow("Input", "Command", command)
 
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
@@ -522,8 +533,8 @@ import (
 			// -------------------------
 
 			default:
-				logc.Infof("? unknown_command command:%s\n", tokens[0])
-				logj.Infow("? unknown_command", "Command", tokens[0])
+				logg.c.Infof("? unknown_command command:%s\n", tokens[0])
+				logg.j.Infow("? unknown_command", "Command", tokens[0])
 			}
 		}
 	}

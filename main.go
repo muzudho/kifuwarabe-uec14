@@ -25,8 +25,7 @@ func main() {
 	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var logc = CreateSugaredLoggerForConsole(textLogFile) // コンソール用
-	var logj = CreateSugaredLoggerAsJson(jsonLogFile)     // JSON複数行用
+	var logg = NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
 
 	// この上に初期設定を追加していく
 	// ---------------------------
@@ -38,8 +37,8 @@ func main() {
 		// ---------------------
 
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
-		logc.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
-		logj.Infow("Welcome!",
+		logg.c.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
+		logg.j.Infow("Welcome!",
 			"a", 1, "b", 2, "c", 3)
 
 		// この上に分岐を挟んでいく
@@ -54,8 +53,8 @@ func main() {
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
-			logc.Infof("# %s", command)
-			logj.Infow("Input", "Command", command)
+			logg.c.Infof("# %s", command)
+			logg.j.Infow("Input", "Command", command)
 
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
@@ -99,8 +98,8 @@ func main() {
 			// -------------------------
 
 			default:
-				logc.Infof("? unknown_command command:%s\n", tokens[0])
-				logj.Infow("? unknown_command", "Command", tokens[0])
+				logg.c.Infof("? unknown_command command:%s\n", tokens[0])
+				logg.j.Infow("? unknown_command", "Command", tokens[0])
 			}
 		}
 	}
