@@ -248,6 +248,73 @@ Output:
 Hello, World!
 ```
 
+# Step [O1o1o0g11o___100o0] カーネル作成
+
+思考エンジンのうち、おおまかに言って **ゲームの知識（ドメイン）以外の部分** を仮にカーネルと呼ぶことにする  
+
+# Step [O1o1o0g11o___100o1p0] フォルダー作成
+
+👇 以下のフォルダーを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+👉	├── 📂 kernel
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+## Step [O1o1o0g11o___100o2p0] カレントディレクトリーを移動
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+```shell
+cd kernel
+```
+
+## Step [O1o1o0g11o___100o3p0] Goモジュールの作成
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go mod init github.com/muzudho/kifuwarabe-uec14/kernel
+```
+
+Output:  
+
+```shell
+go: creating new go.mod: module github.com/muzudho/kifuwarabe-uec14/kernel
+```
+
+👇 以下のファイルが自動生成された  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+👉	│	└── 📄 go.mod
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```go
+module github.com/muzudho/kifuwarabe-uec14/kernel
+
+go 1.19
+```
+
+## Step [O1o1o0g11o___100o4p0] カレントディレクトリーを戻す
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+```shell
+cd ..
+```
+
 # Step [O1o1o0g11o__10o0] ロガー設定
 
 ## Step [O1o1o0g11o__10o1o0] インストール
@@ -266,6 +333,8 @@ go get -u go.uber.org/zap
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	└── 📄 go.mod
 👉	├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -291,17 +360,19 @@ go get -u go.uber.org/zap
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+👉 	│	├── 📄 logger.go
+	│	└── 📄 go.mod
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
-👉 	├── 📄 logger.go
  	└── 📄 main.go
 ```
 
 ```go
 // BOF [O1o1o0g11o__10o2o0]
 
-package main
+package kernel
 
 import (
 	"os"
@@ -399,6 +470,9 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+ 	│	├── 📄 logger.go
+	│	└── 📄 go.mod
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -407,6 +481,14 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 ```
 
 ```go
+// ...略...
+
+import (
+	// ...略...
+	"github.com/muzudho/kifuwarabe-uec14/kernel"
+)
+
+func main() {
 	// ...略...
 	// この下に初期設定を追加していく
 	// ---------------------------
@@ -418,7 +500,7 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var logg = NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
+	var logg = kernel.NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
 
 	// この上に初期設定を追加していく
 	// ---------------------------

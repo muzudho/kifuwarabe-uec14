@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/muzudho/kifuwarabe-uec14/kernel"
 )
 
 func main() {
@@ -25,7 +27,7 @@ func main() {
 	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var logg = NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
+	var logg = kernel.NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
 
 	// この上に初期設定を追加していく
 	// ---------------------------
