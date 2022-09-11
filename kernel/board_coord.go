@@ -1,6 +1,6 @@
 // BOF [O1o1o0g16o0]
 
-package main
+package kernel
 
 // GetPointFromXy - 座標変換 (x,y) → Point
 func (b *Board) GetPointFromXy(x int, y int) Point {

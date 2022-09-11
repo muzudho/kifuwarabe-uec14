@@ -1,6 +1,6 @@
 // BOF [O1o1o0g15o0]
 
-package main
+package kernel
 
 // Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
 type Point int
