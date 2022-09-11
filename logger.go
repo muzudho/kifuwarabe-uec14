@@ -9,8 +9,46 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// CreateSugaredLogger - ロガーを作成します
-func CreateSugaredLogger(logFile *os.File) *zap.SugaredLogger {
+// CreateSugaredLoggerForConsole - ロガーを作成します，コンソール形式
+func CreateSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
+	// 設定，コンソール用
+	var configC = zapcore.EncoderConfig{
+		MessageKey: "message",
+
+		// LevelKey:    "level",
+		// EncodeLevel: zapcore.CapitalLevelEncoder,
+
+		TimeKey:    "time",
+		EncodeTime: zapcore.ISO8601TimeEncoder, // 日本時間のタイムスタンプ
+
+		// CallerKey:    "caller",
+		// EncodeCaller: zapcore.ShortCallerEncoder,
+	}
+
+	// 設定、ファイル用
+	var configF = zap.NewProductionEncoderConfig()
+	configF.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ
+
+	// コア
+	var core = zapcore.NewTee(
+		zapcore.NewCore(
+			zapcore.NewConsoleEncoder(configC), // コンソール形式
+			zapcore.Lock(os.Stderr),            // 出力先は標準エラー
+			zapcore.DebugLevel),                // ログレベル
+		zapcore.NewCore(
+			zapcore.NewConsoleEncoder(configF), // コンソール形式
+			zapcore.AddSync(textLogFile),       // 出力先はファイル
+			zapcore.DebugLevel),                // ログレベル
+	)
+
+	// ロガーのビルド
+	var logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
+	// 糖衣構文のインターフェースを取得
+	return logger.Sugar()
+}
+
+// CreateSugaredLoggerAsJson - ロガーを作成します，JSON複数行形式
+func CreateSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	// 設定 > 製品用
 	var config = zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ
@@ -19,11 +57,7 @@ func CreateSugaredLogger(logFile *os.File) *zap.SugaredLogger {
 	var core = zapcore.NewTee(
 		zapcore.NewCore(
 			zapcore.NewJSONEncoder(config), // JSON形式
-			zapcore.Lock(os.Stderr),        // 出力先は標準エラー
-			zapcore.DebugLevel),            // ログレベル
-		zapcore.NewCore(
-			zapcore.NewJSONEncoder(config), // JSON形式
-			zapcore.AddSync(logFile),       // 出力先はログファイル
+			zapcore.AddSync(jsonLogFile),   // 出力先はファイル
 			zapcore.DebugLevel),            // ログレベル
 	)
 

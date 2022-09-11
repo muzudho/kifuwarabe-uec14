@@ -6,7 +6,6 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 )
@@ -20,11 +19,14 @@ func main() {
 	// ---------------------------
 
 	// ログファイル
-	var logFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	defer logFile.Close()  // ログファイル使用済み時にファイルを閉じる
-	log.SetOutput(logFile) // ロガーにログファイルを紐づけ
+	var textLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer textLogFile.Close() // ログファイル使用済み時にファイルを閉じる
+	// ログファイル
+	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var slog = CreateSugaredLogger(logFile) // Sugared LOGger
+	var logc = CreateSugaredLoggerForConsole(textLogFile) // コンソール用
+	var logj = CreateSugaredLoggerAsJson(jsonLogFile)     // JSON複数行用
 
 	// この上に初期設定を追加していく
 	// ---------------------------
@@ -36,7 +38,8 @@ func main() {
 		// ---------------------
 
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
-		slog.Infow("Welcome!",
+		logc.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
+		logj.Infow("Welcome!",
 			"a", 1, "b", 2, "c", 3)
 
 		// この上に分岐を挟んでいく
@@ -51,6 +54,9 @@ func main() {
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
+			logc.Infof("# %s", command)
+			logj.Infow("Input", "Command", command)
+
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
 
@@ -93,10 +99,10 @@ func main() {
 			// -------------------------
 
 			default:
-				fmt.Printf("? unknown_command:%s\n\n", tokens[0])
+				logc.Infof("? unknown_command command:%s\n", tokens[0])
+				logj.Infow("? unknown_command", "Command", tokens[0])
 			}
 		}
-
 	}
 }
 

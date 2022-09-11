@@ -309,8 +309,46 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// CreateSugaredLogger - ロガーを作成します
-func CreateSugaredLogger(logFile *os.File) *zap.SugaredLogger {
+// CreateSugaredLoggerForConsole - ロガーを作成します，コンソール形式
+func CreateSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
+	// 設定，コンソール用
+	var configC = zapcore.EncoderConfig{
+		MessageKey: "message",
+
+		// LevelKey:    "level",
+		// EncodeLevel: zapcore.CapitalLevelEncoder,
+
+		TimeKey:    "time",
+		EncodeTime: zapcore.ISO8601TimeEncoder, // 日本時間のタイムスタンプ
+
+		// CallerKey:    "caller",
+		// EncodeCaller: zapcore.ShortCallerEncoder,
+	}
+
+	// 設定、ファイル用
+	var configF = zap.NewProductionEncoderConfig()
+	configF.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ
+
+	// コア
+	var core = zapcore.NewTee(
+		zapcore.NewCore(
+			zapcore.NewConsoleEncoder(configC), // コンソール形式
+			zapcore.Lock(os.Stderr),            // 出力先は標準エラー
+			zapcore.DebugLevel),                // ログレベル
+		zapcore.NewCore(
+			zapcore.NewConsoleEncoder(configF), // コンソール形式
+			zapcore.AddSync(textLogFile),       // 出力先はファイル
+			zapcore.DebugLevel),                // ログレベル
+	)
+
+	// ロガーのビルド
+	var logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
+	// 糖衣構文のインターフェースを取得
+	return logger.Sugar()
+}
+
+// CreateSugaredLoggerAsJson - ロガーを作成します，JSON複数行形式
+func CreateSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	// 設定 > 製品用
 	var config = zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ
@@ -319,11 +357,7 @@ func CreateSugaredLogger(logFile *os.File) *zap.SugaredLogger {
 	var core = zapcore.NewTee(
 		zapcore.NewCore(
 			zapcore.NewJSONEncoder(config), // JSON形式
-			zapcore.Lock(os.Stderr),        // 出力先は標準エラー
-			zapcore.DebugLevel),            // ログレベル
-		zapcore.NewCore(
-			zapcore.NewJSONEncoder(config), // JSON形式
-			zapcore.AddSync(logFile),       // 出力先はログファイル
+			zapcore.AddSync(jsonLogFile),   // 出力先はファイル
 			zapcore.DebugLevel),            // ログレベル
 	)
 
@@ -355,10 +389,14 @@ func CreateSugaredLogger(logFile *os.File) *zap.SugaredLogger {
 	// ---------------------------
 
 	// ログファイル
-	var logFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	defer logFile.Close() // ログファイル使用済み時にファイルを閉じる
+	var textLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer textLogFile.Close() // ログファイル使用済み時にファイルを閉じる
+	// ログファイル
+	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var slog = CreateSugaredLogger(logFile) // Sugared LOGger
+	var logc = CreateSugaredLoggerForConsole(textLogFile) // コンソール用
+	var logj = CreateSugaredLoggerAsJson(jsonLogFile)     // JSON複数行用
 
 	// この上に初期設定を追加していく
 	// ---------------------------
@@ -371,7 +409,8 @@ func CreateSugaredLogger(logFile *os.File) *zap.SugaredLogger {
 
 
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
-		slog.Infow("Welcome!",
+		logc.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
+		logj.Infow("Welcome!",
 			"a", 1, "b", 2, "c", 3)
 
 
@@ -395,8 +434,11 @@ go run . welocome
 Output:  
 
 ```shell
-{"level":"info","ts":"2022-09-11T13:02:31.181+0900","caller":"kifuwarabe-uec14/main.go:39","msg":"Welcome!","a":1,"b":2,"c":3}
+2022-09-11T14:42:53.258+0900    Welcome! a:1 b:2 c:3
 ```
+
+* 標準出力は、大会サーバーにメッセージを送るのに利用されることがある。従って 標準出力にログを出力すると反則負けになることがある
+  * 従って、ログをコンソールに表示したいときは、標準エラーに出力するようにする
 
 👇 以下のファイルが新規作成された  
 
@@ -405,18 +447,25 @@ Output:
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
+👉	├── 📄 kifuwarabe-uec14-json.log
 👉	├── 📄 kifuwarabe-uec14.log
  	├── 📄 logger.go
  	└── 📄 main.go
 ```
 
+👇 📄 `kifuwarabe-uec14-json.log`  
+
 ```json
-{"level":"info","ts":"2022-09-11T13:02:31.181+0900","caller":"kifuwarabe-uec14/main.go:39","msg":"Welcome!","a":1,"b":2,"c":3}
+{"level":"info","ts":"2022-09-11T14:43:54.145+0900","caller":"kifuwarabe-uec14/main.go:42","msg":"Welcome!","a":1,"b":2,"c":3}
 ```
 
 * 作成されるログファイルは JSON形式ではない。 ワンライナーのJSONが複数行並ぶ
-* 標準出力は、大会サーバーにメッセージを送るのに利用されることがある。従って 標準出力にログを出力すると反則負けになることがある
-  * 従って、ログをコンソールに表示したいときは、標準エラーに出力するようにする
+
+👇 📄 `kifuwarabe-uec14.log`  
+
+```plaintext
+2022-09-11T14:43:54.112+0900	info	kifuwarabe-uec14/main.go:41	Welcome! a:1 b:2 c:3
+```
 
 # Step [O1o1o0g11o_1o0] インタープリター 作成
 
@@ -445,14 +494,7 @@ import (
 
 
 	if name == "hello" { // [O1o1o0g9o0]
-		fmt.Println("Hello, World!")
-
-		// この下に分岐を挟んでいく
-		// ---------------------
-
-		// この上に分岐を挟んでいく
-		// ---------------------
-
+		// ...略...
 	} else {
 
 		// * 消す
@@ -463,6 +505,9 @@ import (
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
+			logc.Infof("# %s", command)
+			logj.Infow("Input", "Command", command)
+
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
 
@@ -477,7 +522,8 @@ import (
 			// -------------------------
 
 			default:
-				fmt.Printf("? unknown_command:%s\n\n", tokens[0])
+				logc.Infof("? unknown_command command:%s\n", tokens[0])
+				logj.Infow("? unknown_command", "Command", tokens[0])
 			}
 		}
 	}
