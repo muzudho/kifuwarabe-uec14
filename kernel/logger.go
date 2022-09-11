@@ -4,6 +4,7 @@ package kernel
 
 import (
 	"os"
+	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -33,7 +34,7 @@ func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 		// EncodeLevel: zapcore.CapitalLevelEncoder,
 
 		TimeKey:    "time",
-		EncodeTime: zapcore.ISO8601TimeEncoder, // 日本時間のタイムスタンプ
+		EncodeTime: encodeTimeSimpleInJapan, // 簡略化したタイムスタンプ
 
 		// CallerKey:    "caller",
 		// EncodeCaller: zapcore.ShortCallerEncoder,
@@ -89,6 +90,20 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	var logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
 	// 糖衣構文のインターフェースを取得
 	return logger.Sugar()
+}
+
+// 簡略化したタイムスタンプ
+// 📖 [golang zap v1.0.0 でログの日付をJSTで表示する方法](https://qiita.com/fuku2014/items/c6501c187c8161336485)
+func encodeTimeSimpleInJapan(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+	// // JST形式
+	// const layout = "2006-01-02T15:04:05+09:00"
+	// jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+	// enc.AppendString(t.In(jst).Format(layout))
+
+	// 簡略化したタイムスタンプ
+	const layout = "[2006-01-02 15:04:05]"
+	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+	enc.AppendString(t.In(jst).Format(layout))
 }
 
 // EOF [O1o1o0g11o__10o2o0]
