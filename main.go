@@ -6,6 +6,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
@@ -15,10 +16,31 @@ func main() {
 	// プログラム名
 	var name = flag.Arg(0)
 
+	// この下に初期設定を追加していく
+	// ---------------------------
+
+	// ログファイル
+	var logFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer logFile.Close()  // ログファイル使用済み時にファイルを閉じる
+	log.SetOutput(logFile) // ロガーにログファイルを紐づけ
+	// カスタマイズしたロガーを使うなら
+	var slog = CreateSugaredLogger(logFile) // Sugared LOGger
+
+	// この上に初期設定を追加していく
+	// ---------------------------
+
 	if name == "hello" { // [O1o1o0g9o0]
 		fmt.Println("Hello, World!")
 
+		// この下に分岐を挟んでいく
+		// ---------------------
+
+	} else if name == "welcome" { // [O1o1o0g11o__10o0]
+		slog.Infow("Welcome!",
+			"a", 1, "b", 2, "c", 3)
+
 		// この上に分岐を挟んでいく
+		// ---------------------
 
 	} else {
 

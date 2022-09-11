@@ -25,7 +25,7 @@
 
 📖 [リポジトリ](https://github.com/muzudho/kifuwarabe-uec14)  
 
-# Step [O1o1o0g2o0] ソースの置き場所（ローカル）
+## Step [O1o1o0g2o0] ソースの置き場所（ローカル）
 
 Go言語では ローカルPCのどこにソースを置くかは自分で設定して決めておく。  
 サンプルでは　ユーザーホームの下に置いているので、真似る  
@@ -52,17 +52,17 @@ Output:
 
 以降の文章では、あなたのリポジトリに読み替えてほしい  
 
-# Step [O1o1o0g3o0] Visual Studio Code を使う
+## Step [O1o1o0g3o0] Visual Studio Code を使う
 
 がんばって、 `Visual Studio Code` を使えるようにしておいてほしい  
 
 📖 [Visual Studio Code](https://code.visualstudio.com/)  
 
-# Step [O1o1o0g4o0] Goエクステンションをインストールする
+## Step [O1o1o0g4o0] Goエクステンションをインストールする
 
 `Visual Studio Code` の `Extensions` から、 `Go` をインストールしておいてほしい  
 
-# Step [O1o1o0g5o0] マルチ ワークスペース
+## Step [O1o1o0g5o0] マルチ ワークスペース
 
 べつに ワークスペースは１つでいいが、  
 一応 複数のワークスペースを作れるように対応しておく    
@@ -86,7 +86,7 @@ go 1.19
 
 ```
 
-# Step [O1o1o0g6o0] 設定 - .gitignore ファイル
+## Step [O1o1o0g6o0] 設定 - .gitignore ファイル
 
 👇 以下の既存ファイルを編集（無ければ新規作成）してほしい  
 
@@ -96,20 +96,21 @@ go 1.19
   	└── 📄 go.work
 ```
 
-例えば冒頭に追加  
+👇 例えば冒頭に追加  
 
 ```plaintext
-# * ここから、以下を追加
-# (^q^)
+# この下に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
+# ---------------------------------------------------------------
 
 go.work
-# * ここまで
 
 
+# この上に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
+# ---------------------------------------------------------------
 # ...略...
 ```
 
-# Step [O1o1o0g7o0] モジュール作成
+## Step [O1o1o0g7o0] モジュール作成
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -145,7 +146,7 @@ module github.com/muzudho/kifuwarabe-uec14
 go 1.19
 ```
 
-# Step [O1o1o0g8o0] ワークスペースズへ登録
+## Step [O1o1o0g8o0] ワークスペースズへ登録
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -172,7 +173,7 @@ go work use .
 use .
 ```
 
-# Step [O1o1o0g9o0] エントリーポイント作成
+# Step [O1o1o0g9o0] エントリーポイント作成 - ハローワールド
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -199,10 +200,20 @@ func main() {
 	// プログラム名
 	var name = flag.Arg(0)
 
+	// この下に初期設定を追加していく
+	// ---------------------------
+
+	// この上に初期設定を追加していく
+	// ---------------------------
+
 	if name == "hello" { // [O1o1o0g9o0]
 		fmt.Println("Hello, World!")
 
+		// この下に分岐を挟んでいく
+		// ---------------------
+
 		// この上に分岐を挟んでいく
+		// ---------------------
 
 	} else {
 		fmt.Println("go run . {programName}")
@@ -212,7 +223,7 @@ func main() {
 // EOF [O1o1o0g9o0]
 ```
 
-# Step [O1o1o0g10o0] tidy
+## Step [O1o1o0g10o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -220,13 +231,192 @@ func main() {
 go mod tidy
 ```
 
-# Step [O1o1o0g10o1o0] ハローワールド
+## Step [O1o1o0g10o1o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
 
 ```shell
 go run . hello
 ```
+
+Output:  
+
+```plaintext
+Hello, World!
+```
+
+# Step [O1o1o0g11o__10o0] ロガー設定
+
+## Step [O1o1o0g11o__10o1o0] インストール
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go get -u go.uber.org/zap
+```
+
+## Step [O1o1o0g11o__10o2_1o0] 設定 - .gitignore ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+👉	├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	├── 📄 logger.go
+ 	└── 📄 main.go
+```
+
+```plaintext
+# この下に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
+# ---------------------------------------------------------------
+# ...略...
+
+*.log
+
+# この上に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
+# ---------------------------------------------------------------
+# ...略...
+```
+
+## Step [O1o1o0g11o__10o2o0] ファイル作成
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉 	├── 📄 logger.go
+ 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g11o__10o2o0]
+
+package main
+
+import (
+	"os"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
+
+// CreateSugaredLogger - ロガーを作成します
+func CreateSugaredLogger(logFile *os.File) *zap.SugaredLogger {
+	// 設定 > 製品用
+	var config = zap.NewProductionEncoderConfig()
+	config.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ
+
+	// コア
+	var core = zapcore.NewTee(
+		zapcore.NewCore(
+			zapcore.NewJSONEncoder(config), // JSON形式
+			zapcore.Lock(os.Stderr),        // 出力先は標準エラー
+			zapcore.DebugLevel),            // ログレベル
+		zapcore.NewCore(
+			zapcore.NewJSONEncoder(config), // JSON形式
+			zapcore.AddSync(logFile),       // 出力先はログファイル
+			zapcore.DebugLevel),            // ログレベル
+	)
+
+	// ロガーのビルド
+	var logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
+	// 糖衣構文のインターフェースを取得
+	return logger.Sugar()
+}
+
+// EOF [O1o1o0g11o__10o2o0]
+```
+
+## Step [O1o1o0g11o__10o3o0] ファイル編集
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	├── 📄 logger.go
+👉 	└── 📄 main.go
+```
+
+```go
+	// ...略...
+	// この下に初期設定を追加していく
+	// ---------------------------
+
+	// ログファイル
+	var logFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer logFile.Close() // ログファイル使用済み時にファイルを閉じる
+	// カスタマイズしたロガーを使うなら
+	var slog = CreateSugaredLogger(logFile) // Sugared LOGger
+
+	// この上に初期設定を追加していく
+	// ---------------------------
+
+	if name == "hello" { // [O1o1o0g9o0]
+		// ...略...
+		// この下に分岐を挟んでいく
+		// ---------------------
+		// ...略...
+
+
+	} else if name == "welcome" { // [O1o1o0g11o__10o0]
+		slog.Infow("Welcome!",
+			"a", 1, "b", 2, "c", 3)
+
+
+		// ...略...
+		// この上に分岐を挟んでいく
+		// ---------------------
+		// ...略...
+	}
+```
+
+# Step [O1o1o0g11o__10o4o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go run . welocome
+```
+
+Output:  
+
+```shell
+{"level":"info","ts":"2022-09-11T13:02:31.181+0900","caller":"kifuwarabe-uec14/main.go:39","msg":"Welcome!","a":1,"b":2,"c":3}
+```
+
+👇 以下のファイルが新規作成された  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉	├── 📄 kifuwarabe-uec14.log
+ 	├── 📄 logger.go
+ 	└── 📄 main.go
+```
+
+```json
+{"level":"info","ts":"2022-09-11T13:02:31.181+0900","caller":"kifuwarabe-uec14/main.go:39","msg":"Welcome!","a":1,"b":2,"c":3}
+```
+
+* 作成されるログファイルは JSON形式ではない。 ワンライナーのJSONが複数行並ぶ
+* 標準出力は、大会サーバーにメッセージを送るのに利用されることがある。従って 標準出力にログを出力すると反則負けになることがある
+  * 従って、ログをコンソールに表示したいときは、標準エラーに出力するようにする
 
 # Step [O1o1o0g11o_1o0] インタープリター 作成
 
@@ -257,7 +447,11 @@ import (
 	if name == "hello" { // [O1o1o0g9o0]
 		fmt.Println("Hello, World!")
 
+		// この下に分岐を挟んでいく
+		// ---------------------
+
 		// この上に分岐を挟んでいく
+		// ---------------------
 
 	} else {
 
