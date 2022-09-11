@@ -49,7 +49,7 @@ func main() {
 	} else {
 
 		// fmt.Println("go run . {programName}")
-		var board = NewBoard() // [O1o1o0g13o0]
+		var board = kernel.NewBoard() // [O1o1o0g13o0]
 
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
 		var scanner = bufio.NewScanner(os.Stdin)
@@ -71,7 +71,7 @@ func main() {
 					sb.WriteString(`= board:'''
 . `)
 
-					var setStone = func(s Stone) {
+					var setStone = func(s kernel.Stone) {
 						sb.WriteString(fmt.Sprintf("%v", s))
 					}
 					var doNewline = func() {
@@ -85,7 +85,7 @@ func main() {
 				{
 					var sb strings.Builder
 
-					var setStone = func(s Stone) {
+					var setStone = func(s kernel.Stone) {
 						sb.WriteString(fmt.Sprintf("%v", s))
 					}
 					var doNewline = func() {
@@ -102,7 +102,7 @@ func main() {
 
 			case "file": // [O1o1o0g17o0]
 				// Example: "file A7"
-				var file = GetFileFromCode(tokens[1])
+				var file = kernel.GetFileFromCode(tokens[1])
 				fmt.Printf("= %s\n", file)
 
 			case "quit": // [O1o1o0g11o_1o0]
@@ -111,7 +111,7 @@ func main() {
 
 			case "rank": // [O1o1o0g17o0]
 				// Example: "rank J13"
-				var rank = GetRankFromCode(tokens[1])
+				var rank = kernel.GetRankFromCode(tokens[1])
 				fmt.Printf("= %s\n", rank)
 
 			// この上にコマンドを挟んでいく

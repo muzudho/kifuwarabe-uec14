@@ -406,7 +406,7 @@ go get -u go.uber.org/zap
 ```go
 // BOF [O1o1o0g11o__10o2o0]
 
-package main
+package kernel
 
 import (
 	"os"
@@ -771,7 +771,7 @@ quit
 ```go
 // BOF [O1o1o0g11o0]
 
-package main
+package kernel
 
 import "fmt"
 
@@ -867,7 +867,7 @@ go mod tidy
 ```go
 // BOF [O1o1o0g12o0]
 
-package main
+package kernel
 
 // Board - 盤
 type Board struct {
@@ -1017,7 +1017,7 @@ go mod tidy
 // ...略...
 
 
-		var board = NewBoard()	// [O1o1o0g13o0]
+		var board = kernel.NewBoard() // [O1o1o0g13o0]
 		// * 以下の行より上
 		// var scanner = bufio.NewScanner(os.Stdin)
 		// for scanner.Scan() {
@@ -1037,7 +1037,7 @@ go mod tidy
 					sb.WriteString(`= board:'''
 . `)
 
-					var setStone = func(s Stone) {
+					var setStone = func(s kernel.Stone) {
 						sb.WriteString(fmt.Sprintf("%v", s))
 					}
 					var doNewline = func() {
@@ -1051,7 +1051,7 @@ go mod tidy
 				{
 					var sb strings.Builder
 
-					var setStone = func(s Stone) {
+					var setStone = func(s kernel.Stone) {
 						sb.WriteString(fmt.Sprintf("%v", s))
 					}
 					var doNewline = func() {
@@ -1068,7 +1068,7 @@ go mod tidy
 // ...略...
 ```
 
-# Step [O1o1o0g14o0] 実行
+## Step [O1o1o0g14o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -1195,7 +1195,7 @@ Output:
 ```go
 // BOF [O1o1o0g15o0]
 
-package main
+package kernel
 
 // Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
 type Point int
@@ -1242,7 +1242,7 @@ func GetRankFromCode(code string) string {
 // EOF [O1o1o0g15o0]
 ```
 
-# Step [O1o1o0g16o0] 座標の算出
+## Step [O1o1o0g16o0] 座標の算出
 
 👇 以下の既存ファイルを新規作成してほしい  
 
@@ -1263,7 +1263,7 @@ func GetRankFromCode(code string) string {
 ```go
 // BOF [O1o1o0g16o0]
 
-package main
+package kernel
 
 // GetPointFromXy - 座標変換 (x,y) → Point
 func (b *Board) GetPointFromXy(x int, y int) Point {
@@ -1283,7 +1283,7 @@ func (b *Board) GetPointFromCode(code string) Point {
 // EOF [O1o1o0g16o0]
 ```
 
-# Step [O1o1o0g17o0] 符号変換 作成
+## Step [O1o1o0g17o0] 符号変換 作成
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1315,12 +1315,12 @@ func (b *Board) GetPointFromCode(code string) Point {
 
 			case "file": // [O1o1o0g17o0]
 				// Example: "file A7"
-				var file = GetFileFromCode(tokens[1])
+				var file = kernel.GetFileFromCode(tokens[1])
 				fmt.Printf("= %s\n", file)
 
 			case "rank": // [O1o1o0g17o0]
 				// Example: "rank J13"
-				var rank = GetRankFromCode(tokens[1])
+				var rank = kernel.GetRankFromCode(tokens[1])
 				fmt.Printf("= %s\n", rank)
 
 			// この上にコマンドを挟んでいく
@@ -1330,7 +1330,7 @@ func (b *Board) GetPointFromCode(code string) Point {
 // ...略...
 ```
 
-# Step [O1o1o0g18o0] 実行
+## Step [O1o1o0g18o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
