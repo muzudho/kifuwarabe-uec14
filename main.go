@@ -48,6 +48,9 @@ func main() {
 
 	} else {
 
+		// [O1o1o0g11o_3o0]
+		var kernel1 = kernel.NewKernel()
+
 		// fmt.Println("go run . {programName}")
 		var board = kernel.NewBoard() // [O1o1o0g13o0]
 
@@ -58,6 +61,13 @@ func main() {
 			logg.C.Infof("# %s", command)             // 人間向けの出力
 			logg.J.Infow("input", "command", command) // コンピューター向けの出力
 
+			// [O1o1o0g11o_3o0]
+			var isHandled = kernel1.Execute(command)
+			if isHandled {
+				continue
+			}
+
+			// [O1o1o0g11o_1o0]
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
 
