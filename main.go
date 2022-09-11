@@ -79,7 +79,7 @@ func main() {
 					}
 					board.ForeachLikeText(setStone, doNewline)
 					sb.WriteString("\n. '''\n")
-					logg.c.Info(sb.String())
+					logg.C.Info(sb.String())
 				}
 				// コンピューター向けの出力
 				{
@@ -92,7 +92,7 @@ func main() {
 						// pass
 					}
 					board.ForeachLikeText(setStone, doNewline)
-					logg.j.Infow("output", "board", sb.String())
+					logg.J.Infow("output", "board", sb.String())
 				}
 
 			case "coord": // [O1o1o0g17o0]

@@ -361,8 +361,8 @@ go get -u go.uber.org/zap
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
-👉 	│	├── 📄 logger.go
-	│	└── 📄 go.mod
+	│	├── 📄 go.mod
+👉 	│	└── 📄 logger.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -478,8 +478,8 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
- 	│	├── 📄 logger.go
-	│	└── 📄 go.mod
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -583,6 +583,9 @@ Output:
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -612,6 +615,9 @@ Output:
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -710,23 +716,28 @@ quit
 強制終了したいときは、 `[Ctrl]` キーを押しながら `[C]` キーを押してほしい。  
 これを以後 `[Ctrl] + [C]` と表記する  
 
-# Step [O1o1o0g11o0] 石定義 作成
+# Step [O1o1o0g11o_3o0] 石定義 作成
+
+## Step [O1o1o0g11o0] ファイル作成 - stone.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 logger.go
+👉 	│	└── 📄 stone.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
- 	├── 📄 main.go
-👉 	└── 📄 stone.go
+ 	└── 📄 main.go
 ```
 
 ```go
 // BOF [O1o1o0g11o0]
 
-package main
+package kernel
 
 import "fmt"
 
@@ -757,6 +768,11 @@ func (s Stone) String() string {
 
 // EOF [O1o1o0g11o0]
 ```
+
+## Step [O1o1o0g11o1o0] リモートリポジトリにプッシュ
+
+がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
+リモートリポジトリにプッシュしてほしい  
 
 # Step [O1o1o0g12o0] 盤定義 作成
 
@@ -895,7 +911,7 @@ func (b *Board) getMemoryArea() int {
 					}
 					board.ForeachLikeText(setStone, doNewline)
 					sb.WriteString("\n. '''\n")
-					logg.c.Info(sb.String())
+					logg.C.Info(sb.String())
 				}
 				// コンピューター向けの出力
 				{
@@ -908,7 +924,7 @@ func (b *Board) getMemoryArea() int {
 						// pass
 					}
 					board.ForeachLikeText(setStone, doNewline)
-					logg.j.Infow("output", "board", sb.String())
+					logg.J.Infow("output", "board", sb.String())
 				}
 
 			// この上にコマンドを挟んでいく
