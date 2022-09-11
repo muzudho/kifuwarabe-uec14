@@ -788,7 +788,7 @@ func (b *Board) getMemoryArea() int {
 
 			// * アルファベット順になる位置に、以下のケース文を挿入
 			case "board": // [O1o1o0g13o0]
-				// 対人表示用の盤
+				// 人間向けの出力
 				{
 					var sb strings.Builder
 					sb.WriteString(`= board:'''
@@ -803,7 +803,19 @@ func (b *Board) getMemoryArea() int {
 					board.ForeachLikeText(setStone, doNewline)
 					sb.WriteString("\n. '''\n")
 					logg.c.Info(sb.String())
-					logg.j.Infow("output", "response", "=")
+				}
+				// コンピューター向けの出力
+				{
+					var sb strings.Builder
+
+					var setStone = func(s Stone) {
+						sb.WriteString(fmt.Sprintf("%v", s))
+					}
+					var doNewline = func() {
+						// pass
+					}
+					board.ForeachLikeText(setStone, doNewline)
+					logg.j.Infow("output", "board", sb.String())
 				}
 
 			// この上にコマンドを挟んでいく
@@ -883,7 +895,7 @@ Output:
 
 ```plaintext
 {"level":"info","ts":"2022-09-11T19:04:58.192+0900","caller":"kifuwarabe-uec14/main.go:57","msg":"input","command":"board"}
-{"level":"info","ts":"2022-09-11T19:04:58.195+0900","caller":"kifuwarabe-uec14/main.go:81","msg":"output","response":"="}
+{"level":"info","ts":"2022-09-11T19:04:58.195+0900","caller":"kifuwarabe-uec14/main.go:81","msg":"output","board":"++++++++++++++++++++++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++...................++++++++++++++++++++++"}
 ```
 
 👇 📄 `kifuwarabe-uec14.log`  

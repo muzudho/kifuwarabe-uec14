@@ -53,8 +53,8 @@ func main() {
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
-			logg.c.Infof("# %s", command)
-			logg.j.Infow("input", "command", command)
+			logg.c.Infof("# %s", command)             // 人間向けの出力
+			logg.j.Infow("input", "command", command) // コンピューター向けの出力
 
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
@@ -63,7 +63,7 @@ func main() {
 			// -------------------------
 
 			case "board": // [O1o1o0g13o0]
-				// 対人表示用の盤
+				// 人間向けの出力
 				{
 					var sb strings.Builder
 					sb.WriteString(`= board:'''
@@ -78,7 +78,19 @@ func main() {
 					board.ForeachLikeText(setStone, doNewline)
 					sb.WriteString("\n. '''\n")
 					logg.c.Info(sb.String())
-					logg.j.Infow("output", "response", "=")
+				}
+				// コンピューター向けの出力
+				{
+					var sb strings.Builder
+
+					var setStone = func(s Stone) {
+						sb.WriteString(fmt.Sprintf("%v", s))
+					}
+					var doNewline = func() {
+						// pass
+					}
+					board.ForeachLikeText(setStone, doNewline)
+					logg.j.Infow("output", "board", sb.String())
 				}
 
 			case "coord": // [O1o1o0g17o0]
