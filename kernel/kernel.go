@@ -3,10 +3,13 @@
 package kernel
 
 type Kernel struct {
+	// Board - 盤
+	Board *Board
 }
 
 func NewKernel() *Kernel {
 	var k = new(Kernel)
+	k.Board = NewBoard()
 	return k
 }
 

@@ -776,10 +776,13 @@ quit
 package kernel
 
 type Kernel struct {
+	// Board - 盤
+	Board *Board
 }
 
 func NewKernel() *Kernel {
 	var k = new(Kernel)
+	k.Board = NewBoard()
 	return k
 }
 
@@ -1115,10 +1118,7 @@ go mod tidy
 ```
 
 ```go
-// ...略...
-
-
-		var board = kernel.NewBoard() // [O1o1o0g13o0]
+		// ...略...
 		// * 以下の行より上
 		// var scanner = bufio.NewScanner(os.Stdin)
 		// for scanner.Scan() {
@@ -1144,7 +1144,7 @@ go mod tidy
 					var doNewline = func() {
 						sb.WriteString("\n. ")
 					}
-					board.ForeachLikeText(setStone, doNewline)
+					kernel1.Board.ForeachLikeText(setStone, doNewline)
 					sb.WriteString("\n. '''\n")
 					logg.C.Info(sb.String())
 				}
@@ -1158,7 +1158,7 @@ go mod tidy
 					var doNewline = func() {
 						// pass
 					}
-					board.ForeachLikeText(setStone, doNewline)
+					kernel1.Board.ForeachLikeText(setStone, doNewline)
 					logg.J.Infow("output", "board", sb.String())
 				}
 
@@ -1411,7 +1411,7 @@ func (b *Board) GetPointFromCode(code string) Point {
 			// * アルファベット順になる位置に、以下のケース文を挿入
 			case "coord": // [O1o1o0g17o0]
 				// Example: "coord A7"
-				var point = board.GetPointFromCode(tokens[1])
+				var point = kernel1.Board.GetPointFromCode(tokens[1])
 				fmt.Printf("= %d\n", point)
 
 			case "file": // [O1o1o0g17o0]
