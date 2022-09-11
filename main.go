@@ -61,7 +61,7 @@ func main() {
 			logg.J.Infow("input", "command", command) // コンピューター向けの出力
 
 			// [O1o1o0g11o_3o0]
-			var isHandled = kernel1.Execute(command)
+			var isHandled = kernel1.Execute(command, logg)
 			if isHandled {
 				continue
 			}
@@ -72,37 +72,6 @@ func main() {
 
 			// この下にコマンドを挟んでいく
 			// -------------------------
-
-			case "board": // [O1o1o0g13o0]
-				// 人間向けの出力
-				{
-					var sb strings.Builder
-					sb.WriteString(`= board:'''
-. `)
-
-					var setStone = func(s kernel.Stone) {
-						sb.WriteString(fmt.Sprintf("%v", s))
-					}
-					var doNewline = func() {
-						sb.WriteString("\n. ")
-					}
-					kernel1.Board.ForeachLikeText(setStone, doNewline)
-					sb.WriteString("\n. '''\n")
-					logg.C.Info(sb.String())
-				}
-				// コンピューター向けの出力
-				{
-					var sb strings.Builder
-
-					var setStone = func(s kernel.Stone) {
-						sb.WriteString(fmt.Sprintf("%v", s))
-					}
-					var doNewline = func() {
-						// pass
-					}
-					kernel1.Board.ForeachLikeText(setStone, doNewline)
-					logg.J.Infow("output", "board", sb.String())
-				}
 
 			case "coord": // [O1o1o0g17o0]
 				// Example: "coord A7"

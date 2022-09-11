@@ -762,8 +762,8 @@ quit
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📄 go.mod
- 	│	├── 📄 logger.go
-👉 	│	└── 📄 kernel.go
+👉 	│	├── 📄 kernel.go
+ 	│	└── 📄 logger.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -774,6 +774,8 @@ quit
 // BOF [O1o1o0g11o_3o0]
 
 package kernel
+
+import "strings"
 
 type Kernel struct {
 	// Board - 盤
@@ -787,7 +789,20 @@ func NewKernel() *Kernel {
 }
 
 // Execute - 実行
-func (k *Kernel) Execute(command string) bool {
+func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
+
+	var tokens = strings.Split(command, " ")
+	switch tokens[0] {
+
+	// この下にコマンドを挟んでいく
+	// -------------------------
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
+
+	default:
+	}
+
 	return false
 }
 
@@ -802,8 +817,8 @@ func (k *Kernel) Execute(command string) bool {
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📄 go.mod
- 	│	├── 📄 logger.go
- 	│	└── 📄 main.go
+ 	│	├── 📄 kernel.go
+ 	│	└── 📄 logger.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
@@ -838,7 +853,7 @@ import (
 
 			// * これを追加する
 			// [O1o1o0g11o_3o0]
-			var isHandled = kernel1.Execute(command)
+			var isHandled = kernel1.Execute(command, logg)
 			if isHandled {
 				continue
 			}
@@ -864,6 +879,7 @@ import (
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
 👉 	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -960,6 +976,7 @@ go mod tidy
 	├── 📂 kernel
 👉  │	├── 📄 board.go
 	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1100,7 +1117,7 @@ Input:
 go mod tidy
 ```
 
-# Step [O1o1o0g13o0] 盤表示コマンド 作成
+# Step [O1o1o0g13o0] 盤表示コマンド作成 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1109,62 +1126,57 @@ go mod tidy
 	├── 📂 kernel
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
-👉  └── 📄 main.go
+	└── 📄 main.go
 ```
 
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
 ```go
-		// ...略...
-		// * 以下の行より上
-		// var scanner = bufio.NewScanner(os.Stdin)
-		// for scanner.Scan() {
+// ...略...
 
+	// この下にコマンドを挟んでいく
+	// -------------------------
 
-			//...略...
-
-
-			// この下にコマンドを挟んでいく
-			// -------------------------
-
-			// * アルファベット順になる位置に、以下のケース文を挿入
-			case "board": // [O1o1o0g13o0]
-				// 人間向けの出力
-				{
-					var sb strings.Builder
-					sb.WriteString(`= board:'''
+	case "board": // [O1o1o0g13o0]
+		// 人間向けの出力
+		{
+			var sb strings.Builder
+			sb.WriteString(`= board:'''
 . `)
 
-					var setStone = func(s kernel.Stone) {
-						sb.WriteString(fmt.Sprintf("%v", s))
-					}
-					var doNewline = func() {
-						sb.WriteString("\n. ")
-					}
-					kernel1.Board.ForeachLikeText(setStone, doNewline)
-					sb.WriteString("\n. '''\n")
-					logg.C.Info(sb.String())
-				}
-				// コンピューター向けの出力
-				{
-					var sb strings.Builder
+			var setStone = func(s Stone) {
+				sb.WriteString(fmt.Sprintf("%v", s))
+			}
+			var doNewline = func() {
+				sb.WriteString("\n. ")
+			}
+			k.Board.ForeachLikeText(setStone, doNewline)
+			sb.WriteString("\n. '''\n")
+			logg.C.Info(sb.String())
+		}
+		// コンピューター向けの出力
+		{
+			var sb strings.Builder
 
-					var setStone = func(s kernel.Stone) {
-						sb.WriteString(fmt.Sprintf("%v", s))
-					}
-					var doNewline = func() {
-						// pass
-					}
-					kernel1.Board.ForeachLikeText(setStone, doNewline)
-					logg.J.Infow("output", "board", sb.String())
-				}
+			var setStone = func(s Stone) {
+				sb.WriteString(fmt.Sprintf("%v", s))
+			}
+			var doNewline = func() {
+				// pass
+			}
+			k.Board.ForeachLikeText(setStone, doNewline)
+			logg.J.Infow("output", "board", sb.String())
+		}
+		return true
 
-			// この上にコマンドを挟んでいく
-			// -------------------------
-
+	// この上にコマンドを挟んでいく
+	// -------------------------
 
 // ...略...
 ```
@@ -1227,6 +1239,7 @@ Output:
 	├── 📂 kernel
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1284,6 +1297,7 @@ Output:
 	├── 📂 kernel
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
 👉  │	├── 📄 point.go
  	│	└── 📄 stone.go
@@ -1353,6 +1367,7 @@ func GetRankFromCode(code string) string {
 👉  │	├── 📄 board_coord.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1393,6 +1408,7 @@ func (b *Board) GetPointFromCode(code string) Point {
 	├── 📂 kernel
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore

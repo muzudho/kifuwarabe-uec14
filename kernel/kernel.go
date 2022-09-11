@@ -2,6 +2,11 @@
 
 package kernel
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Kernel struct {
 	// Board - 盤
 	Board *Board
@@ -14,7 +19,52 @@ func NewKernel() *Kernel {
 }
 
 // Execute - 実行
-func (k *Kernel) Execute(command string) bool {
+func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
+
+	var tokens = strings.Split(command, " ")
+	switch tokens[0] {
+
+	// この下にコマンドを挟んでいく
+	// -------------------------
+
+	case "board": // [O1o1o0g13o0]
+		// 人間向けの出力
+		{
+			var sb strings.Builder
+			sb.WriteString(`= board:'''
+. `)
+
+			var setStone = func(s Stone) {
+				sb.WriteString(fmt.Sprintf("%v", s))
+			}
+			var doNewline = func() {
+				sb.WriteString("\n. ")
+			}
+			k.Board.ForeachLikeText(setStone, doNewline)
+			sb.WriteString("\n. '''\n")
+			logg.C.Info(sb.String())
+		}
+		// コンピューター向けの出力
+		{
+			var sb strings.Builder
+
+			var setStone = func(s Stone) {
+				sb.WriteString(fmt.Sprintf("%v", s))
+			}
+			var doNewline = func() {
+				// pass
+			}
+			k.Board.ForeachLikeText(setStone, doNewline)
+			logg.J.Infow("output", "board", sb.String())
+		}
+		return true
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
+
+	default:
+	}
+
 	return false
 }
 
