@@ -742,7 +742,7 @@ func (b *Board) getMemoryArea() int {
 
 			// * アルファベット順になる位置に、以下のケース文を挿入
 			case "board": // [O1o1o0g13o0]
-				fmt.Print(`= board'''
+				fmt.Print(`= board:'''
 . `)
 
 				var b = NewBoard()
