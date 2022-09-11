@@ -303,7 +303,9 @@ go get -u go.uber.org/zap
 package main
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -379,6 +381,29 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	return logger.Sugar()
 }
 
+func (logg *SugaredLoggerForGame) Infow(msg string, keysAndValues ...interface{}) {
+	var sb strings.Builder
+	if msg != "" {
+		sb.WriteString(msg)
+		sb.WriteString(" ")
+	}
+
+	for i, v := range keysAndValues {
+		if i == 0 {
+			// pass
+		} else if i%2 == 0 {
+			sb.WriteString(" ")
+		} else {
+			sb.WriteString(":")
+		}
+
+		sb.WriteString(fmt.Sprintf("%v", v))
+	}
+	logg.c.Infof("%s", sb.String())
+
+	logg.j.Infow(msg, keysAndValues...)
+}
+
 // EOF [O1o1o0g11o__10o2o0]
 ```
 
@@ -422,6 +447,8 @@ func createSugaredLoggerAsJson(jsonLogFile *os.File) *zap.SugaredLogger {
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
 		logg.c.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
 		logg.j.Infow("Welcome!",
+			"a", 1, "b", 2, "c", 3)
+		logg.Infow("Welcome!",
 			"a", 1, "b", 2, "c", 3)
 
 
@@ -1036,6 +1063,11 @@ Output:
 ### 列挙型
 
 📖 [How to make Go print enum fields as string?](https://stackoverflow.com/questions/41480543/how-to-make-go-print-enum-fields-as-string)  
+
+### 可変長引数
+
+📖 [Concatenating and Building Strings in Go 1.10+](https://www.calhoun.io/concatenating-and-building-strings-in-go/)  
+📖 [Convert interface to string](https://yourbasic.org/golang/interface-to-string/)  
 
 .
 

@@ -40,6 +40,8 @@ func main() {
 		logg.c.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
 		logg.j.Infow("Welcome!",
 			"a", 1, "b", 2, "c", 3)
+		logg.Infow("Welcome!",
+			"a", 1, "b", 2, "c", 3)
 
 		// この上に分岐を挟んでいく
 		// ---------------------
