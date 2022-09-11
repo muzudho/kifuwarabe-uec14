@@ -455,11 +455,9 @@ func (logg *SugaredLoggerForGame) Infow(msg string, keysAndValues ...interface{}
 
 
 	} else if name == "welcome" { // [O1o1o0g11o__10o0]
-		logg.c.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
+		logg.c.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
 		logg.j.Infow("Welcome!",
-			"a", 1, "b", 2, "c", 3)
-		logg.Infow("Welcome!",
-			"a", 1, "b", 2, "c", 3)
+			"name", "nihon taro", "weight", 92.6, "x", 3)
 
 
 		// ...略...
@@ -570,8 +568,8 @@ import (
 			// -------------------------
 
 			default:
-				logg.c.Infof("? unknown_command command:%s\n", tokens[0])
-				logg.j.Infow("? unknown_command", "Command", tokens[0])
+				logg.c.Infof("? unknown_command command:'%s'\n", tokens[0])
+				logg.j.Infow("? unknown_command", "command", tokens[0])
 			}
 		}
 	}
@@ -790,18 +788,23 @@ func (b *Board) getMemoryArea() int {
 
 			// * アルファベット順になる位置に、以下のケース文を挿入
 			case "board": // [O1o1o0g13o0]
-				fmt.Print(`= board:'''
+				// 対人表示用の盤
+				{
+					var sb strings.Builder
+					sb.WriteString(`= board:'''
 . `)
 
-				var b = NewBoard()
-				var setStone = func(s Stone) {
-					fmt.Printf("%v", s)
+					var setStone = func(s Stone) {
+						sb.WriteString(fmt.Sprintf("%v", s))
+					}
+					var doNewline = func() {
+						sb.WriteString("\n. ")
+					}
+					board.ForeachLikeText(setStone, doNewline)
+					sb.WriteString("\n. '''\n")
+					logg.c.Info(sb.String())
+					logg.j.Infow("output", "response", "=")
 				}
-				var doNewline = func() {
-					fmt.Printf("\n. ")
-				}
-				board.ForeachLikeText(setStone, doNewline)
-				fmt.Print("\n. '''\n")
 
 			// この上にコマンドを挟んでいく
 			// -------------------------
@@ -833,7 +836,7 @@ board
 Output:  
 
 ```plaintext
-= board_test'''
+2022-09-11T19:04:58.192+0900    = board:'''
 . +++++++++++++++++++++
 . +...................+
 . +...................+
@@ -858,9 +861,59 @@ Output:
 . '''
 ```
 
-この出力書式は 私の方法であって、公式大会のものではないことに注意されたい  
+* この出力書式は 私の方法であって、公式大会のものではないことに注意されたい
+	* 📖 [思考エンジンの思考ログ仕様（きふわらべ2022年以降）](https://qiita.com/muzudho1/items/ceb6130cf558cd373dd7)
 
-📖 [思考エンジンの思考ログ仕様（きふわらべ2022年以降）](https://qiita.com/muzudho1/items/ceb6130cf558cd373dd7)  
+👇 以下のファイルが自動生成された  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📄 .gitignore
+    ├── 📄 board.go
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉 	├── 📄 kifuwarabe-uec14-json.log
+👉 	├── 📄 kifuwarabe-uec14.log
+  	├── 📄 logger.go
+  	├── 📄 main.go
+ 	└── 📄 stone.go
+```
+
+👇 📄 `kifuwarabe-uec14-json.log`  
+
+```plaintext
+{"level":"info","ts":"2022-09-11T19:04:58.192+0900","caller":"kifuwarabe-uec14/main.go:57","msg":"input","command":"board"}
+{"level":"info","ts":"2022-09-11T19:04:58.195+0900","caller":"kifuwarabe-uec14/main.go:81","msg":"output","response":"="}
+```
+
+👇 📄 `kifuwarabe-uec14.log`  
+
+```plaintext
+2022-09-11T19:04:58.157+0900	# board
+2022-09-11T19:04:58.192+0900	= board:'''
+. +++++++++++++++++++++
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +++++++++++++++++++++
+. '''
+```
 
 `quit` コマンドで 思考エンジンを終了してほしい  
 
@@ -1074,10 +1127,13 @@ Output:
 
 📖 [How to make Go print enum fields as string?](https://stackoverflow.com/questions/41480543/how-to-make-go-print-enum-fields-as-string)  
 
+### 出力
+
+📖 [Go で値を出力する方法](https://golang.keicode.com/basics/go-print-basics.php)  
+
 ### 可変長引数
 
 📖 [Concatenating and Building Strings in Go 1.10+](https://www.calhoun.io/concatenating-and-building-strings-in-go/)  
 📖 [Convert interface to string](https://yourbasic.org/golang/interface-to-string/)  
 
 .
-

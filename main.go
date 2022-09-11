@@ -40,9 +40,6 @@ func main() {
 		logg.c.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
 		logg.j.Infow("Welcome!",
 			"name", "nihon taro", "weight", 92.6, "x", 3)
-		// logg.c.Infof("Welcome! a:%d b:%d c:%d", 1, 2, 3)
-		// logg.j.Infow("Welcome!",
-		//  	"a", 1, "b", 2, "c", 3)
 
 		// この上に分岐を挟んでいく
 		// ---------------------
@@ -57,7 +54,7 @@ func main() {
 		for scanner.Scan() {
 			var command = scanner.Text()
 			logg.c.Infof("# %s", command)
-			logg.j.Infow("Input", "Command", command)
+			logg.j.Infow("input", "command", command)
 
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
@@ -66,17 +63,23 @@ func main() {
 			// -------------------------
 
 			case "board": // [O1o1o0g13o0]
-				fmt.Print(`= board_test'''
+				// 対人表示用の盤
+				{
+					var sb strings.Builder
+					sb.WriteString(`= board:'''
 . `)
 
-				var setStone = func(s Stone) {
-					fmt.Printf("%v", s)
+					var setStone = func(s Stone) {
+						sb.WriteString(fmt.Sprintf("%v", s))
+					}
+					var doNewline = func() {
+						sb.WriteString("\n. ")
+					}
+					board.ForeachLikeText(setStone, doNewline)
+					sb.WriteString("\n. '''\n")
+					logg.c.Info(sb.String())
+					logg.j.Infow("output", "response", "=")
 				}
-				var doNewline = func() {
-					fmt.Printf("\n. ")
-				}
-				board.ForeachLikeText(setStone, doNewline)
-				fmt.Print("\n. '''\n")
 
 			case "coord": // [O1o1o0g17o0]
 				// Example: "coord A7"
@@ -101,8 +104,8 @@ func main() {
 			// -------------------------
 
 			default:
-				logg.c.Infof("? unknown_command command:%s\n", tokens[0])
-				logg.j.Infow("? unknown_command", "Command", tokens[0])
+				logg.c.Infof("? unknown_command command:'%s'\n", tokens[0])
+				logg.j.Infow("? unknown_command", "command", tokens[0])
 			}
 		}
 	}
