@@ -340,8 +340,18 @@ func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 	}
 
 	// 設定、ファイル用
-	var configF = zap.NewProductionEncoderConfig()
-	configF.EncodeTime = zapcore.ISO8601TimeEncoder // 日本時間のタイムスタンプ
+	var configF = zapcore.EncoderConfig{
+		MessageKey: "message",
+
+		// LevelKey:    "level",
+		// EncodeLevel: zapcore.CapitalLevelEncoder,
+
+		TimeKey:    "time",
+		EncodeTime: zapcore.ISO8601TimeEncoder, // 日本時間のタイムスタンプ
+
+		// CallerKey:    "caller",
+		// EncodeCaller: zapcore.ShortCallerEncoder,
+	}
 
 	// コア
 	var core = zapcore.NewTee(

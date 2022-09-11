@@ -132,7 +132,7 @@ Output & Log:
 Output & Log:  
 
 ```
-= coord:"A1"
+= coord:'A1'
 ```
 
 * `文字列:` で始まるなら、プロパティと呼ぶ
@@ -142,7 +142,7 @@ Output & Log:
 Output & Log:  
 
 ```
-= profile name:"nihon taro" weight:92.6
+= profile name:'nihon taro' weight:92.6
 ```
 
 * 先頭から読んで `文字列:` が出てきたとき、プロパティのリストの始まりとする
@@ -151,7 +151,7 @@ Output & Log:
 * プロパティ名と値の間に `:` を置く。スペースは開けない
   * プロパティ名に `msg` を使うのは避ける。 `msg` はメッセージを指す
 * 複数のプロパティは半角空白区切りで置くことができる
-* 文字列型の値のエスケープシーケンスは TOML に倣うこと
+* 文字列型の値のクォーテーションの `"` と `'` の違いや、エスケープシーケンスは TOML の考え方に倣う
 
 ## 例: 複数行の返事
 
@@ -167,7 +167,7 @@ Output & Log:
 
 * ```'''``` から ```'''``` まで
 * エスケープシーケンスは使えない
-* TOML の考え方に倣う
+* 文字列型の値のクォーテーションの `"` と `'` の違いや、エスケープシーケンスは TOML の考え方に倣う
 
 # 思考エンジンからのコメント
 
@@ -227,7 +227,7 @@ Output & Log:
 Output & Log:  
 
 ```
-? unexpected_profile name:"nihon taro" weight:92.6
+? unexpected_profile name:'nihon taro' weight:92.6
 ```
 
 * 解説は `思考エンジンからの返事` を参照
