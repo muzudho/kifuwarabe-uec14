@@ -1414,7 +1414,7 @@ func (b *Board) GetPointFromCode(code string) Point {
 // EOF [O1o1o0g16o0]
 ```
 
-## Step [O1o1o0g17o0] 符号変換 作成
+## Step [O1o1o0g17o0] 符号変換作成 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1423,40 +1423,50 @@ func (b *Board) GetPointFromCode(code string) Point {
 	├── 📂 kernel
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
- 	│	├── 📄 kernel.go
+👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
-👉  └── 📄 main.go
+  	└── 📄 main.go
 ```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
 
 ```go
 // ...略...
 
 
-			// この下にコマンドを挟んでいく
-			// -------------------------
+	// この下にコマンドを挟んでいく
+	// -------------------------
 
-			// * アルファベット順になる位置に、以下のケース文を挿入
-			case "coord": // [O1o1o0g17o0]
-				// Example: "coord A7"
-				var point = kernel1.Board.GetPointFromCode(tokens[1])
-				fmt.Printf("= %d\n", point)
+	// ...略...
 
-			case "file": // [O1o1o0g17o0]
-				// Example: "file A7"
-				var file = kernel.GetFileFromCode(tokens[1])
-				fmt.Printf("= %s\n", file)
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "coord": // [O1o1o0g17o0]
+		// Example: "coord A13"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		logg.C.Infof("= %d\n", point)
+		logg.J.Infow("output", "point", point)
+		return true
 
-			case "rank": // [O1o1o0g17o0]
-				// Example: "rank J13"
-				var rank = kernel.GetRankFromCode(tokens[1])
-				fmt.Printf("= %s\n", rank)
+	case "file": // [O1o1o0g17o0]
+		// Example: "file A"
+		var file = GetFileFromCode(tokens[1])
+		logg.C.Infof("= %s\n", file)
+		logg.J.Infow("output", "file", file)
+		return true
 
-			// この上にコマンドを挟んでいく
-			// -------------------------
+	case "rank": // [O1o1o0g17o0]
+		// Example: "rank 13"
+		var rank = GetRankFromCode(tokens[1])
+		logg.C.Infof("= %s\n", rank)
+		logg.J.Infow("output", "rank", rank)
+		return true
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
 
 
 // ...略...
@@ -1482,10 +1492,25 @@ Input:
 file A1
 ```
 
-Output:  
+Output > Console:  
 
 ```plaintext
-= A
+[2022-09-11 23:27:52]   # file A1
+[2022-09-11 23:27:52]   = A
+```
+
+Output > Log > Text:  
+
+```plaintext
+2022-09-11T23:27:52.547+0900	# file A1
+2022-09-11T23:27:52.583+0900	= A
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-11T23:27:52.583+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"file A1"}
+{"level":"info","ts":"2022-09-11T23:27:52.584+0900","caller":"kernel/kernel.go:73","msg":"output","file":"A"}
 ```
 
 Input:  
@@ -1494,10 +1519,25 @@ Input:
 rank A1
 ```
 
-Output:  
+Output > Console:  
 
 ```plaintext
-= 1
+[2022-09-11 23:31:11]   # rank A1
+[2022-09-11 23:31:11]   = 1
+```
+
+Output > Log > Text:  
+
+```plaintext
+2022-09-11T23:31:11.020+0900	# rank A1
+2022-09-11T23:31:11.020+0900	= 1
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-11T23:31:11.020+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"rank A1"}
+{"level":"info","ts":"2022-09-11T23:31:11.021+0900","caller":"kernel/kernel.go:80","msg":"output","rank":"1"}
 ```
 
 Input:  
@@ -1506,10 +1546,25 @@ Input:
 coord A1
 ```
 
-Output:  
+Output > Console:  
 
 ```plaintext
-= 22
+[2022-09-11 23:32:42]   # coord A1
+[2022-09-11 23:32:42]   = 22
+```
+
+Output > Log > Text:  
+
+```plaintext
+2022-09-11T23:32:42.228+0900	# coord A1
+2022-09-11T23:32:42.229+0900	= 22
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"coord A1"}
+{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kernel/kernel.go:66","msg":"output","point":22}
 ```
 
 # 参考にした記事

@@ -73,24 +73,9 @@ func main() {
 			// この下にコマンドを挟んでいく
 			// -------------------------
 
-			case "coord": // [O1o1o0g17o0]
-				// Example: "coord A7"
-				var point = kernel1.Board.GetPointFromCode(tokens[1])
-				fmt.Printf("= %d\n", point)
-
-			case "file": // [O1o1o0g17o0]
-				// Example: "file A7"
-				var file = kernel.GetFileFromCode(tokens[1])
-				fmt.Printf("= %s\n", file)
-
 			case "quit": // [O1o1o0g11o_1o0]
 				// os.Exit(0)
 				return
-
-			case "rank": // [O1o1o0g17o0]
-				// Example: "rank J13"
-				var rank = kernel.GetRankFromCode(tokens[1])
-				fmt.Printf("= %s\n", rank)
 
 			// この上にコマンドを挟んでいく
 			// -------------------------

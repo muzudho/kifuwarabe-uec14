@@ -59,6 +59,27 @@ func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
 		}
 		return true
 
+	case "coord": // [O1o1o0g17o0]
+		// Example: "coord A13"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		logg.C.Infof("= %d\n", point)
+		logg.J.Infow("output", "point", point)
+		return true
+
+	case "file": // [O1o1o0g17o0]
+		// Example: "file A"
+		var file = GetFileFromCode(tokens[1])
+		logg.C.Infof("= %s\n", file)
+		logg.J.Infow("output", "file", file)
+		return true
+
+	case "rank": // [O1o1o0g17o0]
+		// Example: "rank 13"
+		var rank = GetRankFromCode(tokens[1])
+		logg.C.Infof("= %s\n", rank)
+		logg.J.Infow("output", "rank", rank)
+		return true
+
 	// この上にコマンドを挟んでいく
 	// -------------------------
 
