@@ -2,7 +2,7 @@ module github.com/muzudho/kifuwarabe-uec14
 
 go 1.19
 
-require github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911112135-f237cc5d1832
+require github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911114704-f68bc2cc5ece
 
 require (
 	go.uber.org/atomic v1.10.0 // indirect

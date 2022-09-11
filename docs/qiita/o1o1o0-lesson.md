@@ -940,6 +940,29 @@ cd ..
 がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
 リモートリポジトリにプッシュしてほしい  
 
+## Step [O1o1o0g12o5o0] tidy
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go get -u
+```
+
+Output:  
+
+```plaintext
+go: downloading github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911114704-f68bc2cc5ece
+go: upgraded github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911112135-f237cc5d1832 => v0.0.0-20220911114704-f68bc2cc5ece
+```
+
+Input:  
+
+```
+go mod tidy
+```
+
 # Step [O1o1o0g13o0] 盤表示コマンド 作成
 
 👇 以下の既存ファイルを編集してほしい  

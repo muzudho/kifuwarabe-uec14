@@ -1,6 +1,6 @@
 // BOF [O1o1o0g12o0]
 
-package kernel
+package main
 
 // Board - 盤
 type Board struct {

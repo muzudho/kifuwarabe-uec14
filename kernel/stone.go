@@ -1,6 +1,6 @@
 // BOF [O1o1o0g11o0]
 
-package kernel
+package main
 
 import "fmt"
 
