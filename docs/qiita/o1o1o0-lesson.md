@@ -406,7 +406,7 @@ go get -u go.uber.org/zap
 ```go
 // BOF [O1o1o0g11o__10o2o0]
 
-package kernel
+package main
 
 import (
 	"os"
@@ -566,7 +566,7 @@ func main() {
 	}
 ```
 
-# Step [O1o1o0g11o__10o3o0] tidy
+## Step [O1o1o0g11o__10o3o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -594,7 +594,7 @@ go: downloading gopkg.in/yaml.v3 v3.0.1
 
 Example: 📂 `C:\Users\むずでょ\go\pkg\mod\github.com\muzudho`  
 
-# Step [O1o1o0g11o__10o4o0] 実行
+## Step [O1o1o0g11o__10o4o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -711,7 +711,7 @@ import (
 // ...略...
 ```
 
-# Step [O1o1o0g11o_2o0] 実行
+## Step [O1o1o0g11o_2o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -771,7 +771,7 @@ quit
 ```go
 // BOF [O1o1o0g11o0]
 
-package kernel
+package main
 
 import "fmt"
 
@@ -861,14 +861,13 @@ go mod tidy
     ├── 📄 .gitignore
     ├── 📄 go.mod
   	├── 📄 go.work
- 	├── 📄 main.go
- 	└── 📄 stone.go
+ 	└── 📄 main.go
 ```
 
 ```go
 // BOF [O1o1o0g12o0]
 
-package kernel
+package main
 
 // Board - 盤
 type Board struct {
@@ -1003,12 +1002,15 @@ go mod tidy
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
     ├── 📄 .gitignore
-    ├── 📄 board.go
     ├── 📄 go.mod
   	├── 📄 go.work
-👉  ├── 📄 main.go
- 	└── 📄 stone.go
+👉  └── 📄 main.go
 ```
 
 ```go
@@ -1121,15 +1123,17 @@ Output:
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
     ├── 📄 .gitignore
-    ├── 📄 board.go
     ├── 📄 go.mod
   	├── 📄 go.work
 👉 	├── 📄 kifuwarabe-uec14-json.log
 👉 	├── 📄 kifuwarabe-uec14.log
-  	├── 📄 logger.go
-  	├── 📄 main.go
- 	└── 📄 stone.go
+  	└── 📄 main.go
 ```
 
 👇 📄 `kifuwarabe-uec14-json.log`  
@@ -1176,13 +1180,16 @@ Output:
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 logger.go
+👉  │	├── 📄 point.go
+ 	│	└── 📄 stone.go
     ├── 📄 .gitignore
-    ├── 📄 board.go
     ├── 📄 go.mod
   	├── 📄 go.work
-  	├── 📄 main.go
-👉  ├── 📄 point.go
- 	└── 📄 stone.go
+  	└── 📄 main.go
 ```
 
 ```go
@@ -1241,14 +1248,16 @@ func GetRankFromCode(code string) string {
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+👉  │	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
     ├── 📄 .gitignore
-👉  ├── 📄 board_coord.go
-    ├── 📄 board.go
     ├── 📄 go.mod
   	├── 📄 go.work
-  	├── 📄 main.go
-  	├── 📄 point.go
- 	└── 📄 stone.go
+  	└── 📄 main.go
 ```
 
 ```go
@@ -1280,12 +1289,15 @@ func (b *Board) GetPointFromCode(code string) Point {
 
 ```plaintext
   	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
     ├── 📄 .gitignore
-    ├── 📄 board.go
     ├── 📄 go.mod
   	├── 📄 go.work
-👉  ├── 📄 main.go
- 	└── 📄 stone.go
+👉  └── 📄 main.go
 ```
 
 ```go
