@@ -1023,15 +1023,15 @@ func NewBoard() *Board {
 	var b = new(Board)
 
 	// 盤のサイズ指定と、盤面の初期化
-	b.Resize(19+2, 19+2)
+	b.Resize(19, 19)
 
 	return b
 }
 
 // Resize - サイズ変更
 func (b *Board) Resize(width int, height int) {
-	b.memoryWidth = 19 + 2
-	b.memoryHeight = 19 + 2
+	b.memoryWidth = width + 2
+	b.memoryHeight = height + 2
 	b.nodes = make([]Stone, b.getMemoryArea())
 
 	// 枠を設定する
@@ -1350,8 +1350,7 @@ Output:
 			return true
 		}
 
-		// 枠の厚み 2 を追加
-		k.Board.Resize(sideLength+2, sideLength+2)
+		k.Board.Resize(sideLength, sideLength)
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 
@@ -1410,6 +1409,25 @@ Input:
 
 ```shell
 board
+```
+
+Output:  
+
+```plaintext
+[2022-09-12 20:56:20]   # board
+[2022-09-12 20:56:20]   = board:'''
+. +++++++++++
+. +.........+
+. +.........+
+. +.........+
+. +.........+
+. +.........+
+. +.........+
+. +.........+
+. +.........+
+. +.........+
+. +++++++++++
+. '''
 ```
 
 # Step [O1o1o0g15o_1o0] 座標の定義

@@ -70,8 +70,7 @@ func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
 			return true
 		}
 
-		// 枠の厚み 2 を追加
-		k.Board.Resize(sideLength+2, sideLength+2)
+		k.Board.Resize(sideLength, sideLength)
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 

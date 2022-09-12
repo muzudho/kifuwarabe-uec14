@@ -19,15 +19,15 @@ func NewBoard() *Board {
 	var b = new(Board)
 
 	// 盤のサイズ指定と、盤面の初期化
-	b.Resize(19+2, 19+2)
+	b.Resize(19, 19)
 
 	return b
 }
 
 // Resize - サイズ変更
 func (b *Board) Resize(width int, height int) {
-	b.memoryWidth = 19 + 2
-	b.memoryHeight = 19 + 2
+	b.memoryWidth = width + 2
+	b.memoryHeight = height + 2
 	b.nodes = make([]Stone, b.getMemoryArea())
 
 	// 枠を設定する
