@@ -90,6 +90,11 @@ func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
 		logg.J.Infow("output", "file", file)
 		return true
 
+	case "play": // [O1o1o0g20o0]
+		// Example: `play black A19`
+		k.DoPlay(command, logg)
+		return true
+
 	case "rank": // [O1o1o0g17o0]
 		// Example: "rank 13"
 		var rank = GetRankFromCode(tokens[1])

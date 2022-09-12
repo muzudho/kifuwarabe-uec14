@@ -1696,6 +1696,182 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kernel/kernel.go:66","msg":"output","point":22}
 ```
 
+# Step [O1o1o0g19o0] play コマンド（石を打つ）
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+👉 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g19o0]
+
+package kernel
+
+import "strings"
+
+// DoPlay - 打つ
+//
+// * `command` - Example: `play black A19`
+func (k *Kernel) DoPlay(command string, logg *SugaredLoggerForGame) {
+	var tokens = strings.Split(command, " ")
+
+	var stone Stone
+	switch tokens[1] {
+	case "empty":
+		stone = Empty
+	case "black":
+		stone = Black
+	case "white":
+		stone = White
+	case "wall":
+		stone = Wall
+	default:
+		logg.C.Infof("? unexpected stone:%s\n", tokens[1])
+		logg.J.Infow("error", "stone", tokens[1])
+		return
+	}
+
+	var point = k.Board.GetPointFromCode(tokens[2])
+	k.Play(stone, point)
+	logg.C.Info("=\n")
+	logg.J.Infow("ok")
+}
+
+func (k *Kernel) Play(stone Stone, point Point) {
+	k.Board.nodes[point] = stone
+}
+
+// EOF [O1o1o0g19o0]
+```
+
+## Step [O1o1o0g20o0] 実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+	// ...略...
+	// この下にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "play": // [O1o1o0g20o0]
+		// Example: `play black A19`
+		k.DoPlay(command, logg)
+		return true
+
+	// ...略...
+	// この上にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+```
+
+## Step [O1o1o0g21o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+play black B2
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-12 21:46:48]   # play black B2
+[2022-09-12 21:46:48]   =
+```
+
+Output > Log > Plain:  
+
+```plaintext
+2022-09-12T21:46:48.701+0900	# play black B2
+2022-09-12T21:46:48.739+0900	=
+```
+
+Output > Log > Json:  
+
+```json
+{"level":"info","ts":"2022-09-12T21:46:48.739+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"play black B2"}
+{"level":"info","ts":"2022-09-12T21:46:48.739+0900","caller":"kernel/play.go:32","msg":"ok"}
+```
+
+Input:  
+
+```shell
+board
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-12 21:49:36]   # board
+[2022-09-12 21:49:36]   = board:'''
+. +++++++++++++++++++++
+. +...................+
+. +.x.................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +...................+
+. +++++++++++++++++++++
+. '''
+```
+
 # 参考にした記事
 
 ## Go言語
