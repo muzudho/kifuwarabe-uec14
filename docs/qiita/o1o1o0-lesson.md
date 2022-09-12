@@ -1022,6 +1022,14 @@ type Board struct {
 func NewBoard() *Board {
 	var b = new(Board)
 
+	// 盤のサイズ指定と、盤面の初期化
+	b.Resize(19+2, 19+2)
+
+	return b
+}
+
+// Resize - サイズ変更
+func (b *Board) Resize(width int, height int) {
 	b.memoryWidth = 19 + 2
 	b.memoryHeight = 19 + 2
 	b.nodes = make([]Stone, b.getMemoryArea())
@@ -1051,8 +1059,6 @@ func NewBoard() *Board {
 			b.nodes[i] = Wall
 		}
 	}
-
-	return b
 }
 
 // ForeachLikeText - 枠を含めた各セル
@@ -1133,7 +1139,9 @@ Input:
 go mod tidy
 ```
 
-# Step [O1o1o0g13o0] 盤表示コマンド作成 - kernel.go ファイル
+# Step [O1o1o0g13o_1o0] board コマンド（盤表示）
+
+## Step [O1o1o0g13o0] 実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1304,7 +1312,109 @@ Output:
 
 `quit` コマンドで 思考エンジンを終了してほしい  
 
-# Step [O1o1o0g15o0] 座標の定義
+# Step [O1o1o0g15o_10o0] resize コマンド（盤サイズの変更）
+
+## Step [O1o1o0g15o_11o0] 実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+// ...略...
+
+	// この下にコマンドを挟んでいく
+	// -------------------------
+
+	case "boardsize": // [O1o1o0g15o_11o0]
+		// Example: `boardsize 19`
+		var sideLength, err = strconv.Atoi(tokens[1])
+
+		if err != nil {
+			logg.C.Infof("? unexpected sideLength:%s\n", tokens[1])
+			logg.J.Infow("error", "sideLength", tokens[1])
+			return true
+		}
+
+		// 枠の厚み 2 を追加
+		k.Board.Resize(sideLength+2, sideLength+2)
+		logg.C.Info("=\n")
+		logg.J.Infow("ok")
+
+		return true
+
+	// ...略...
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
+
+// ...略...
+```
+
+## Step [O1o1o0g15o_12o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+boardsize 9
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-12 20:44:12]   # boardsize 9
+[2022-09-12 20:44:12]   =
+```
+
+Output > Log > Plain:  
+
+```plaintext
+2022-09-12T20:44:12.860+0900	# boardsize 9
+2022-09-12T20:44:12.896+0900	=
+```
+
+Output > Log > Json:  
+
+```json
+{"level":"info","ts":"2022-09-12T20:44:12.894+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"boardsize 9"}
+{"level":"info","ts":"2022-09-12T20:44:12.896+0900","caller":"kernel/kernel.go:76","msg":"ok"}
+```
+
+Input:  
+
+```shell
+board
+```
+
+# Step [O1o1o0g15o_1o0] 座標の定義
+
+## Step [O1o1o0g15o0] ファイル作成 - point.go ファイル
 
 👇 以下の既存ファイルを新規作成してほしい  
 

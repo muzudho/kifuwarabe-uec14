@@ -18,6 +18,14 @@ type Board struct {
 func NewBoard() *Board {
 	var b = new(Board)
 
+	// 盤のサイズ指定と、盤面の初期化
+	b.Resize(19+2, 19+2)
+
+	return b
+}
+
+// Resize - サイズ変更
+func (b *Board) Resize(width int, height int) {
 	b.memoryWidth = 19 + 2
 	b.memoryHeight = 19 + 2
 	b.nodes = make([]Stone, b.getMemoryArea())
@@ -47,8 +55,6 @@ func NewBoard() *Board {
 			b.nodes[i] = Wall
 		}
 	}
-
-	return b
 }
 
 // ForeachLikeText - 枠を含めた各セル

@@ -4,6 +4,7 @@ package kernel
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -57,6 +58,23 @@ func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
 			k.Board.ForeachLikeText(setStone, doNewline)
 			logg.J.Infow("output", "board", sb.String())
 		}
+		return true
+
+	case "boardsize": // [O1o1o0g15o_11o0]
+		// Example: `boardsize 19`
+		var sideLength, err = strconv.Atoi(tokens[1])
+
+		if err != nil {
+			logg.C.Infof("? unexpected sideLength:%s\n", tokens[1])
+			logg.J.Infow("error", "sideLength", tokens[1])
+			return true
+		}
+
+		// 枠の厚み 2 を追加
+		k.Board.Resize(sideLength+2, sideLength+2)
+		logg.C.Info("=\n")
+		logg.J.Infow("ok")
+
 		return true
 
 	case "coord": // [O1o1o0g17o0]
