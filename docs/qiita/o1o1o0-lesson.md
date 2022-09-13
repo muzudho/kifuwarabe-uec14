@@ -1769,6 +1769,11 @@ Moved to `[O1o1o0g11o__10o_6o0]`
 
 package kernel
 
+import (
+	"fmt"
+	"strconv"
+)
+
 // Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
 type Point int
 
@@ -1782,6 +1787,18 @@ func GetXFromFile(file string) int {
 	return int(x)
 }
 
+// GetFileFromX - GetXFromFile の逆関数
+func GetFileFromX(x int) string {
+	// ABCDEFGHI
+	// 012345678
+	if 7 < x {
+		// 'I' を飛ばす
+		x++
+	}
+	// 筋
+	return fmt.Sprintf("%c", 'A'+x)
+}
+
 // GetYFromRank - '1' ～ '99' を 0 ～ 98 へ変換します
 func GetYFromRank(rank string) int {
 	// 段
@@ -1791,6 +1808,23 @@ func GetYFromRank(rank string) int {
 		y += int(rank[1] - '0')
 	}
 	return y - 1
+}
+
+// GetRankFromY - GetYFromRank の逆関数
+//
+// Parameters
+// ----------
+// y : int
+//
+//	0 .. 98
+//
+// Returns
+// -------
+// rank : string
+//
+//	"1" .. "99"
+func GetRankFromY(y int) string {
+	return strconv.Itoa(y + 1)
 }
 
 // GetFileFromCode - 座標の符号の筋の部分を抜き出します
@@ -1890,23 +1924,42 @@ func (b *Board) GetPointFromCode(code string) Point {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "coord": // [O1o1o0g17o0]
-		// Example: "coord A13"
-		var point = k.Board.GetPointFromCode(tokens[1])
-		logg.C.Infof("= %d\n", point)
-		logg.J.Infow("output", "point", point)
-		return true
-
-	case "file": // [O1o1o0g17o0]
-		// Example: "file A"
+	case "test_file": // [O1o1o0g17o0]
+		// Example: "test_file A"
 		var file = GetFileFromCode(tokens[1])
 		logg.C.Infof("= %s\n", file)
 		logg.J.Infow("output", "file", file)
 		return true
 
-	case "rank": // [O1o1o0g17o0]
-		// Example: "rank 13"
+	case "test_rank": // [O1o1o0g17o0]
+		// Example: "test_rank 13"
 		var rank = GetRankFromCode(tokens[1])
+		logg.C.Infof("= %s\n", rank)
+		logg.J.Infow("output", "rank", rank)
+		return true
+
+	case "test_x": // [O1o1o0g17o0]
+		// Example: "test_x 18"
+		var x, err = strconv.Atoi(tokens[1])
+		if err != nil {
+			logg.C.Infof("? unexpected x:%s\n", tokens[1])
+			logg.J.Infow("error", "x", tokens[1])
+			return true
+		}
+		var file = GetFileFromX(x)
+		logg.C.Infof("= %s\n", file)
+		logg.J.Infow("output", "file", file)
+		return true
+
+	case "test_y": // [O1o1o0g17o0]
+		// Example: "test_y 18"
+		var y, err = strconv.Atoi(tokens[1])
+		if err != nil {
+			logg.C.Infof("? unexpected y:%s\n", tokens[1])
+			logg.J.Infow("error", "y", tokens[1])
+			return true
+		}
+		var rank = GetRankFromY(y)
 		logg.C.Infof("= %s\n", rank)
 		logg.J.Infow("output", "rank", rank)
 		return true
@@ -1935,82 +1988,148 @@ go run .
 Input:  
 
 ```shell
-file A1
+test_file A1
 ```
 
 Output > Console:  
 
 ```plaintext
-[2022-09-11 23:27:52]   # file A1
+[2022-09-11 23:27:52]   # test_file A1
 [2022-09-11 23:27:52]   = A
 ```
 
-Output > Log > Text:  
+Output > Log > PlainText:  
 
 ```plaintext
-2022-09-11T23:27:52.547+0900	# file A1
+2022-09-11T23:27:52.547+0900	# test_file A1
 2022-09-11T23:27:52.583+0900	= A
 ```
 
 Output > Log > JSON:  
 
 ```json
-{"level":"info","ts":"2022-09-11T23:27:52.583+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"file A1"}
+{"level":"info","ts":"2022-09-11T23:27:52.583+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_file A1"}
 {"level":"info","ts":"2022-09-11T23:27:52.584+0900","caller":"kernel/kernel.go:73","msg":"output","file":"A"}
 ```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
 Input:  
 
 ```shell
-rank A1
+test_rank A1
 ```
 
 Output > Console:  
 
 ```plaintext
-[2022-09-11 23:31:11]   # rank A1
+[2022-09-11 23:31:11]   # test_rank A1
 [2022-09-11 23:31:11]   = 1
 ```
 
-Output > Log > Text:  
+Output > Log > PlainText:  
 
 ```plaintext
-2022-09-11T23:31:11.020+0900	# rank A1
+2022-09-11T23:31:11.020+0900	# test_rank A1
 2022-09-11T23:31:11.020+0900	= 1
 ```
 
 Output > Log > JSON:  
 
 ```json
-{"level":"info","ts":"2022-09-11T23:31:11.020+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"rank A1"}
+{"level":"info","ts":"2022-09-11T23:31:11.020+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_rank A1"}
 {"level":"info","ts":"2022-09-11T23:31:11.021+0900","caller":"kernel/kernel.go:80","msg":"output","rank":"1"}
 ```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
 Input:  
 
 ```shell
-coord A1
+test_coord A1
 ```
 
 Output > Console:  
 
 ```plaintext
-[2022-09-11 23:32:42]   # coord A1
+[2022-09-11 23:32:42]   # test_coord A1
 [2022-09-11 23:32:42]   = 22
 ```
 
-Output > Log > Text:  
+Output > Log > PlainText:  
 
 ```plaintext
-2022-09-11T23:32:42.228+0900	# coord A1
+2022-09-11T23:32:42.228+0900	# test_coord A1
 2022-09-11T23:32:42.229+0900	= 22
 ```
 
 Output > Log > JSON:  
 
 ```json
-{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"coord A1"}
+{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_coord A1"}
 {"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kernel/kernel.go:66","msg":"output","point":22}
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_x 18
+```
+
+* x は 0 から始まるので、 19列目は 18
+
+Output > Console:  
+
+```plaintext
+[2022-09-13 23:53:40]   # test_x 18
+[2022-09-13 23:53:40]   = T
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-13T23:53:40.906+0900	# test_x 18
+2022-09-13T23:53:40.943+0900	= T
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-13T23:53:40.943+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_x 18"}
+{"level":"info","ts":"2022-09-13T23:53:40.943+0900","caller":"kernel/kernel.go:115","msg":"output","file":"T"}
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_y 18
+```
+
+* y は 0 から始まるので、 19列目は 18
+
+Output > Console:  
+
+```plaintext
+[2022-09-13 23:58:42]   # test_y 18
+[2022-09-13 23:58:42]   = 19
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-13T23:58:42.739+0900	# test_y 18
+2022-09-13T23:58:42.781+0900	= 19
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-13T23:58:42.781+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_y 18"}
+{"level":"info","ts":"2022-09-13T23:58:42.782+0900","caller":"kernel/kernel.go:128","msg":"output","rank":"19"}
 ```
 
 # Step [O1o1o0g19o0] play コマンド（石を打つ）
@@ -2065,13 +2184,22 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	}
 
 	var point = k.Board.GetPointFromCode(tokens[2])
-	k.Play(stone, point)
-	logg.C.Info("=\n")
-	logg.J.Infow("ok")
+	var isOk = k.Play(stone, point, logg)
+	if isOk {
+		logg.C.Info("=\n")
+		logg.J.Infow("ok")
+	}
 }
 
-func (k *Kernel) Play(stone Stone, point Point) {
+// Play - 石を打つ
+//
+// Returns
+// -------
+// isOk : bool
+//		石を置けたら真、置けなかったら偽
+func (k *Kernel) Play(stone Stone, point Point, logg *Logger) bool {
 	k.Board.cells[point] = stone
+	return true
 }
 
 // EOF [O1o1o0g19o0]
@@ -2252,20 +2380,82 @@ import "fmt"
 
 func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 	var target = k.Board.cells[point]
+
 	switch target {
-	case Black:
-	case White:
-	case Wall:
-		return true
 	case Empty:
 		return false
+	case Black, White, Wall:
+		return true
 	default:
 		panic(fmt.Sprintf("unexpected target cell:%s", target))
 	}
-	return false
 }
 
 // EOF [O1o1o0g22o1o1o0]
+```
+
+## Step [O1o1o0g22o1o2o0] 呼出し
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+👉 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって以下の箇所に挿入してほしい  
+
+```go
+// func (k *Kernel) DoPlay(command string, logg *Logger) {
+	// ...略...
+	// var point = k.Board.GetPointFromCode(tokens[2])
+
+	// * 以下を追加
+	// [O1o1o0g22o1o2o0]
+	var onMasonryError = func() bool {
+		logg.C.Infof("? masonry my_stone:%s point:%d\n", stone, point)
+		logg.J.Infow("error", "my_stone", stone, "point", point)
+		return false
+	}
+
+	// var isOk = k.Play(stone, point, logg,
+		// * 以下を追加
+		// [O1o1o0g22o1o2o0] ,onMasonryError
+		onMasonryError//)
+	// ...略...
+// }
+
+// func (k *Kernel) Play(stone Stone, point Point, logg *Logger,
+	// * 以下を追加
+	// [O1o1o0g22o1o2o0] onMasonryError
+	onMasonryError func() bool//) bool {
+
+	// * 以下を追加
+	// [O1o1o0g22o1o2o0]
+	if k.IsMasonryError(stone, point) {
+		return onMasonryError()
+	}
+
+//	k.Board.cells[point] = stone
+//	return true
+// }
 ```
 
 # 参考にした記事

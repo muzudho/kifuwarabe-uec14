@@ -76,28 +76,54 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 		return true
 
-	case "coord": // [O1o1o0g17o0]
-		// Example: "coord A13"
-		var point = k.Board.GetPointFromCode(tokens[1])
-		logg.C.Infof("= %d\n", point)
-		logg.J.Infow("output", "point", point)
-		return true
-
-	case "file": // [O1o1o0g17o0]
-		// Example: "file A"
-		var file = GetFileFromCode(tokens[1])
-		logg.C.Infof("= %s\n", file)
-		logg.J.Infow("output", "file", file)
-		return true
-
 	case "play": // [O1o1o0g20o0]
 		// Example: `play black A19`
 		k.DoPlay(command, logg)
 		return true
 
-	case "rank": // [O1o1o0g17o0]
-		// Example: "rank 13"
+	case "test_coord": // [O1o1o0g17o0]
+		// Example: "test_coord A13"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		logg.C.Infof("= %d\n", point)
+		logg.J.Infow("output", "point", point)
+		return true
+
+	case "test_file": // [O1o1o0g17o0]
+		// Example: "test_file A"
+		var file = GetFileFromCode(tokens[1])
+		logg.C.Infof("= %s\n", file)
+		logg.J.Infow("output", "file", file)
+		return true
+
+	case "test_rank": // [O1o1o0g17o0]
+		// Example: "test_rank 13"
 		var rank = GetRankFromCode(tokens[1])
+		logg.C.Infof("= %s\n", rank)
+		logg.J.Infow("output", "rank", rank)
+		return true
+
+	case "test_x": // [O1o1o0g17o0]
+		// Example: "test_x 18"
+		var x, err = strconv.Atoi(tokens[1])
+		if err != nil {
+			logg.C.Infof("? unexpected x:%s\n", tokens[1])
+			logg.J.Infow("error", "x", tokens[1])
+			return true
+		}
+		var file = GetFileFromX(x)
+		logg.C.Infof("= %s\n", file)
+		logg.J.Infow("output", "file", file)
+		return true
+
+	case "test_y": // [O1o1o0g17o0]
+		// Example: "test_y 18"
+		var y, err = strconv.Atoi(tokens[1])
+		if err != nil {
+			logg.C.Infof("? unexpected y:%s\n", tokens[1])
+			logg.J.Infow("error", "y", tokens[1])
+			return true
+		}
+		var rank = GetRankFromY(y)
 		logg.C.Infof("= %s\n", rank)
 		logg.J.Infow("output", "rank", rank)
 		return true

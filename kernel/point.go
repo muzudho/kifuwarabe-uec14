@@ -2,6 +2,11 @@
 
 package kernel
 
+import (
+	"fmt"
+	"strconv"
+)
+
 // Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
 type Point int
 
@@ -15,6 +20,18 @@ func GetXFromFile(file string) int {
 	return int(x)
 }
 
+// GetFileFromX - GetXFromFile の逆関数
+func GetFileFromX(x int) string {
+	// ABCDEFGHI
+	// 012345678
+	if 7 < x {
+		// 'I' を飛ばす
+		x++
+	}
+	// 筋
+	return fmt.Sprintf("%c", 'A'+x)
+}
+
 // GetYFromRank - '1' ～ '99' を 0 ～ 98 へ変換します
 func GetYFromRank(rank string) int {
 	// 段
@@ -24,6 +41,23 @@ func GetYFromRank(rank string) int {
 		y += int(rank[1] - '0')
 	}
 	return y - 1
+}
+
+// GetRankFromY - GetYFromRank の逆関数
+//
+// Parameters
+// ----------
+// y : int
+//
+//	0 .. 98
+//
+// Returns
+// -------
+// rank : string
+//
+//	"1" .. "99"
+func GetRankFromY(y int) string {
+	return strconv.Itoa(y + 1)
 }
 
 // GetFileFromCode - 座標の符号の筋の部分を抜き出します
