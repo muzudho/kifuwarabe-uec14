@@ -34,4 +34,13 @@ BoardData = '''
 + + + + + + + + + + +
 '''
 
+# ファイルやフォルダーのパスの設定
+[Paths]
+
+# PlainTextLog - コンソールのより詳細なログ
+PlainTextLog = "kifuwarabe-uec14.log"
+
+# JsonLog - コンピューター向けのログ
+JsonLog = "kifuwarabe-uec14-json.log"
+
 # EOF [O1o1o0g11o__10o_2o0]

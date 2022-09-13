@@ -13,11 +13,6 @@ import (
 )
 
 func main() {
-	// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
-	var (
-		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
-	)
-
 	flag.Parse()
 	// プログラム名
 	var name = flag.Arg(0)
@@ -25,7 +20,10 @@ func main() {
 	// この下に初期設定を追加していく
 	// ---------------------------
 
-	// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
+	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
+	var (
+		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
+	)
 	var onError = func(err error) Config {
 		// ログファイルには出力できません。ログファイルはまだ読込んでいません
 
@@ -35,10 +33,10 @@ func main() {
 	var engineConfig = LoadEngineConfig(*pEngineFilePath, onError)
 
 	// [O1o1o0g11o__10o3o0] ログファイル
-	var plainTextLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	var plainTextLogFile, _ = os.OpenFile(engineConfig.PlainTextLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer plainTextLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// ログファイル
-	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	var jsonLogFile, _ = os.OpenFile(engineConfig.JsonLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
 	var logg = kernel.NewSugaredLoggerForGame(plainTextLogFile, jsonLogFile) // customized LOGGer
