@@ -20,7 +20,16 @@ func main() {
 	// この下に初期設定を追加していく
 	// ---------------------------
 
-	// ログファイル
+	// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
+	var onError = func(err error) Config {
+		// ログファイルには出力できません。ログファイルはまだ読込んでいません
+
+		// 強制終了
+		panic(err)
+	}
+	var engineConfig = LoadEngineConfig("engine.toml", onError)
+
+	// [O1o1o0g11o__10o3o0] ログファイル
 	var textLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer textLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// ログファイル
@@ -52,6 +61,10 @@ func main() {
 
 		// [O1o1o0g11o_3o0]
 		var kernel1 = kernel.NewKernel()
+
+		// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
+		// 盤サイズ変更
+		kernel1.Board.Resize(engineConfig.BoardSize(), engineConfig.BoardSize())
 
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
 		var scanner = bufio.NewScanner(os.Stdin)

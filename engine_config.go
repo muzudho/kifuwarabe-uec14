@@ -1,6 +1,6 @@
 // BOF [O1o1o0g15o_13o2o0]
 
-package kernel
+package main
 
 import (
 	"os"

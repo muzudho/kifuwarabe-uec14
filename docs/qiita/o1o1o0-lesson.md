@@ -552,7 +552,7 @@ func main() {
 	// この下に初期設定を追加していく
 	// ---------------------------
 
-	// ログファイル
+	// [O1o1o0g11o__10o3o0] ログファイル
 	var textLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer textLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// ログファイル
@@ -1519,7 +1519,7 @@ Output:
 go: added github.com/pelletier/go-toml v1.9.5
 ```
 
-## Step [O1o1o0g15o_13o2o0] ファイル作成 - engine_config.go
+## Step [O1o1o0g15o_13o2o_2o0] ファイル作成 - engine_config.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1528,12 +1528,12 @@ go: added github.com/pelletier/go-toml v1.9.5
 	├── 📂 kernel
   	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
-👉 	│	├── 📄 engine_config.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+👉 	├── 📄 engine_config.go
 	├── 📄 engine.toml
 	├── 📄 go.mod
   	├── 📄 go.work
@@ -1543,7 +1543,7 @@ go: added github.com/pelletier/go-toml v1.9.5
 ```go
 // BOF [O1o1o0g15o_13o2o0]
 
-package kernel
+package main
 
 import (
 	"os"
@@ -1608,6 +1608,78 @@ type Game struct {
 }
 
 // EOF [O1o1o0g15o_13o2o0]
+```
+
+## Step [O1o1o0g15o_13o2o_3o0] ファイル編集 - main.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 engine_config.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+	├── 📄 engine.toml
+	├── 📄 go.mod
+  	├── 📄 go.work
+👉	└── 📄 main.go
+```
+
+```go
+	// ...略...
+	// この下に初期設定を追加していく
+	// ---------------------------
+
+	// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
+	var onError = func(err error) {
+		// ログファイルには出力できません。ログファイルはまだ読込んでいません
+		panic(err)
+	}
+	var engineConfig = LoadEngineConfig("engine.toml", onError)
+
+	// ...略...
+	// この上に初期設定を追加していく
+	// ---------------------------
+	// ...略...
+
+		// [O1o1o0g11o_3o0]
+		// var kernel1 = kernel.NewKernel()
+		// ...略...
+
+		// * 以下を追加
+		// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
+		// 盤サイズ変更
+		kernel1.Board.Resize(engineConfig.BoardSize(), engineConfig.BoardSize())
+
+		// ...略...
+		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
+		var scanner = bufio.NewScanner(os.Stdin)
+```
+
+## Step [O1o1o0g15o_13o2o_4o0] 実行 - main.go
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+board
 ```
 
 # Step [O1o1o0g15o_1o0] 座標の定義
