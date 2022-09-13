@@ -7,7 +7,7 @@ import "strings"
 // DoPlay - 打つ
 //
 // * `command` - Example: `play black A19`
-func (k *Kernel) DoPlay(command string, logg *SugaredLoggerForGame) {
+func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 
 	var stone Stone

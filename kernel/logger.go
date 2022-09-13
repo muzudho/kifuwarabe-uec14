@@ -10,15 +10,15 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-type SugaredLoggerForGame struct {
+type Logger struct {
 	// C is sugared logger for Console
 	C *zap.SugaredLogger
 	// J is sugared logger as JSON
 	J *zap.SugaredLogger
 }
 
-func NewSugaredLoggerForGame(plainTextLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
-	var slog = new(SugaredLoggerForGame) // Sugared LOGger
+func NewSugaredLoggerForGame(plainTextLogFile *os.File, jsonLogFile *os.File) *Logger {
+	var slog = new(Logger) // Sugared LOGger
 	slog.C = createSugaredLoggerForConsole(plainTextLogFile)
 	slog.J = createSugaredLoggerAsJson(jsonLogFile)
 	return slog

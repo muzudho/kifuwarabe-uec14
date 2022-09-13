@@ -12,7 +12,7 @@
 # Step [O1o1o0g11o__10o2o0]
 
 ```go
-func (logg *SugaredLoggerForGame) Infow(setMsgArgs func(string, ...interface{}), msg string, keysAndValues ...interface{}) {
+func (logg *Logger) Infow(setMsgArgs func(string, ...interface{}), msg string, keysAndValues ...interface{}) {
 	var sb strings.Builder
 	if msg != "" {
 		sb.WriteString(msg)

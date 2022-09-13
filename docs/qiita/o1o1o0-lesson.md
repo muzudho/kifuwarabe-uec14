@@ -682,15 +682,15 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-type SugaredLoggerForGame struct {
+type Logger struct {
 	// C is sugared logger for Console
 	C *zap.SugaredLogger
 	// J is sugared logger as JSON
 	J *zap.SugaredLogger
 }
 
-func NewSugaredLoggerForGame(plainTextLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
-	var slog = new(SugaredLoggerForGame) // Sugared LOGger
+func NewSugaredLoggerForGame(plainTextLogFile *os.File, jsonLogFile *os.File) *Logger {
+	var slog = new(Logger) // Sugared LOGger
 	slog.C = createSugaredLoggerForConsole(plainTextLogFile)
 	slog.J = createSugaredLoggerAsJson(jsonLogFile)
 	return slog
@@ -1076,7 +1076,7 @@ func NewKernel() *Kernel {
 }
 
 // Execute - 実行
-func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
+func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	var tokens = strings.Split(command, " ")
 	switch tokens[0] {
@@ -2045,7 +2045,7 @@ import "strings"
 // DoPlay - 打つ
 //
 // * `command` - Example: `play black A19`
-func (k *Kernel) DoPlay(command string, logg *SugaredLoggerForGame) {
+func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 
 	var stone Stone

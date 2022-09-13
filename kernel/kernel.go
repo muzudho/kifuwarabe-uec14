@@ -20,7 +20,7 @@ func NewKernel() *Kernel {
 }
 
 // Execute - 実行
-func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
+func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	var tokens = strings.Split(command, " ")
 	switch tokens[0] {
