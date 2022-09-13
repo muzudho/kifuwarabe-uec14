@@ -5,6 +5,7 @@ go 1.19
 require github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911121122-0b897e4deb1a
 
 require (
+	github.com/pelletier/go-toml v1.9.5 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect

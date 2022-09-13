@@ -1434,7 +1434,7 @@ Output:
 
 盤サイズを最初から指定しておきたい。だから、設定ファイルを作る  
 
-# Step [O1o1o0g15o_13o1o0] ファイル作成 - engine.toml
+## Step [O1o1o0g15o_13o1o0] ファイル作成 - engine.toml
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1501,6 +1501,113 @@ BoardData = '''
 '''
 
 # EOF [O1o1o0g15o_13o1o0]
+```
+
+## Step [O1o1o0g15o_13o2o_1o0] インストール - go-toml
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go get github.com/pelletier/go-toml
+```
+
+Output:  
+
+```plaintext
+go: added github.com/pelletier/go-toml v1.9.5
+```
+
+## Step [O1o1o0g15o_13o2o0] ファイル作成 - engine_config.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+👉 	│	├── 📄 engine_config.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+	├── 📄 engine.toml
+	├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g15o_13o2o0]
+
+package kernel
+
+import (
+	"os"
+
+	"github.com/pelletier/go-toml"
+)
+
+// LoadEngineConfig - 思考エンジン設定ファイルを読み込みます
+func LoadEngineConfig(
+	path string,
+	onError func(error) Config) Config {
+
+	// ファイル読込
+	var fileData, err = os.ReadFile(path)
+	if err != nil {
+		return onError(err)
+	}
+
+	// Toml解析
+	var binary = []byte(string(fileData))
+	var config = Config{}
+	toml.Unmarshal(binary, &config)
+
+	return config
+}
+
+// Config - 設定ファイル
+type Config struct {
+	Game Game
+}
+
+// BoardSize - 何路盤か
+func (c *Config) BoardSize() int {
+	return int(c.Game.BoardSize)
+}
+
+// Komi - コミ
+//
+// * float 32bit で足りるが、実行速度優先で float 64bit に変換して返す
+func (c *Config) Komi() float64 {
+	return float64(c.Game.Komi)
+}
+
+// MaxMovesNum - 最大手数
+func (c *Config) MaxMovesNum() int {
+	return int(c.Game.MaxMoves)
+}
+
+// Game - 対局
+type Game struct {
+	// Komi - コミ
+	Komi float32
+
+	// BoardSize - 盤の一辺の長さ
+	BoardSize int8
+
+	// MaxMoves - 手数の上限
+	MaxMoves int16
+
+	// BoardData - 盤面データ
+	BoardData string
+}
+
+// EOF [O1o1o0g15o_13o2o0]
 ```
 
 # Step [O1o1o0g15o_1o0] 座標の定義
