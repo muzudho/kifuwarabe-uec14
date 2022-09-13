@@ -13,6 +13,10 @@ import (
 )
 
 func main() {
+	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
+	var (
+		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
+	)
 	flag.Parse()
 	// プログラム名
 	var name = flag.Arg(0)
@@ -21,9 +25,6 @@ func main() {
 	// ---------------------------
 
 	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
-	var (
-		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
-	)
 	var onError = func(err error) Config {
 		// ログファイルには出力できません。ログファイルはまだ読込んでいません
 
@@ -64,9 +65,7 @@ func main() {
 
 		// [O1o1o0g11o_3o0]
 		var kernel1 = kernel.NewKernel()
-
-		// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
-		// 盤サイズ変更
+		// 設定ファイルの内容をカーネルへ反映
 		kernel1.Board.Resize(engineConfig.BoardSize(), engineConfig.BoardSize())
 
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力

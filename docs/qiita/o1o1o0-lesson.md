@@ -574,17 +574,17 @@ type Paths struct {
 // ...略...
 
 // func main() {
+	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
+	var (
+		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
+	)
+	// * この上に追加
 	// flag.Parse()
 	// var name = flag.Arg(0)
 	// この下に初期設定を追加していく
 	// ---------------------------
 	// * この下に追加
-
-	// * 追加
 	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
-	var (
-		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
-	)
 	var onError = func(err error) {
 		// ログファイルには出力できません。ログファイルはまだ読込んでいません
 		panic(err)
@@ -593,6 +593,23 @@ type Paths struct {
 
 // ...略...
 ```
+
+## Step [O1o1o0g11o__10o_6o0] 実行についての備考
+
+設定ファイルを使った例は、これ以降のステップで示す  
+
+これ以降のステップでは、 📄 `engine.toml` ファイルの名前や内容を任意に編集して、がんばってテストしてほしい。  
+テストが終わったらもとに戻してほしい  
+
+👇 思考エンジン設定ファイルを読込むには、以下のようにコマンドに `-f` 引数を付けてほしい  
+
+Input:  
+
+```shell
+go run . -f engine.toml
+```
+
+* `-f engine.toml` を省略すると、デフォルトで `./engine.toml` ファイルを読みに行く
 
 # Step [O1o1o0g11o__10o0] ロガー設定
 
@@ -615,6 +632,8 @@ go get -u go.uber.org/zap
 	├── 📂 kernel
 	│	└── 📄 go.mod
 👉	├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
  	├── 📄 logger.go
@@ -643,6 +662,8 @@ go get -u go.uber.org/zap
 	│	├── 📄 go.mod
 👉 	│	└── 📄 logger.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
  	└── 📄 main.go
@@ -775,6 +796,8 @@ func encodeTimeSimpleInJapan(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	│	├── 📄 go.mod
  	│	└── 📄 logger.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
  	├── 📄 logger.go
@@ -881,6 +904,8 @@ Output:
 	│	├── 📄 go.mod
  	│	└── 📄 logger.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
 👉	├── 📄 kifuwarabe-uec14-json.log
@@ -913,6 +938,8 @@ Output:
 	│	├── 📄 go.mod
  	│	└── 📄 logger.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
 👉 	└── 📄 main.go
@@ -1023,6 +1050,8 @@ quit
 👉 	│	├── 📄 kernel.go
  	│	└── 📄 logger.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
  	└── 📄 main.go
@@ -1078,6 +1107,8 @@ func (k *Kernel) Execute(command string, logg *SugaredLoggerForGame) bool {
  	│	├── 📄 kernel.go
  	│	└── 📄 logger.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
 👉 	└── 📄 main.go
@@ -1097,6 +1128,8 @@ import (
 
 		// [O1o1o0g11o_3o0]
 		var kernel1 = kernel.NewKernel()
+		// 設定ファイルの内容をカーネルへ反映
+		kernel1.Board.Resize(engineConfig.BoardSize(), engineConfig.BoardSize())
 
 		/*
 		...以下略...
@@ -1141,6 +1174,8 @@ import (
  	│	├── 📄 logger.go
 👉 	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
  	└── 📄 main.go
@@ -1238,6 +1273,8 @@ go mod tidy
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
  	└── 📄 main.go
@@ -1396,6 +1433,8 @@ go mod tidy
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
 	└── 📄 main.go
@@ -1509,6 +1548,8 @@ Output:
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
 👉 	├── 📄 kifuwarabe-uec14-json.log
@@ -1569,6 +1610,8 @@ Output:
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
 	└── 📄 main.go
@@ -1672,93 +1715,29 @@ Output:
 . '''
 ```
 
-# Step [O1o1o0g15o_13o0] 思考エンジン設定ファイル
+# ~~Step [O1o1o0g15o_13o0]~~
 
-盤サイズを最初から指定しておきたい。だから、設定ファイルを作る  
+Removed  
 
 ## ~~Step [O1o1o0g15o_13o1o0]~~
 
-Move to `O1o1o0g11o__10o_2o0`  
+Moved to `O1o1o0g11o__10o_2o0`  
 
 ## ~~Step [O1o1o0g15o_13o2o_1o0]~~
 
-Move to `O1o1o0g11o__10o_3o0`  
+Moved to `[O1o1o0g11o__10o_3o0]`  
 
 ## ~~Step [O1o1o0g15o_13o2o_2o0]~~
 
-Move to `O1o1o0g11o__10o_4o0`  
+Moved to `[O1o1o0g11o__10o_4o0]`  
 
-## Step [O1o1o0g15o_13o2o_3o0] ファイル編集 - main.go
+## ~~Step [O1o1o0g15o_13o2o_3o0]~~
 
-👇 以下の既存ファイルを編集してほしい  
+Merged to `[O1o1o0g11o_3o0]`  
 
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 kernel
-  	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
- 	│	├── 📄 engine_config.go
-	│	├── 📄 go.mod
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
-	├── 📄 engine.toml
-	├── 📄 go.mod
-  	├── 📄 go.work
-👉	└── 📄 main.go
-```
+## ~~Step [O1o1o0g15o_13o2o_4o0]~~
 
-```go
-// ...略...
-//func main() {
-	// ...略...
-	// この上に初期設定を追加していく
-	// ---------------------------
-	// ...略...
-
-	// if name == "hello" { // [O1o1o0g9o0]
-	// ...略...
-	// } else {
-		// [O1o1o0g11o_3o0]
-		// var kernel1 = kernel.NewKernel()
-		// * この下に追加
-		// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
-		// 盤サイズ変更
-		kernel1.Board.Resize(engineConfig.BoardSize(), engineConfig.BoardSize())
-
-		// ...略...
-		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
-		// var scanner = bufio.NewScanner(os.Stdin)
-		// ...略...
-	// }
-	// ...略...
-```
-
-## Step [O1o1o0g15o_13o2o_4o0] 実行 - main.go
-
-📄 `engine.toml` ファイルの名前や内容を任意に編集して、がんばってテストしてほしい。  
-テストが終わったらもとに戻してほしい  
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
-
-Input:  
-
-```shell
-go run . -f engine.toml
-```
-
-* `-f engine.toml` を省略すると、デフォルトで `./engine.toml` ファイルを読みに行く
-
-これで、思考エンジン内の入力待機ループに入った  
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
-
-Input:  
-
-```shell
-board
-```
+Moved to `[O1o1o0g11o__10o_6o0]`  
 
 # Step [O1o1o0g15o_1o0] 座標の定義
 
@@ -1776,6 +1755,8 @@ board
 👉  │	├── 📄 point.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
   	└── 📄 main.go
@@ -1845,6 +1826,8 @@ func GetRankFromCode(code string) string {
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
   	└── 📄 main.go
@@ -1886,6 +1869,8 @@ func (b *Board) GetPointFromCode(code string) Point {
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
   	└── 📄 main.go
@@ -2041,6 +2026,8 @@ Output > Log > JSON:
  	│	├── 📄 point.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
  	└── 📄 main.go
@@ -2101,6 +2088,8 @@ func (k *Kernel) Play(stone Stone, point Point) {
  	│	├── 📄 logger.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
     ├── 📄 go.mod
   	├── 📄 go.work
 	└── 📄 main.go
