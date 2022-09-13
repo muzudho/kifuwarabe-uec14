@@ -1,4 +1,4 @@
-# BOF [O1o1o0g15o_13o1o0]
+# BOF [O1o1o0g11o__10o_2o0]
 # 思考エンジンのデフォルト値です。 CgfGoBan などの GUI はこのファイルを見ません
 
 # Game - 対局１つ分に相当
@@ -34,4 +34,4 @@ BoardData = '''
 + + + + + + + + + + +
 '''
 
-# EOF [O1o1o0g15o_13o1o0]
+# EOF [O1o1o0g11o__10o_2o0]

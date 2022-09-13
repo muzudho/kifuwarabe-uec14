@@ -35,13 +35,13 @@ func main() {
 	var engineConfig = LoadEngineConfig(*pEngineFilePath, onError)
 
 	// [O1o1o0g11o__10o3o0] ログファイル
-	var textLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	defer textLogFile.Close() // ログファイル使用済み時にファイルを閉じる
+	var plainTextLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer plainTextLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// ログファイル
 	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var logg = kernel.NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
+	var logg = kernel.NewSugaredLoggerForGame(plainTextLogFile, jsonLogFile) // customized LOGGer
 
 	// この上に初期設定を追加していく
 	// ---------------------------

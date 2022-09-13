@@ -352,6 +352,199 @@ go 1.19
 cd ..
 ```
 
+# Step [O1o1o0g11o__10o_1o0] 思考エンジン設定ファイル
+
+## Step [O1o1o0g11o__10o_2o0] ファイル作成 - engine.toml
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	└── 📄 go.mod
+    ├── 📄 .gitignore
+👉  ├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```toml
+# BOF [O1o1o0g11o__10o_2o0]
+# 思考エンジンのデフォルト値です。 CgfGoBan などの GUI はこのファイルを見ません
+
+# Game - 対局１つ分に相当
+[Game]
+
+# Komi - コミ
+Komi = 6.5
+
+# BoardSize - 何路盤
+BoardSize = 19
+
+# MaxMoves - 最大手数
+MaxMoves = 400
+
+# BoardData - 盤面
+#
+# * '.' - 空点
+# * 'x' - 黒石
+# * 'o' - 白石
+# * '+' - 壁
+# * 半角空白は無視します
+BoardData = '''
++++++++++++++++++++++
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++...................+
++++++++++++++++++++++
+'''
+
+# EOF [O1o1o0g11o__10o_2o0]
+```
+
+## Step [O1o1o0g11o__10o_3o0] インストール - go-toml
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go get github.com/pelletier/go-toml
+go mod tidy
+```
+
+Output:  
+
+```plaintext
+go: added github.com/pelletier/go-toml v1.9.5
+```
+
+## Step [O1o1o0g11o__10o_4o0] ファイル作成 - engine_config.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	└── 📄 go.mod
+    ├── 📄 .gitignore
+👉 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g11o__10o_4o0]
+
+package main
+
+import (
+	"os"
+
+	"github.com/pelletier/go-toml"
+)
+
+// LoadEngineConfig - 思考エンジン設定ファイルを読み込む
+func LoadEngineConfig(
+	path string,
+	onError func(error) Config) Config {
+
+	// ファイル読込
+	var fileData, err = os.ReadFile(path)
+	if err != nil {
+		return onError(err)
+	}
+
+	// Toml解析
+	var binary = []byte(string(fileData))
+	var config = Config{}
+	// Go言語の struct に合わせてデータを読み込む
+	toml.Unmarshal(binary, &config)
+
+	return config
+}
+
+// Config - 設定ファイル
+type Config struct {
+	// Game - 対局
+	Game Game
+	// Paths - ファイルやフォルダーのパスの設定
+	Paths Paths
+}
+
+// BoardSize - 何路盤か
+func (c *Config) BoardSize() int {
+	return int(c.Game.BoardSize)
+}
+
+// Komi - コミ
+//
+// * float 32bit で足りるが、実行速度優先で float 64bit に変換して返す
+func (c *Config) Komi() float64 {
+	return float64(c.Game.Komi)
+}
+
+// MaxMovesNum - 最大手数
+func (c *Config) MaxMovesNum() int {
+	return int(c.Game.MaxMoves)
+}
+
+// PlainTextLog - PlainTextLog - コンソールのより詳細なログ
+func (c *Config) PlainTextLog() string {
+	return c.Paths.PlainTextLog
+}
+
+// JsonLog - コンピューター向けのログ
+func (c *Config) JsonLog() string {
+	return c.Paths.JsonLog
+}
+
+// Game - 対局
+type Game struct {
+	// Komi - コミ
+	Komi float32
+
+	// BoardSize - 盤の一辺の長さ
+	BoardSize int8
+
+	// MaxMoves - 手数の上限
+	MaxMoves int16
+
+	// BoardData - 盤面データ
+	BoardData string
+}
+
+// Paths - ファイルやフォルダーのパスの設定
+type Paths struct {
+	// PlainTextLog - コンソールのより詳細なログ
+	PlainTextLog string
+
+	// JsonLog - コンピューター向けのログ
+	JsonLog string
+}
+
+// EOF [O1o1o0g11o__10o_4o0]
+```
+
 # Step [O1o1o0g11o__10o0] ロガー設定
 
 ## Step [O1o1o0g11o__10o1o0] インストール
@@ -426,15 +619,15 @@ type SugaredLoggerForGame struct {
 	J *zap.SugaredLogger
 }
 
-func NewSugaredLoggerForGame(textLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
+func NewSugaredLoggerForGame(plainTextLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
 	var slog = new(SugaredLoggerForGame) // Sugared LOGger
-	slog.C = createSugaredLoggerForConsole(textLogFile)
+	slog.C = createSugaredLoggerForConsole(plainTextLogFile)
 	slog.J = createSugaredLoggerAsJson(jsonLogFile)
 	return slog
 }
 
 // ロガーを作成します，コンソール形式
-func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
+func createSugaredLoggerForConsole(plainTextLogFile *os.File) *zap.SugaredLogger {
 	// 設定，コンソール用
 	var configC = zapcore.EncoderConfig{
 		MessageKey: "message",
@@ -471,7 +664,7 @@ func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 			zapcore.DebugLevel),                // ログレベル
 		zapcore.NewCore(
 			zapcore.NewConsoleEncoder(configF), // コンソール形式
-			zapcore.AddSync(textLogFile),       // 出力先はファイル
+			zapcore.AddSync(plainTextLogFile),       // 出力先はファイル
 			zapcore.DebugLevel),                // ログレベル
 	)
 
@@ -553,13 +746,13 @@ func main() {
 	// ---------------------------
 
 	// [O1o1o0g11o__10o3o0] ログファイル
-	var textLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	defer textLogFile.Close() // ログファイル使用済み時にファイルを閉じる
+	var plainTextLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer plainTextLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// ログファイル
 	var jsonLogFile, _ = os.OpenFile("kifuwarabe-uec14-json.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
-	var logg = kernel.NewSugaredLoggerForGame(textLogFile, jsonLogFile) // customized LOGGer
+	var logg = kernel.NewSugaredLoggerForGame(plainTextLogFile, jsonLogFile) // customized LOGGer
 
 	// この上に初期設定を追加していく
 	// ---------------------------
@@ -1434,181 +1627,17 @@ Output:
 
 盤サイズを最初から指定しておきたい。だから、設定ファイルを作る  
 
-## Step [O1o1o0g15o_13o1o0] ファイル作成 - engine.toml
+## ~~Step [O1o1o0g15o_13o1o0]~~
 
-👇 以下のファイルを新規作成してほしい  
+Move to `O1o1o0g11o__10o_2o0`  
 
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 kernel
-  	│	├── 📄 board.go
-	│	├── 📄 go.mod
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
-👉  ├── 📄 engine.toml
-	├── 📄 go.mod
-  	├── 📄 go.work
-	└── 📄 main.go
-```
+## ~~Step [O1o1o0g15o_13o2o_1o0]~~
 
-```toml
-# BOF [O1o1o0g15o_13o1o0]
-# 思考エンジンのデフォルト値です。 CgfGoBan などの GUI はこのファイルを見ません
+Move to `O1o1o0g11o__10o_3o0`  
 
-# Game - 対局１つ分に相当
-[Game]
+## ~~Step [O1o1o0g15o_13o2o_2o0]~~
 
-# Komi - コミ
-Komi = 6.5
-
-# BoardSize - 何路盤
-BoardSize = 19
-
-# MaxMoves - 最大手数
-MaxMoves = 400
-
-# BoardData - 盤面
-#
-# * '.' - 空点
-# * 'x' - 黒石
-# * 'o' - 白石
-# * '+' - 壁
-# * 半角空白は無視します
-BoardData = '''
-+++++++++++++++++++++
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+...................+
-+++++++++++++++++++++
-'''
-
-# EOF [O1o1o0g15o_13o1o0]
-```
-
-## Step [O1o1o0g15o_13o2o_1o0] インストール - go-toml
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
-
-Input:  
-
-```shell
-go get github.com/pelletier/go-toml
-```
-
-Output:  
-
-```plaintext
-go: added github.com/pelletier/go-toml v1.9.5
-```
-
-## Step [O1o1o0g15o_13o2o_2o0] ファイル作成 - engine_config.go
-
-👇 以下のファイルを新規作成してほしい  
-
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 kernel
-  	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
-	│	├── 📄 go.mod
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
-👉 	├── 📄 engine_config.go
-	├── 📄 engine.toml
-	├── 📄 go.mod
-  	├── 📄 go.work
-	└── 📄 main.go
-```
-
-```go
-// BOF [O1o1o0g15o_13o2o0]
-
-package main
-
-import (
-	"os"
-
-	"github.com/pelletier/go-toml"
-)
-
-// LoadEngineConfig - 思考エンジン設定ファイルを読み込みます
-func LoadEngineConfig(
-	path string,
-	onError func(error) Config) Config {
-
-	// ファイル読込
-	var fileData, err = os.ReadFile(path)
-	if err != nil {
-		return onError(err)
-	}
-
-	// Toml解析
-	var binary = []byte(string(fileData))
-	var config = Config{}
-	toml.Unmarshal(binary, &config)
-
-	return config
-}
-
-// Config - 設定ファイル
-type Config struct {
-	Game Game
-}
-
-// BoardSize - 何路盤か
-func (c *Config) BoardSize() int {
-	return int(c.Game.BoardSize)
-}
-
-// Komi - コミ
-//
-// * float 32bit で足りるが、実行速度優先で float 64bit に変換して返す
-func (c *Config) Komi() float64 {
-	return float64(c.Game.Komi)
-}
-
-// MaxMovesNum - 最大手数
-func (c *Config) MaxMovesNum() int {
-	return int(c.Game.MaxMoves)
-}
-
-// Game - 対局
-type Game struct {
-	// Komi - コミ
-	Komi float32
-
-	// BoardSize - 盤の一辺の長さ
-	BoardSize int8
-
-	// MaxMoves - 手数の上限
-	MaxMoves int16
-
-	// BoardData - 盤面データ
-	BoardData string
-}
-
-// EOF [O1o1o0g15o_13o2o0]
-```
+Move to `O1o1o0g11o__10o_4o0`  
 
 ## Step [O1o1o0g15o_13o2o_3o0] ファイル編集 - main.go
 
@@ -2150,6 +2179,10 @@ Output > Console:
 ### ファイル分割
 
 📖 [[Go言語] ファイル分割とローカルパッケージ](https://zenn.dev/fm_radio/articles/ca2ff1dfcf89b5)  
+
+### コマンドライン引数
+
+📖 [Goでflagを使ってコマンドライン引数を扱う](https://qiita.com/Yaruki00/items/7edc04720a24e71abfa2)  
 
 ### 列挙型
 

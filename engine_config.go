@@ -1,4 +1,4 @@
-// BOF [O1o1o0g15o_13o2o0]
+// BOF [O1o1o0g11o__10o_4o0]
 
 package main
 
@@ -8,7 +8,7 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-// LoadEngineConfig - 思考エンジン設定ファイルを読み込みます
+// LoadEngineConfig - 思考エンジン設定ファイルを読み込む
 func LoadEngineConfig(
 	path string,
 	onError func(error) Config) Config {
@@ -22,6 +22,7 @@ func LoadEngineConfig(
 	// Toml解析
 	var binary = []byte(string(fileData))
 	var config = Config{}
+	// Go言語の struct に合わせてデータを読み込む
 	toml.Unmarshal(binary, &config)
 
 	return config
@@ -29,7 +30,10 @@ func LoadEngineConfig(
 
 // Config - 設定ファイル
 type Config struct {
+	// Game - 対局
 	Game Game
+	// Paths - ファイルやフォルダーのパスの設定
+	Paths Paths
 }
 
 // BoardSize - 何路盤か
@@ -49,6 +53,16 @@ func (c *Config) MaxMovesNum() int {
 	return int(c.Game.MaxMoves)
 }
 
+// PlainTextLog - PlainTextLog - コンソールのより詳細なログ
+func (c *Config) PlainTextLog() string {
+	return c.Paths.PlainTextLog
+}
+
+// JsonLog - コンピューター向けのログ
+func (c *Config) JsonLog() string {
+	return c.Paths.JsonLog
+}
+
 // Game - 対局
 type Game struct {
 	// Komi - コミ
@@ -64,4 +78,13 @@ type Game struct {
 	BoardData string
 }
 
-// EOF [O1o1o0g15o_13o2o0]
+// Paths - ファイルやフォルダーのパスの設定
+type Paths struct {
+	// PlainTextLog - コンソールのより詳細なログ
+	PlainTextLog string
+
+	// JsonLog - コンピューター向けのログ
+	JsonLog string
+}
+
+// EOF [O1o1o0g11o__10o_4o0]

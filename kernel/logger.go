@@ -17,15 +17,15 @@ type SugaredLoggerForGame struct {
 	J *zap.SugaredLogger
 }
 
-func NewSugaredLoggerForGame(textLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
+func NewSugaredLoggerForGame(plainTextLogFile *os.File, jsonLogFile *os.File) *SugaredLoggerForGame {
 	var slog = new(SugaredLoggerForGame) // Sugared LOGger
-	slog.C = createSugaredLoggerForConsole(textLogFile)
+	slog.C = createSugaredLoggerForConsole(plainTextLogFile)
 	slog.J = createSugaredLoggerAsJson(jsonLogFile)
 	return slog
 }
 
 // ロガーを作成します，コンソール形式
-func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
+func createSugaredLoggerForConsole(plainTextLogFile *os.File) *zap.SugaredLogger {
 	// 設定，コンソール用
 	var configC = zapcore.EncoderConfig{
 		MessageKey: "message",
@@ -62,7 +62,7 @@ func createSugaredLoggerForConsole(textLogFile *os.File) *zap.SugaredLogger {
 			zapcore.DebugLevel),                // ログレベル
 		zapcore.NewCore(
 			zapcore.NewConsoleEncoder(configF), // コンソール形式
-			zapcore.AddSync(textLogFile),       // 出力先はファイル
+			zapcore.AddSync(plainTextLogFile),  // 出力先はファイル
 			zapcore.DebugLevel),                // ログレベル
 	)
 
