@@ -1632,7 +1632,18 @@ type Game struct {
 ```
 
 ```go
-	// ...略...
+
+func main() {
+	// * 追加
+	// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
+	var (
+		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
+	)
+
+	// * この上に追加
+	// flag.Parse()
+	// var name = flag.Arg(0)
+	//
 	// この下に初期設定を追加していく
 	// ---------------------------
 
@@ -1641,36 +1652,44 @@ type Game struct {
 		// ログファイルには出力できません。ログファイルはまだ読込んでいません
 		panic(err)
 	}
-	var engineConfig = LoadEngineConfig("engine.toml", onError)
+	var engineConfig = LoadEngineConfig(*pEngineFilePath, onError)
 
 	// ...略...
 	// この上に初期設定を追加していく
 	// ---------------------------
 	// ...略...
 
+	// if name == "hello" { // [O1o1o0g9o0]
+	// ...略...
+	// } else {
 		// [O1o1o0g11o_3o0]
 		// var kernel1 = kernel.NewKernel()
-		// ...略...
-
-		// * 以下を追加
+		// * この下に追加
 		// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
 		// 盤サイズ変更
 		kernel1.Board.Resize(engineConfig.BoardSize(), engineConfig.BoardSize())
 
 		// ...略...
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
-		var scanner = bufio.NewScanner(os.Stdin)
+		// var scanner = bufio.NewScanner(os.Stdin)
+		// ...略...
+	// }
 ```
 
 ## Step [O1o1o0g15o_13o2o_4o0] 実行 - main.go
+
+📄 `engine.toml` ファイルの名前や内容を任意に編集して、がんばってテストしてほしい。  
+テストが終わったらもとに戻してほしい  
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
 Input:  
 
 ```shell
-go run .
+go run . -f engine.toml
 ```
+
+* `-f engine.toml` を省略すると、デフォルトで `./engine.toml` ファイルを読みに行く
 
 これで、思考エンジン内の入力待機ループに入った  
 

@@ -13,6 +13,11 @@ import (
 )
 
 func main() {
+	// [O1o1o0g15o_13o2o_3o0] 思考エンジン設定ファイル
+	var (
+		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
+	)
+
 	flag.Parse()
 	// プログラム名
 	var name = flag.Arg(0)
@@ -27,7 +32,7 @@ func main() {
 		// 強制終了
 		panic(err)
 	}
-	var engineConfig = LoadEngineConfig("engine.toml", onError)
+	var engineConfig = LoadEngineConfig(*pEngineFilePath, onError)
 
 	// [O1o1o0g11o__10o3o0] ログファイル
 	var textLogFile, _ = os.OpenFile("kifuwarabe-uec14.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
