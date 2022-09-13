@@ -1294,7 +1294,9 @@ type Board struct {
 	memoryHeight int
 
 	// 交点
-	nodes []Stone
+	//
+	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
+	cells []Stone
 }
 
 // NewBoard - 新規作成
@@ -1311,7 +1313,7 @@ func NewBoard() *Board {
 func (b *Board) Resize(width int, height int) {
 	b.memoryWidth = width + 2
 	b.memoryHeight = height + 2
-	b.nodes = make([]Stone, b.getMemoryArea())
+	b.cells = make([]Stone, b.getMemoryArea())
 
 	// 枠を設定する
 	// 上辺、下辺を引く
@@ -1320,10 +1322,10 @@ func (b *Board) Resize(width int, height int) {
 		var y2 = b.memoryHeight - 1
 		for x := 0; x < b.memoryWidth; x++ {
 			var i = (y * b.memoryWidth) + x
-			b.nodes[i] = Wall
+			b.cells[i] = Wall
 
 			i = (y2 * b.memoryWidth) + x
-			b.nodes[i] = Wall
+			b.cells[i] = Wall
 		}
 	}
 	// 左辺、右辺を引く
@@ -1332,10 +1334,10 @@ func (b *Board) Resize(width int, height int) {
 		var x2 = b.memoryWidth - 1
 		for y := 1; y < b.memoryHeight-1; y++ {
 			var i = (y * b.memoryWidth) + x
-			b.nodes[i] = Wall
+			b.cells[i] = Wall
 
 			i = (y * b.memoryWidth) + x2
-			b.nodes[i] = Wall
+			b.cells[i] = Wall
 		}
 	}
 }
@@ -1349,7 +1351,7 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 
 		for x := 0; x < b.memoryWidth; x++ {
 			var i = (y * b.memoryWidth) + x
-			var stone = b.nodes[i]
+			var stone = b.cells[i]
 			setStone(stone)
 		}
 	}
@@ -2069,7 +2071,7 @@ func (k *Kernel) DoPlay(command string, logg *SugaredLoggerForGame) {
 }
 
 func (k *Kernel) Play(stone Stone, point Point) {
-	k.Board.nodes[point] = stone
+	k.Board.cells[point] = stone
 }
 
 // EOF [O1o1o0g19o0]
@@ -2189,6 +2191,81 @@ Output > Console:
 . +...................+
 . +++++++++++++++++++++
 . '''
+```
+
+# Step [O1o1o0g22o0] 囲碁の石を打つルールの実装
+
+TODO 空点以外のところ（石または壁の上）に石を置くことの禁止  
+
+TODO 呼吸点のカウント  
+
+TODO 自殺手の可／不可指定  
+
+TODO 相手の眼への自殺手の判定と、その禁止（ルール上禁止）  
+
+TODO 自分の眼への自殺手の判定と、その禁止または許可（明らかに損な手）  
+
+TODO ダメの眼への自殺手の判定と、その禁止または許可  
+
+TODO 石の打ち上げ
+
+TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
+
+## Step [O1o1o0g22o1o0] 空点以外のところ（石または壁の上）に石を置くことの禁止 - IsMasonryError関数作成
+
+とりあえず、 `石または壁の上に石を置く行為` に `Masonry` （メイスンリー）という名前を付ける。  
+従って この主のエラーは `Masonry error` と呼ぶことにする。  
+そのようなエラーであるかどうか判定する関数の名前は `IsMasonryError` と呼ぶことにする  
+
+## Step [O1o1o0g22o1o1o0] ファイル作成 - masonry.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+👉 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g22o1o1o0]
+
+package kernel
+
+import "fmt"
+
+func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
+	var target = k.Board.cells[point]
+	switch target {
+	case Black:
+	case White:
+	case Wall:
+		return true
+	case Empty:
+		return false
+	default:
+		panic(fmt.Sprintf("unexpected target cell:%s", target))
+	}
+	return false
+}
+
+// EOF [O1o1o0g22o1o1o0]
 ```
 
 # 参考にした記事

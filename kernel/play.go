@@ -33,7 +33,7 @@ func (k *Kernel) DoPlay(command string, logg *SugaredLoggerForGame) {
 }
 
 func (k *Kernel) Play(stone Stone, point Point) {
-	k.Board.nodes[point] = stone
+	k.Board.cells[point] = stone
 }
 
 // EOF [O1o1o0g19o0]
