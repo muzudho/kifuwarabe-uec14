@@ -27,9 +27,20 @@ func (b *Board) GetHeight() int {
 }
 
 // GetPointFromXy - 座標変換 (x,y) → Point
+//
+// Parameters
+// ----------
+// x : int
+//	筋番号。 Example: 19路盤なら0～18
+// y : int
+//	段番号。 Example: 19路盤なら0～18
+//
+// Returns
+// -------
+// point : Point
+//  配列インデックス。 Example: 2,3 なら 65
 func (b *Board) GetPointFromXy(x int, y int) Point {
-	// 枠の厚み 1 を考慮
-	return Point((y+1)*b.memoryWidth + x + 1)
+	return Point(y*b.memoryWidth + x)
 }
 
 // サイズ変更

@@ -99,6 +99,26 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		logg.J.Infow("output", "file", file)
 		return true
 
+	case "test_get_point_from_xy": // [O1o1o0g12o__11o2o0]
+		// Example: "test_get_point_from_xy 2 3"
+		var x, errX = strconv.Atoi(tokens[1])
+		if errX != nil {
+			logg.C.Infof("? unexpected x:%s\n", tokens[1])
+			logg.J.Infow("error", "x", tokens[1], "err", errX)
+			return true
+		}
+		var y, errY = strconv.Atoi(tokens[2])
+		if errY != nil {
+			logg.C.Infof("? unexpected y:%s\n", tokens[2])
+			logg.J.Infow("error", "y", tokens[2], "err", errY)
+			return true
+		}
+
+		var point = k.Board.GetPointFromXy(x, y)
+		logg.C.Infof("= %d\n", point)
+		logg.J.Infow("output", "point", point)
+		return true
+
 	case "test_rank": // [O1o1o0g12o__10o2o0]
 		// Example: "test_rank 13"
 		var rank = GetRankFromCode(tokens[1])

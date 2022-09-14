@@ -1366,7 +1366,7 @@ func GetRankFromCode(code string) string {
 // EOF [O1o1o0g12o__10o1o0]
 ```
 
-## Step [O1o1o0g12o__10o2o0] 符号変換作成 - kernel.go ファイル
+## Step [O1o1o0g12o__10o2o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1444,6 +1444,167 @@ func GetRankFromCode(code string) string {
 // ...略...
 ```
 
+## Step [O1o1o0g12o__10o3o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_file A1
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-11 23:27:52]   # test_file A1
+[2022-09-11 23:27:52]   = A
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-11T23:27:52.547+0900	# test_file A1
+2022-09-11T23:27:52.583+0900	= A
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-11T23:27:52.583+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_file A1"}
+{"level":"info","ts":"2022-09-11T23:27:52.584+0900","caller":"kernel/kernel.go:73","msg":"output","file":"A"}
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_rank A1
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-11 23:31:11]   # test_rank A1
+[2022-09-11 23:31:11]   = 1
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-11T23:31:11.020+0900	# test_rank A1
+2022-09-11T23:31:11.020+0900	= 1
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-11T23:31:11.020+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_rank A1"}
+{"level":"info","ts":"2022-09-11T23:31:11.021+0900","caller":"kernel/kernel.go:80","msg":"output","rank":"1"}
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_coord A1
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-11 23:32:42]   # test_coord A1
+[2022-09-11 23:32:42]   = 22
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-11T23:32:42.228+0900	# test_coord A1
+2022-09-11T23:32:42.229+0900	= 22
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_coord A1"}
+{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kernel/kernel.go:66","msg":"output","point":22}
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_x 18
+```
+
+* x は 0 から始まるので、 19列目は 18
+
+Output > Console:  
+
+```plaintext
+[2022-09-13 23:53:40]   # test_x 18
+[2022-09-13 23:53:40]   = T
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-13T23:53:40.906+0900	# test_x 18
+2022-09-13T23:53:40.943+0900	= T
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-13T23:53:40.943+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_x 18"}
+{"level":"info","ts":"2022-09-13T23:53:40.943+0900","caller":"kernel/kernel.go:115","msg":"output","file":"T"}
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_y 18
+```
+
+* y は 0 から始まるので、 19列目は 18
+
+Output > Console:  
+
+```plaintext
+[2022-09-13 23:58:42]   # test_y 18
+[2022-09-13 23:58:42]   = 19
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-13T23:58:42.739+0900	# test_y 18
+2022-09-13T23:58:42.781+0900	= 19
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-13T23:58:42.781+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_y 18"}
+{"level":"info","ts":"2022-09-13T23:58:42.782+0900","caller":"kernel/kernel.go:128","msg":"output","rank":"19"}
+```
+
 # Step [O1o1o0g12o__11o0] 盤定義（土台）
 
 これから盤を作っていく前に、土台を作る  
@@ -1498,9 +1659,20 @@ func (b *Board) GetHeight() int {
 }
 
 // GetPointFromXy - 座標変換 (x,y) → Point
+//
+// Parameters
+// ----------
+// x : int
+//	筋番号。 Example: 19路盤なら0～18
+// y : int
+//	段番号。 Example: 19路盤なら0～18
+//
+// Returns
+// -------
+// point : Point
+//  配列インデックス。 Example: 2,3 なら 65
 func (b *Board) GetPointFromXy(x int, y int) Point {
-	// 枠の厚み 1 を考慮
-	return Point((y+1)*b.memoryWidth + x + 1)
+	return Point(y*b.memoryWidth + x)
 }
 
 // サイズ変更
@@ -1516,6 +1688,109 @@ func (b *Board) getMemoryArea() int {
 }
 
 // EOF [O1o1o0g12o__11o1o0]
+```
+
+## Step [O1o1o0g12o__11o2o0] コマンド実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+// ...略...
+
+
+	// この下にコマンドを挟んでいく
+	// -------------------------
+
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "test_get_point_from_xy": // [O1o1o0g12o__11o2o0]
+		// Example: "test_get_point_from_xy 2 3"
+		var x, errX = strconv.Atoi(tokens[1])
+		if errX != nil {
+			logg.C.Infof("? unexpected x:%s\n", tokens[1])
+			logg.J.Infow("error", "x", tokens[1], "err", errX)
+			return true
+		}
+		var y, errY = strconv.Atoi(tokens[2])
+		if errY != nil {
+			logg.C.Infof("? unexpected y:%s\n", tokens[2])
+			logg.J.Infow("error", "y", tokens[2], "err", errY)
+			return true
+		}
+
+		var point = k.Board.GetPointFromXy(x, y)
+		logg.C.Infof("= %d\n", point)
+		logg.J.Infow("output", "point", point)
+		return true
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
+
+
+// ...略...
+```
+
+## Step [O1o1o0g12o__11o3o0] 実行
+
+19路盤とする  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_get_point_from_xy 2 3
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-14 22:37:42]   # test_get_point_from_xy 2 3
+[2022-09-14 22:37:42]   = 65
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-14T22:37:42.600+0900	# test_get_point_from_xy 2 3
+2022-09-14T22:37:42.637+0900	= 65
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-14T22:37:42.637+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_get_point_from_xy 2 3"}
+{"level":"info","ts":"2022-09-14T22:37:42.638+0900","caller":"kernel/kernel.go:119","msg":"output","point":65}
 ```
 
 # Step [O1o1o0g12o_1o0] 盤定義（盤面）
@@ -2034,9 +2309,12 @@ package kernel
 //
 // * `code` - 座標の符号。 Example: "A7" や "J13"
 func (b *Board) GetPointFromCode(code string) Point {
+	// 枠の厚み
+	var left_wall = 1
+	var top_wall = 1
 	return b.GetPointFromXy(
-		GetXFromFile(GetFileFromCode(code)),
-		GetYFromRank(GetRankFromCode(code)))
+		GetXFromFile(GetFileFromCode(code))+left_wall,
+		GetYFromRank(GetRankFromCode(code))+top_wall)
 }
 
 // EOF [O1o1o0g16o0]
@@ -2044,168 +2322,11 @@ func (b *Board) GetPointFromCode(code string) Point {
 
 ## ~~Step [O1o1o0g17o0]~~
 
-Moved to `O1o1o0g12o__10o2o0`  
+Moved to `[O1o1o0g12o__10o2o0]`  
 
-## Step [O1o1o0g18o0] 実行
+## ~~Step [O1o1o0g18o0]~~
 
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
-
-Input:  
-
-```shell
-go run .
-```
-
-これで、思考エンジン内の入力待機ループに入った  
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
-
-Input:  
-
-```shell
-test_file A1
-```
-
-Output > Console:  
-
-```plaintext
-[2022-09-11 23:27:52]   # test_file A1
-[2022-09-11 23:27:52]   = A
-```
-
-Output > Log > PlainText:  
-
-```plaintext
-2022-09-11T23:27:52.547+0900	# test_file A1
-2022-09-11T23:27:52.583+0900	= A
-```
-
-Output > Log > JSON:  
-
-```json
-{"level":"info","ts":"2022-09-11T23:27:52.583+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_file A1"}
-{"level":"info","ts":"2022-09-11T23:27:52.584+0900","caller":"kernel/kernel.go:73","msg":"output","file":"A"}
-```
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
-
-Input:  
-
-```shell
-test_rank A1
-```
-
-Output > Console:  
-
-```plaintext
-[2022-09-11 23:31:11]   # test_rank A1
-[2022-09-11 23:31:11]   = 1
-```
-
-Output > Log > PlainText:  
-
-```plaintext
-2022-09-11T23:31:11.020+0900	# test_rank A1
-2022-09-11T23:31:11.020+0900	= 1
-```
-
-Output > Log > JSON:  
-
-```json
-{"level":"info","ts":"2022-09-11T23:31:11.020+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_rank A1"}
-{"level":"info","ts":"2022-09-11T23:31:11.021+0900","caller":"kernel/kernel.go:80","msg":"output","rank":"1"}
-```
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
-
-Input:  
-
-```shell
-test_coord A1
-```
-
-Output > Console:  
-
-```plaintext
-[2022-09-11 23:32:42]   # test_coord A1
-[2022-09-11 23:32:42]   = 22
-```
-
-Output > Log > PlainText:  
-
-```plaintext
-2022-09-11T23:32:42.228+0900	# test_coord A1
-2022-09-11T23:32:42.229+0900	= 22
-```
-
-Output > Log > JSON:  
-
-```json
-{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kifuwarabe-uec14/main.go:61","msg":"input","command":"test_coord A1"}
-{"level":"info","ts":"2022-09-11T23:32:42.229+0900","caller":"kernel/kernel.go:66","msg":"output","point":22}
-```
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
-
-Input:  
-
-```shell
-test_x 18
-```
-
-* x は 0 から始まるので、 19列目は 18
-
-Output > Console:  
-
-```plaintext
-[2022-09-13 23:53:40]   # test_x 18
-[2022-09-13 23:53:40]   = T
-```
-
-Output > Log > PlainText:  
-
-```plaintext
-2022-09-13T23:53:40.906+0900	# test_x 18
-2022-09-13T23:53:40.943+0900	= T
-```
-
-Output > Log > JSON:  
-
-```json
-{"level":"info","ts":"2022-09-13T23:53:40.943+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_x 18"}
-{"level":"info","ts":"2022-09-13T23:53:40.943+0900","caller":"kernel/kernel.go:115","msg":"output","file":"T"}
-```
-
-👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
-
-Input:  
-
-```shell
-test_y 18
-```
-
-* y は 0 から始まるので、 19列目は 18
-
-Output > Console:  
-
-```plaintext
-[2022-09-13 23:58:42]   # test_y 18
-[2022-09-13 23:58:42]   = 19
-```
-
-Output > Log > PlainText:  
-
-```plaintext
-2022-09-13T23:58:42.739+0900	# test_y 18
-2022-09-13T23:58:42.781+0900	= 19
-```
-
-Output > Log > JSON:  
-
-```json
-{"level":"info","ts":"2022-09-13T23:58:42.781+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_y 18"}
-{"level":"info","ts":"2022-09-13T23:58:42.782+0900","caller":"kernel/kernel.go:128","msg":"output","rank":"19"}
-```
+Moved to `[O1o1o0g12o__10o3o0]`  
 
 # Step [O1o1o0g19o0] play コマンド（石を打つ）
 
