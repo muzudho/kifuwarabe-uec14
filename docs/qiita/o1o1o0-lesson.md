@@ -1269,7 +1269,6 @@ go mod tidy
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
-  	│	├── 📄 board.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
@@ -1374,7 +1373,6 @@ func GetRankFromCode(code string) string {
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
-  	│	├── 📄 board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
@@ -1446,9 +1444,11 @@ func GetRankFromCode(code string) string {
 // ...略...
 ```
 
-# Step [O1o1o0g12o_1o0] 盤定義
+# Step [O1o1o0g12o__11o0] 盤定義（土台）
 
-## Step [O1o1o0g12o0] ファイル作成 - board.go
+これから盤を作っていく前に、土台を作る  
+
+## Step [O1o1o0g12o__11o1o0] ファイル作成 - board.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1469,7 +1469,7 @@ func GetRankFromCode(code string) string {
 ```
 
 ```go
-// BOF [O1o1o0g12o0]
+// BOF [O1o1o0g12o__11o1o0]
 
 package kernel
 
@@ -1487,16 +1487,6 @@ type Board struct {
 	cells []Stone
 }
 
-// NewBoard - 新規作成
-func NewBoard() *Board {
-	var b = new(Board)
-
-	// 盤のサイズ指定と、盤面の初期化
-	b.resize(19, 19)
-
-	return b
-}
-
 // GetWidth - 枠の厚みを含まない横幅
 func (b *Board) GetWidth() int {
 	return b.memoryWidth - 2
@@ -1505,6 +1495,65 @@ func (b *Board) GetWidth() int {
 // GetHeight - 枠の厚みを含まない縦幅
 func (b *Board) GetHeight() int {
 	return b.memoryHeight - 2
+}
+
+// GetPointFromXy - 座標変換 (x,y) → Point
+func (b *Board) GetPointFromXy(x int, y int) Point {
+	// 枠の厚み 1 を考慮
+	return Point((y+1)*b.memoryWidth + x + 1)
+}
+
+// サイズ変更
+func (b *Board) resize(width int, height int) {
+	b.memoryWidth = width + 2
+	b.memoryHeight = height + 2
+	b.cells = make([]Stone, b.getMemoryArea())
+}
+
+// 枠付き盤の面積
+func (b *Board) getMemoryArea() int {
+	return b.memoryWidth * b.memoryHeight
+}
+
+// EOF [O1o1o0g12o__11o1o0]
+```
+
+# Step [O1o1o0g12o_1o0] 盤定義（盤面）
+
+## Step [O1o1o0g12o0] ファイル作成 - board_area.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+👉  │	├── 📄 board_area.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g12o0]
+
+package kernel
+
+// NewBoard - 新規作成
+func NewBoard() *Board {
+	var b = new(Board)
+
+	// 盤のサイズ指定と、盤面の初期化
+	b.resize(19, 19)
+
+	return b
 }
 
 // Init - 盤面初期化
@@ -1551,13 +1600,6 @@ func (b *Board) Init(width int, height int) {
 	}
 }
 
-// サイズ変更
-func (b *Board) resize(width int, height int) {
-	b.memoryWidth = width + 2
-	b.memoryHeight = height + 2
-	b.cells = make([]Stone, b.getMemoryArea())
-}
-
 // ForeachLikeText - 枠を含めた各セル
 func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 	for y := 0; y < b.memoryHeight; y++ {
@@ -1571,11 +1613,6 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 			setStone(stone)
 		}
 	}
-}
-
-// 枠付き盤の面積
-func (b *Board) getMemoryArea() int {
-	return b.memoryWidth * b.memoryHeight
 }
 
 // EOF [O1o1o0g12o0]
@@ -1645,6 +1682,7 @@ go mod tidy
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
+  	│	├── 📄 board_area.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
@@ -1760,6 +1798,7 @@ Output:
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
+  	│	├── 📄 board_area.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
@@ -1822,6 +1861,7 @@ Output:
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
+  	│	├── 📄 board_area.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
@@ -1971,6 +2011,7 @@ Moved to `[O1o1o0g12o__10o1o0]`
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 👉  │	├── 📄 board_coord.go
+  	│	├── 📄 board_area.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
@@ -1988,12 +2029,6 @@ Moved to `[O1o1o0g12o__10o1o0]`
 // BOF [O1o1o0g16o0]
 
 package kernel
-
-// GetPointFromXy - 座標変換 (x,y) → Point
-func (b *Board) GetPointFromXy(x int, y int) Point {
-	// 枠の厚み 1 を考慮
-	return Point((y+1)*b.memoryWidth + x + 1)
-}
 
 // GetPointFromCode - "A7" や "J13" といった符号を Point へ変換します
 //
@@ -2179,6 +2214,8 @@ Output > Log > JSON:
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
@@ -2252,6 +2289,8 @@ func (k *Kernel) Play(stone Stone, point Point, logg *Logger) bool {
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
@@ -2377,6 +2416,7 @@ Output > Console:
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
@@ -2426,6 +2466,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
@@ -2500,6 +2541,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
@@ -2545,6 +2587,7 @@ type Ren struct {
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
 👉 	│	├── 📄 check_board.go
@@ -2639,6 +2682,7 @@ func (b *CheckBoard) getMemoryArea() int {
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
  	│	├── 📄 check_board.go
@@ -2681,6 +2725,7 @@ func (b *CheckBoard) getMemoryArea() int {
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
   	│	├── 📄 board.go
  	│	├── 📄 check_board.go
