@@ -16,6 +16,16 @@ type Board struct {
 	cells []Stone
 }
 
+// GetMemoryWidth - 枠の厚みを含んだ横幅
+func (b *Board) GetMemoryWidth() int {
+	return b.memoryWidth
+}
+
+// GetMemoryHeight - 枠の厚みを含んだ縦幅
+func (b *Board) GetMemoryHeight() int {
+	return b.memoryHeight
+}
+
 // GetWidth - 枠の厚みを含まない横幅
 func (b *Board) GetWidth() int {
 	return b.memoryWidth - 2
@@ -24,6 +34,11 @@ func (b *Board) GetWidth() int {
 // GetHeight - 枠の厚みを含まない縦幅
 func (b *Board) GetHeight() int {
 	return b.memoryHeight - 2
+}
+
+// GetStoneAt - 指定座標の石を取得
+func (b *Board) GetStoneAt(i Point) Stone {
+	return b.cells[i]
 }
 
 // GetPointFromXy - 座標変換 (x,y) → Point

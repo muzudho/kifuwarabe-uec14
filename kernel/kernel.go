@@ -15,11 +15,19 @@ type Kernel struct {
 	// [O1o1o0g22o2o3o0]
 	// CheckBoard - 呼吸点の探索時に使います
 	CheckBoard *CheckBoard
+	// Ren - 呼吸点の探索時に使います
+	Ren *Ren
+	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
+	Direction [4]int
 }
 
 func NewKernel() *Kernel {
 	var k = new(Kernel)
 	k.Board = NewBoard()
+
+	// [O1o1o0g22o2o3o0]
+	k.CheckBoard = NewCheckBoard()
+
 	return k
 }
 
@@ -97,6 +105,14 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		var file = GetFileFromCode(tokens[1])
 		logg.C.Infof("= %s\n", file)
 		logg.J.Infow("output", "file", file)
+		return true
+
+	case "test_get_liberty": // [O1o1o0g22o2o5o0]
+		// Example: "test_get_liberty B2"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		var ren = k.GetLiberty(point)
+		logg.C.Infof("= ren color:%s area:%d libertyArea:%d\n", ren.Color, ren.Area, ren.LibertyArea)
+		logg.J.Infow("output ren", "color", ren.Color, "area", ren.Area, "libertyArea", ren.LibertyArea)
 		return true
 
 	case "test_get_point_from_xy": // [O1o1o0g12o__11o2o0]

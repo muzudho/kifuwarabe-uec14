@@ -1648,6 +1648,16 @@ type Board struct {
 	cells []Stone
 }
 
+// GetMemoryWidth - 枠の厚みを含んだ横幅
+func (b *Board) GetMemoryWidth() int {
+	return b.memoryWidth
+}
+
+// GetMemoryHeight - 枠の厚みを含んだ縦幅
+func (b *Board) GetMemoryHeight() int {
+	return b.memoryHeight
+}
+
 // GetWidth - 枠の厚みを含まない横幅
 func (b *Board) GetWidth() int {
 	return b.memoryWidth - 2
@@ -1656,6 +1666,11 @@ func (b *Board) GetWidth() int {
 // GetHeight - 枠の厚みを含まない縦幅
 func (b *Board) GetHeight() int {
 	return b.memoryHeight - 2
+}
+
+// GetStoneAt - 指定座標の石を取得
+func (b *Board) GetStoneAt(i Point) Stone {
+	return b.cells[i]
 }
 
 // GetPointFromXy - 座標変換 (x,y) → Point
@@ -1750,7 +1765,7 @@ func (b *Board) getMemoryArea() int {
 // ...略...
 ```
 
-## Step [O1o1o0g12o__11o3o0] 実行
+## Step [O1o1o0g12o__11o3o0] 動作確認
 
 19路盤とする  
 
@@ -2829,13 +2844,28 @@ func (b *CheckBoard) getMemoryArea() int {
 ```go
 // ...略...
 // type Kernel struct {
-	// Board *Board
+//	Board *Board
 
 	// * 以下を追加
 	// [O1o1o0g22o2o3o0]
 	// CheckBoard - 呼吸点の探索時に使います
 	CheckBoard *CheckBoard
+	// Ren - 呼吸点の探索時に使います
+	Ren *Ren
+	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
+	Direction [4]int
 //}
+
+// func NewKernel() *Kernel {
+//	var k = new(Kernel)
+//	k.Board = NewBoard()
+
+	// * 以下を追加
+	// [O1o1o0g22o2o3o0]
+	k.CheckBoard = NewCheckBoard()
+
+//	return k
+// }
 ```
 
 ### Step [O1o1o0g22o2o4o0] ファイル作成 - liberty.go
@@ -2881,12 +2911,149 @@ package kernel
 func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+	// 連の初期化
+	k.Ren = new(Ren)
+	// 連の色
+	k.Ren.Color = k.Board.GetStoneAt(arbitraryPoint)
+	// ４方向（東、北、西、南）の番地への相対インデックス
+	k.Direction = [4]int{1, -k.Board.GetMemoryWidth(), -1, k.Board.GetMemoryWidth()}
 
-	// TODO
-	return new(Ren)
+	k.searchRen(arbitraryPoint)
+
+	return k.Ren
+}
+
+// 再帰関数。連の探索
+func (k *Kernel) searchRen(here Point) {
+	k.CheckBoard.Check(here)
+	k.Ren.Area++
+
+	// 東、北、西、南
+	for dir := 0; dir < 4; dir++ {
+		var adjacent = here + Point(k.Direction[dir]) // 隣接する交点
+		// 探索済みならスキップ
+		if k.CheckBoard.IsChecked(adjacent) {
+			continue
+		}
+		if k.Board.GetStoneAt(adjacent) == Empty { // 空点
+			k.CheckBoard.Check(adjacent)
+			k.Ren.LibertyArea++
+		} else if k.Board.GetStoneAt(adjacent) == k.Ren.Color { // 同色の石
+			k.searchRen(adjacent) // 再帰
+		}
+	}
 }
 
 // EOF [O1o1o0g22o2o4o0]
+```
+
+### Step [O1o1o0g22o2o5o0] コマンド実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+// ...略...
+
+
+	// この下にコマンドを挟んでいく
+	// -------------------------
+
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "test_get_liberty": // [O1o1o0g22o2o5o0]
+		// Example: "test_get_liberty B2"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		var ren = k.GetLiberty(point)
+		logg.C.Infof("= ren color:%s area:%d libertyArea:%d\n", ren.Color, ren.Area, ren.LibertyArea)
+		logg.J.Infow("output ren", "color", ren.Color, "area", ren.Area, "libertyArea", ren.LibertyArea)
+		return true
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
+
+
+// ...略...
+```
+
+## Step [O1o1o0g22o2o6o0] 動作確認
+
+19路盤とする  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+play black B2
+test_get_liberty B2
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-14 23:36:15]   # play black B2
+[2022-09-14 23:36:15]   =
+
+[2022-09-14 23:36:21]   # test_get_liberty B2
+[2022-09-14 23:36:21]   = ren color:x area:1 libertyArea:4
+```
+
+Output > Log > PlainText:  
+
+```plaintext
+2022-09-14T23:36:15.521+0900	# play black B2
+2022-09-14T23:36:15.556+0900	=
+
+2022-09-14T23:36:21.463+0900	# test_get_liberty B2
+2022-09-14T23:36:21.464+0900	= ren color:x area:1 libertyArea:4
+```
+
+Output > Log > JSON:  
+
+```json
+{"level":"info","ts":"2022-09-14T23:36:15.556+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"play black B2"}
+{"level":"info","ts":"2022-09-14T23:36:15.556+0900","caller":"kernel/play.go:43","msg":"ok"}
+{"level":"info","ts":"2022-09-14T23:36:21.464+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_get_liberty B2"}
+{"level":"info","ts":"2022-09-14T23:36:21.465+0900","caller":"kernel/kernel.go:115","msg":"output ren","color":"x","area":1,"libertyArea":4}
 ```
 
 TODO 自殺手の可／不可指定  
