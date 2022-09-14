@@ -74,7 +74,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			return true
 		}
 
-		k.Board.Resize(sideLength, sideLength)
+		k.Board.Init(sideLength, sideLength)
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 

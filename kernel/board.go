@@ -21,7 +21,7 @@ func NewBoard() *Board {
 	var b = new(Board)
 
 	// 盤のサイズ指定と、盤面の初期化
-	b.Resize(19, 19)
+	b.resize(19, 19)
 
 	return b
 }
@@ -36,14 +36,14 @@ func (b *Board) GetHeight() int {
 	return b.memoryHeight - 2
 }
 
-// Resize - サイズ変更
-func (b *Board) Resize(width int, height int) {
-	b.memoryWidth = width + 2
-	b.memoryHeight = height + 2
-	b.cells = make([]Stone, b.getMemoryArea())
+// Init - 盤面初期化
+func (b *Board) Init(width int, height int) {
+	// 盤面のサイズが異なるなら、盤面を作り直す
+	if b.memoryWidth != width || b.memoryHeight != height {
+		b.resize(width, height)
+	}
 
-	// 枠を設定する
-	// 上辺、下辺を引く
+	// 枠の上辺、下辺を引く
 	{
 		var y = 0
 		var y2 = b.memoryHeight - 1
@@ -55,7 +55,7 @@ func (b *Board) Resize(width int, height int) {
 			b.cells[i] = Wall
 		}
 	}
-	// 左辺、右辺を引く
+	// 枠の左辺、右辺を引く
 	{
 		var x = 0
 		var x2 = b.memoryWidth - 1
@@ -67,6 +67,24 @@ func (b *Board) Resize(width int, height int) {
 			b.cells[i] = Wall
 		}
 	}
+	// 枠の内側を空点で埋める
+	{
+		var height = b.GetHeight()
+		var width = b.GetWidth()
+		for y := 1; y < height; y++ {
+			for x := 1; x < width; x++ {
+				var i = (y * b.memoryWidth) + x
+				b.cells[i] = Empty
+			}
+		}
+	}
+}
+
+// サイズ変更
+func (b *Board) resize(width int, height int) {
+	b.memoryWidth = width + 2
+	b.memoryHeight = height + 2
+	b.cells = make([]Stone, b.getMemoryArea())
 }
 
 // ForeachLikeText - 枠を含めた各セル

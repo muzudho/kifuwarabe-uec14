@@ -66,7 +66,7 @@ func main() {
 		// [O1o1o0g11o_3o0]
 		var kernel1 = kernel.NewKernel()
 		// 設定ファイルの内容をカーネルへ反映
-		kernel1.Board.Resize(engineConfig.BoardSize(), engineConfig.BoardSize())
+		kernel1.Board.Init(engineConfig.BoardSize(), engineConfig.BoardSize())
 
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
 		var scanner = bufio.NewScanner(os.Stdin)
