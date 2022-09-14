@@ -64,7 +64,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		}
 		return true
 
-	case "boardsize": // [O1o1o0g15o_11o0]
+	case "boardsize": // [O1o1o0g15o__11o0]
 		// Example: `boardsize 19`
 		var sideLength, err = strconv.Atoi(tokens[1])
 
@@ -85,28 +85,28 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		k.DoPlay(command, logg)
 		return true
 
-	case "test_coord": // [O1o1o0g17o0]
+	case "test_coord": // [O1o1o0g12o__10o2o0]
 		// Example: "test_coord A13"
 		var point = k.Board.GetPointFromCode(tokens[1])
 		logg.C.Infof("= %d\n", point)
 		logg.J.Infow("output", "point", point)
 		return true
 
-	case "test_file": // [O1o1o0g17o0]
+	case "test_file": // [O1o1o0g12o__10o2o0]
 		// Example: "test_file A"
 		var file = GetFileFromCode(tokens[1])
 		logg.C.Infof("= %s\n", file)
 		logg.J.Infow("output", "file", file)
 		return true
 
-	case "test_rank": // [O1o1o0g17o0]
+	case "test_rank": // [O1o1o0g12o__10o2o0]
 		// Example: "test_rank 13"
 		var rank = GetRankFromCode(tokens[1])
 		logg.C.Infof("= %s\n", rank)
 		logg.J.Infow("output", "rank", rank)
 		return true
 
-	case "test_x": // [O1o1o0g17o0]
+	case "test_x": // [O1o1o0g12o__10o2o0]
 		// Example: "test_x 18"
 		var x, err = strconv.Atoi(tokens[1])
 		if err != nil {
@@ -119,7 +119,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		logg.J.Infow("output", "file", file)
 		return true
 
-	case "test_y": // [O1o1o0g17o0]
+	case "test_y": // [O1o1o0g12o__10o2o0]
 		// Example: "test_y 18"
 		var y, err = strconv.Atoi(tokens[1])
 		if err != nil {

@@ -1258,6 +1258,194 @@ Input:
 go mod tidy
 ```
 
+# Step [O1o1o0g12o__10o0] 盤座標符号定義
+
+盤を作る前に、これから盤座標符号を定義する  
+
+## Step [O1o1o0g12o__10o1o0] ファイル作成 - point.go ファイル
+
+👇 以下の既存ファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+👉  │	├── 📄 point.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g12o__10o1o0]
+
+package kernel
+
+import (
+	"fmt"
+	"strconv"
+)
+
+// Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
+type Point int
+
+// GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
+func GetXFromFile(file string) int {
+	// 筋
+	var x = file[0] - 'A'
+	if file[0] >= 'I' {
+		x--
+	}
+	return int(x)
+}
+
+// GetFileFromX - GetXFromFile の逆関数
+func GetFileFromX(x int) string {
+	// ABCDEFGHI
+	// 012345678
+	if 7 < x {
+		// 'I' を飛ばす
+		x++
+	}
+	// 筋
+	return fmt.Sprintf("%c", 'A'+x)
+}
+
+// GetYFromRank - '1' ～ '99' を 0 ～ 98 へ変換します
+func GetYFromRank(rank string) int {
+	// 段
+	var y = int(rank[0] - '0')
+	if 1 < len(rank) {
+		y *= 10
+		y += int(rank[1] - '0')
+	}
+	return y - 1
+}
+
+// GetRankFromY - GetYFromRank の逆関数
+//
+// Parameters
+// ----------
+// y : int
+//
+//	0 .. 98
+//
+// Returns
+// -------
+// rank : string
+//
+//	"1" .. "99"
+func GetRankFromY(y int) string {
+	return strconv.Itoa(y + 1)
+}
+
+// GetFileFromCode - 座標の符号の筋の部分を抜き出します
+//
+// * `code` - 座標の符号。 Example: "A7" や "J13"
+func GetFileFromCode(code string) string {
+	return code[0:1]
+}
+
+// GetRankFromCode - 座標の符号の段の部分を抜き出します
+//
+// * `code` - 座標の符号。 Example: "A7" や "J13"
+func GetRankFromCode(code string) string {
+	if 2 < len(code) {
+		return code[1:3]
+	}
+
+	return code[1:2]
+}
+
+// EOF [O1o1o0g12o__10o1o0]
+```
+
+## Step [O1o1o0g12o__10o2o0] 符号変換作成 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+// ...略...
+
+
+	// この下にコマンドを挟んでいく
+	// -------------------------
+
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "test_file": // [O1o1o0g12o__10o2o0]
+		// Example: "test_file A"
+		var file = GetFileFromCode(tokens[1])
+		logg.C.Infof("= %s\n", file)
+		logg.J.Infow("output", "file", file)
+		return true
+
+	case "test_rank": // [O1o1o0g12o__10o2o0]
+		// Example: "test_rank 13"
+		var rank = GetRankFromCode(tokens[1])
+		logg.C.Infof("= %s\n", rank)
+		logg.J.Infow("output", "rank", rank)
+		return true
+
+	case "test_x": // [O1o1o0g12o__10o2o0]
+		// Example: "test_x 18"
+		var x, err = strconv.Atoi(tokens[1])
+		if err != nil {
+			logg.C.Infof("? unexpected x:%s\n", tokens[1])
+			logg.J.Infow("error", "x", tokens[1])
+			return true
+		}
+		var file = GetFileFromX(x)
+		logg.C.Infof("= %s\n", file)
+		logg.J.Infow("output", "file", file)
+		return true
+
+	case "test_y": // [O1o1o0g12o__10o2o0]
+		// Example: "test_y 18"
+		var y, err = strconv.Atoi(tokens[1])
+		if err != nil {
+			logg.C.Infof("? unexpected y:%s\n", tokens[1])
+			logg.J.Infow("error", "y", tokens[1])
+			return true
+		}
+		var rank = GetRankFromY(y)
+		logg.C.Infof("= %s\n", rank)
+		logg.J.Infow("output", "rank", rank)
+		return true
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
+
+
+// ...略...
+```
+
 # Step [O1o1o0g12o_1o0] 盤定義
 
 ## Step [O1o1o0g12o0] ファイル作成 - board.go
@@ -1625,9 +1813,9 @@ Output:
 
 `quit` コマンドで 思考エンジンを終了してほしい  
 
-# Step [O1o1o0g15o_10o0] resize コマンド（盤サイズの変更）
+# Step [O1o1o0g15o__10o0] resize コマンド（盤サイズの変更）
 
-## Step [O1o1o0g15o_11o0] 実装 - kernel.go ファイル
+## Step [O1o1o0g15o__11o0] 実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1655,7 +1843,7 @@ Output:
 	// この下にコマンドを挟んでいく
 	// -------------------------
 
-	case "boardsize": // [O1o1o0g15o_11o0]
+	case "boardsize": // [O1o1o0g15o__11o0]
 		// Example: `boardsize 19`
 		var sideLength, err = strconv.Atoi(tokens[1])
 
@@ -1679,7 +1867,7 @@ Output:
 // ...略...
 ```
 
-## Step [O1o1o0g15o_12o0] 実行
+## Step [O1o1o0g15o__12o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -1745,136 +1933,35 @@ Output:
 . '''
 ```
 
-# ~~Step [O1o1o0g15o_13o0]~~
+# ~~Step [O1o1o0g15o__13o0]~~
 
 Removed  
 
-## ~~Step [O1o1o0g15o_13o1o0]~~
+## ~~Step [O1o1o0g15o__13o1o0]~~
 
 Moved to `O1o1o0g11o__10o_2o0`  
 
-## ~~Step [O1o1o0g15o_13o2o_1o0]~~
+## ~~Step [O1o1o0g15o__13o2o_1o0]~~
 
 Moved to `[O1o1o0g11o__10o_3o0]`  
 
-## ~~Step [O1o1o0g15o_13o2o_2o0]~~
+## ~~Step [O1o1o0g15o__13o2o_2o0]~~
 
 Moved to `[O1o1o0g11o__10o_4o0]`  
 
-## ~~Step [O1o1o0g15o_13o2o_3o0]~~
+## ~~Step [O1o1o0g15o__13o2o_3o0]~~
 
 Merged to `[O1o1o0g11o_3o0]`  
 
-## ~~Step [O1o1o0g15o_13o2o_4o0]~~
+## ~~Step [O1o1o0g15o__13o2o_4o0]~~
 
 Moved to `[O1o1o0g11o__10o_6o0]`  
 
 # Step [O1o1o0g15o_1o0] 座標の定義
 
-## Step [O1o1o0g15o0] ファイル作成 - point.go ファイル
+## ~~Step [O1o1o0g15o0]~~
 
-👇 以下の既存ファイルを新規作成してほしい  
-
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 kernel
-  	│	├── 📄 board.go
-	│	├── 📄 go.mod
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
-👉  │	├── 📄 point.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
- 	├── 📄 engine_config.go
-  	├── 📄 engine.toml
-    ├── 📄 go.mod
-  	├── 📄 go.work
-  	└── 📄 main.go
-```
-
-```go
-// BOF [O1o1o0g15o0]
-
-package kernel
-
-import (
-	"fmt"
-	"strconv"
-)
-
-// Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
-type Point int
-
-// GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
-func GetXFromFile(file string) int {
-	// 筋
-	var x = file[0] - 'A'
-	if file[0] >= 'I' {
-		x--
-	}
-	return int(x)
-}
-
-// GetFileFromX - GetXFromFile の逆関数
-func GetFileFromX(x int) string {
-	// ABCDEFGHI
-	// 012345678
-	if 7 < x {
-		// 'I' を飛ばす
-		x++
-	}
-	// 筋
-	return fmt.Sprintf("%c", 'A'+x)
-}
-
-// GetYFromRank - '1' ～ '99' を 0 ～ 98 へ変換します
-func GetYFromRank(rank string) int {
-	// 段
-	var y = int(rank[0] - '0')
-	if 1 < len(rank) {
-		y *= 10
-		y += int(rank[1] - '0')
-	}
-	return y - 1
-}
-
-// GetRankFromY - GetYFromRank の逆関数
-//
-// Parameters
-// ----------
-// y : int
-//
-//	0 .. 98
-//
-// Returns
-// -------
-// rank : string
-//
-//	"1" .. "99"
-func GetRankFromY(y int) string {
-	return strconv.Itoa(y + 1)
-}
-
-// GetFileFromCode - 座標の符号の筋の部分を抜き出します
-//
-// * `code` - 座標の符号。 Example: "A7" や "J13"
-func GetFileFromCode(code string) string {
-	return code[0:1]
-}
-
-// GetRankFromCode - 座標の符号の段の部分を抜き出します
-//
-// * `code` - 座標の符号。 Example: "A7" や "J13"
-func GetRankFromCode(code string) string {
-	if 2 < len(code) {
-		return code[1:3]
-	}
-
-	return code[1:2]
-}
-
-// EOF [O1o1o0g15o0]
-```
+Moved to `[O1o1o0g12o__10o1o0]`  
 
 ## Step [O1o1o0g16o0] 座標の算出
 
@@ -1920,84 +2007,9 @@ func (b *Board) GetPointFromCode(code string) Point {
 // EOF [O1o1o0g16o0]
 ```
 
-## Step [O1o1o0g17o0] 符号変換作成 - kernel.go ファイル
+## ~~Step [O1o1o0g17o0]~~
 
-👇 以下の既存ファイルを編集してほしい  
-
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 kernel
-  	│	├── 📄 board.go
-	│	├── 📄 go.mod
-👉 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
- 	├── 📄 engine_config.go
-  	├── 📄 engine.toml
-    ├── 📄 go.mod
-  	├── 📄 go.work
-  	└── 📄 main.go
-```
-
-👇 がんばって、 Execute メソッドに挿入してほしい  
-
-```go
-// ...略...
-
-
-	// この下にコマンドを挟んでいく
-	// -------------------------
-
-	// ...略...
-
-	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "test_file": // [O1o1o0g17o0]
-		// Example: "test_file A"
-		var file = GetFileFromCode(tokens[1])
-		logg.C.Infof("= %s\n", file)
-		logg.J.Infow("output", "file", file)
-		return true
-
-	case "test_rank": // [O1o1o0g17o0]
-		// Example: "test_rank 13"
-		var rank = GetRankFromCode(tokens[1])
-		logg.C.Infof("= %s\n", rank)
-		logg.J.Infow("output", "rank", rank)
-		return true
-
-	case "test_x": // [O1o1o0g17o0]
-		// Example: "test_x 18"
-		var x, err = strconv.Atoi(tokens[1])
-		if err != nil {
-			logg.C.Infof("? unexpected x:%s\n", tokens[1])
-			logg.J.Infow("error", "x", tokens[1])
-			return true
-		}
-		var file = GetFileFromX(x)
-		logg.C.Infof("= %s\n", file)
-		logg.J.Infow("output", "file", file)
-		return true
-
-	case "test_y": // [O1o1o0g17o0]
-		// Example: "test_y 18"
-		var y, err = strconv.Atoi(tokens[1])
-		if err != nil {
-			logg.C.Infof("? unexpected y:%s\n", tokens[1])
-			logg.J.Infow("error", "y", tokens[1])
-			return true
-		}
-		var rank = GetRankFromY(y)
-		logg.C.Infof("= %s\n", rank)
-		logg.J.Infow("output", "rank", rank)
-		return true
-
-	// この上にコマンドを挟んでいく
-	// -------------------------
-
-
-// ...略...
-```
+Moved to `O1o1o0g12o__10o2o0`  
 
 ## Step [O1o1o0g18o0] 実行
 
