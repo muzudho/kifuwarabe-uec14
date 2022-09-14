@@ -26,6 +26,16 @@ func NewBoard() *Board {
 	return b
 }
 
+// GetWidth - 枠の厚みを含まない横幅
+func (b *Board) GetWidth() int {
+	return b.memoryWidth - 2
+}
+
+// GetHeight - 枠の厚みを含まない縦幅
+func (b *Board) GetHeight() int {
+	return b.memoryHeight - 2
+}
+
 // Resize - サイズ変更
 func (b *Board) Resize(width int, height int) {
 	b.memoryWidth = width + 2

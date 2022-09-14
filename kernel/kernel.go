@@ -11,6 +11,10 @@ import (
 type Kernel struct {
 	// Board - 盤
 	Board *Board
+
+	// [O1o1o0g22o2o3o0]
+	// CheckBoard - 呼吸点の探索時に使います
+	CheckBoard *CheckBoard
 }
 
 func NewKernel() *Kernel {

@@ -1309,6 +1309,16 @@ func NewBoard() *Board {
 	return b
 }
 
+// GetWidth - 枠の厚みを含まない横幅
+func (b *Board) GetWidth() int {
+	return b.memoryWidth - 2
+}
+
+// GetHeight - 枠の厚みを含まない縦幅
+func (b *Board) GetHeight() int {
+	return b.memoryHeight - 2
+}
+
 // Resize - サイズ変更
 func (b *Board) Resize(width int, height int) {
 	b.memoryWidth = width + 2
@@ -2323,29 +2333,13 @@ Output > Console:
 
 # Step [O1o1o0g22o0] 囲碁の石を打つルールの実装
 
-TODO 空点以外のところ（石または壁の上）に石を置くことの禁止  
-
-TODO 呼吸点のカウント  
-
-TODO 自殺手の可／不可指定  
-
-TODO 相手の眼への自殺手の判定と、その禁止（ルール上禁止）  
-
-TODO 自分の眼への自殺手の判定と、その禁止または許可（明らかに損な手）  
-
-TODO ダメの眼への自殺手の判定と、その禁止または許可  
-
-TODO 石の打ち上げ
-
-TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
-
 ## Step [O1o1o0g22o1o0] 空点以外のところ（石または壁の上）に石を置くことの禁止 - IsMasonryError関数作成
 
 とりあえず、 `石または壁の上に石を置く行為` に `Masonry` （メイスンリー）という名前を付ける。  
 従って この主のエラーは `Masonry error` と呼ぶことにする。  
 そのようなエラーであるかどうか判定する関数の名前は `IsMasonryError` と呼ぶことにする  
 
-## Step [O1o1o0g22o1o1o0] ファイル作成 - masonry.go
+### Step [O1o1o0g22o1o1o0] ファイル作成 - masonry.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -2394,7 +2388,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 // EOF [O1o1o0g22o1o1o0]
 ```
 
-## Step [O1o1o0g22o1o2o0] 呼出し
+### Step [O1o1o0g22o1o2o0] 呼出し
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -2457,6 +2451,259 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 //	return true
 // }
 ```
+
+## Step [O1o1o0g22o2o0] 連の認識と、呼吸点のカウント - GetLiberty関数作成
+
+盤上の座標を指定することで、そこにある `連` の `呼吸点` の数を算出したい  
+
+* `連` - Ren、れん。コンピューター囲碁用語。説明は省略
+* `呼吸点` - Liberty、こきゅうてん。コンピューター囲碁用語。説明は省略
+
+呼吸点を数えるために探索すると、連も認識できる。  
+そのような探索を行う関数を `GetLiberty` と名付けることにする  
+
+### Step [O1o1o0g22o2o1o0] ファイル作成 - ren.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+👉 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g22o2o1o0]
+
+package kernel
+
+// Ren - 連，れん
+type Ren struct {
+	// Area - 面積
+	Area int
+	// Color - 色
+	Color Stone
+	// LibertyArea - 呼吸点の面積
+	LibertyArea int
+}
+
+// EOF [O1o1o0g22o2o1o0]
+```
+
+### Step [O1o1o0g22o2o2o0] ファイル作成 - check_board.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+👉 	│	├── 📄 check_board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g22o2o2o0]
+
+package kernel
+
+// CheckBoard - チェック盤
+type CheckBoard struct {
+	// 枠付きの横幅
+	memoryWidth int
+
+	// 枠付きの縦幅
+	memoryHeight int
+
+	// 交点
+	//
+	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
+	cells []bool
+}
+
+// NewCheckBoard - 新規作成
+//
+// * 使用する前に Init 関数を呼び出してほしい
+func NewCheckBoard() *CheckBoard {
+	var b = new(CheckBoard)
+	return b
+}
+
+// Init - 盤面初期化
+func (b *CheckBoard) Init(width int, height int) {
+	// 盤面のサイズが異なるなら、盤面を作り直す
+	if b.memoryWidth != width || b.memoryHeight != height {
+		b.Resize(width, height)
+		return
+	}
+
+	// 盤面のクリアー
+	for i := 0; i < len(b.cells); i++ {
+		b.cells[i] = false
+	}
+}
+
+// Resize - サイズ変更
+func (b *CheckBoard) Resize(width int, height int) {
+	b.memoryWidth = width + 2
+	b.memoryHeight = height + 2
+	b.cells = make([]bool, b.getMemoryArea())
+}
+
+// Check - チェックを付けます
+func (b *CheckBoard) Check(point Point) {
+	b.cells[point] = true
+}
+
+// IsChecked - チェックが付いているか？
+func (b *CheckBoard) IsChecked(point Point) bool {
+	return b.cells[point]
+}
+
+// 枠付き盤の面積
+func (b *CheckBoard) getMemoryArea() int {
+	return b.memoryWidth * b.memoryHeight
+}
+
+// EOF [O1o1o0g22o2o2o0]
+```
+
+### Step [O1o1o0g22o2o3o0] ファイル編集 - kernel.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって挿入してほしい  
+
+```go
+// ...略...
+// type Kernel struct {
+	// Board *Board
+
+	// * 以下を追加
+	// [O1o1o0g22o2o3o0]
+	// CheckBoard - 呼吸点の探索時に使います
+	CheckBoard *CheckBoard
+//}
+```
+
+### Step [O1o1o0g22o2o4o0] ファイル作成 - liberty.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+👉 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g22o2o4o0]
+
+package kernel
+
+// GetLiberty - 呼吸点の数え上げ。連の数え上げ
+//
+// Parameters
+// ----------
+// * `arbitraryPoint` - 連に含まれる任意の一点
+func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
+	// チェックボードの初期化
+	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+
+	// TODO
+	return new(Ren)
+}
+
+// EOF [O1o1o0g22o2o4o0]
+```
+
+TODO 自殺手の可／不可指定  
+
+TODO 相手の眼への自殺手の判定と、その禁止（ルール上禁止）  
+
+TODO 自分の眼への自殺手の判定と、その禁止または許可（明らかに損な手）  
+
+TODO ダメの眼への自殺手の判定と、その禁止または許可  
+
+TODO 石の打ち上げ
+
+TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
 
 # 参考にした記事
 
