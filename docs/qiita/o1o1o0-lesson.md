@@ -1843,10 +1843,10 @@ func (b *Board) Init(width int, height int) {
 		var y = 0
 		var y2 = b.memoryHeight - 1
 		for x := 0; x < b.memoryWidth; x++ {
-			var i = (y * b.memoryWidth) + x
+			var i = b.GetPointFromXy(x, y)
 			b.cells[i] = Wall
 
-			i = (y2 * b.memoryWidth) + x
+			i = b.GetPointFromXy(x, y2)
 			b.cells[i] = Wall
 		}
 	}
@@ -1855,10 +1855,10 @@ func (b *Board) Init(width int, height int) {
 		var x = 0
 		var x2 = b.memoryWidth - 1
 		for y := 1; y < b.memoryHeight-1; y++ {
-			var i = (y * b.memoryWidth) + x
+			var i = b.GetPointFromXy(x, y)
 			b.cells[i] = Wall
 
-			i = (y * b.memoryWidth) + x2
+			i = b.GetPointFromXy(x2, y)
 			b.cells[i] = Wall
 		}
 	}
@@ -1868,7 +1868,7 @@ func (b *Board) Init(width int, height int) {
 		var width = b.GetWidth()
 		for y := 1; y < height; y++ {
 			for x := 1; x < width; x++ {
-				var i = (y * b.memoryWidth) + x
+				var i = b.GetPointFromXy(x, y)
 				b.cells[i] = Empty
 			}
 		}
@@ -1883,7 +1883,7 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 		}
 
 		for x := 0; x < b.memoryWidth; x++ {
-			var i = (y * b.memoryWidth) + x
+			var i = b.GetPointFromXy(x, y)
 			var stone = b.cells[i]
 			setStone(stone)
 		}
