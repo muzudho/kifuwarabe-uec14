@@ -29,4 +29,20 @@ func (s Stone) String() string {
 	}
 }
 
+// GetColor - 色の取得
+func (s Stone) GetColor() Color {
+	switch s {
+	case Empty:
+		return Color_None
+	case Black:
+		return Color_Black
+	case White:
+		return Color_White
+	case Wall:
+		return Color_None
+	default:
+		panic(fmt.Sprintf("%d", int(s)))
+	}
+}
+
 // EOF [O1o1o0g11o0]

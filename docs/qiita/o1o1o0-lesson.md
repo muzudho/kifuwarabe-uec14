@@ -1160,7 +1160,73 @@ import (
 * カーネルと、自作の部分で コマンドが被ったなら、カーネルの方を優先する
   * これにより カーネルのアップデートにより 自作のコマンドが避けられることから、アップデート時は動作テストしてほしい
 
-# Step [O1o1o0g11o_3o0] 石定義
+# Step [O1o1o0g11o_4o0] 石の色定義
+
+`石` を定義していないが、先に `石の色` を定義する  
+
+石の色の組み合わせを定義する。  
+石の色の組み合わせは以下の４通りある。これらの集合を `Color` と名付けることにする   
+
+* `Color_None` - 隣接する連は１つもない
+* `Color_Black` - 黒石の連とだけ隣接する
+* `Color_White` - 白石の連とだけ隣接する
+* `Color_Mixed` - 黒石と白石の連の両方に隣接する
+
+## Step [O1o1o0g11o_4o1o0] ファイル作成 - color.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+👉	│	├── 📄 color.mod
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	└── 📄 logger.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g11o_4o1o0]
+
+package kernel
+
+import "fmt"
+
+type Color uint
+
+const (
+	Color_None Color = iota
+	Color_Black
+	Color_White
+	Color_Mixed
+)
+
+// String - 文字列化
+func (s Color) String() string {
+	switch s {
+	case Color_None:
+		return ""
+	case Color_Black:
+		return "x"
+	case Color_White:
+		return "o"
+	case Color_Mixed:
+		return "xo"
+	default:
+		panic(fmt.Sprintf("%d", int(s)))
+	}
+}
+
+// EOF [O1o1o0g11o_4o1o0]
+```
+
+# Step [O1o1o0g11o_5o0] 石定義
 
 ## Step [O1o1o0g11o0] ファイル作成 - stone.go ファイル
 
@@ -1208,6 +1274,22 @@ func (s Stone) String() string {
 		return "o"
 	case Wall:
 		return "+"
+	default:
+		panic(fmt.Sprintf("%d", int(s)))
+	}
+}
+
+// GetColor - 色の取得
+func (s Stone) GetColor() Color {
+	switch s {
+	case Empty:
+		return Color_None
+	case Black:
+		return Color_Black
+	case White:
+		return Color_White
+	case Wall:
+		return Color_None
 	default:
 		panic(fmt.Sprintf("%d", int(s)))
 	}
@@ -3004,7 +3086,7 @@ func (k *Kernel) searchRen(here Point) {
 // ...略...
 ```
 
-## Step [O1o1o0g22o2o6o0] 動作確認
+### Step [O1o1o0g22o2o6o0] 動作確認
 
 19路盤とする  
 
@@ -3055,6 +3137,11 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-14T23:36:21.464+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_get_liberty B2"}
 {"level":"info","ts":"2022-09-14T23:36:21.465+0900","caller":"kernel/kernel.go:115","msg":"output ren","color":"x","area":1,"libertyArea":4}
 ```
+
+## Step [O1o1o0g22o3o0] 連の隣接連の色判定 - GetAdjacentRenColor 関数作成
+
+任意に指定した交点を含む連について、その連に隣接する色の組み合わせを取得する。  
+ここで、壁は対象外とする。  
 
 TODO 自殺手の可／不可指定  
 
