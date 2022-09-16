@@ -2705,6 +2705,29 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	// ...略...
 ```
 
+## Step [O1o1o0g15o__14o3o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+set_board file data/board.txt
+board
+```
+
+出力は略  
+
 # Step [O1o1o0g15o_1o0] 座標の定義
 
 ## ~~Step [O1o1o0g15o0]~~
