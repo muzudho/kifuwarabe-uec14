@@ -1923,6 +1923,12 @@ func (b *Board) GetPointFromXy(x int, y int) Point {
 	return Point(y*b.memoryWidth + x)
 }
 
+// GetXyFromPoint - `GetPointFromXy` の逆関数
+func (b *Board) GetXyFromPoint(point Point) (int, int) {
+	var p = int(point)
+	return p % b.memoryWidth, p / b.memoryWidth
+}
+
 // サイズ変更
 func (b *Board) resize(width int, height int) {
 	b.memoryWidth = width + 2
@@ -2775,6 +2781,17 @@ func (b *Board) GetPointFromCode(code string) Point {
 		GetYFromRank(GetRankFromCode(code))+top_wall)
 }
 
+// GetCodeFromPoint - `GetPointFromCode` の逆関数
+func (b *Board) GetCodeFromPoint(point Point) string {
+	// 枠の厚み
+	var left_wall = 1
+	var top_wall = 1
+	var x, y = b.GetXyFromPoint(point)
+	var file = GetFileFromX(x - left_wall)
+	var rank = GetRankFromY(y - top_wall)
+	return fmt.Sprintf("%s%s", file, rank)
+}
+
 // EOF [O1o1o0g16o0]
 ```
 
@@ -2844,8 +2861,8 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// [O1o1o0g22o1o2o0]
 	var onMasonry = func() bool {
-		logg.C.Infof("? masonry my_stone:%s point:%d\n", stone, point)
-		logg.J.Infow("error", "my_stone", stone, "point", point)
+		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
+		logg.J.Infow("error", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
@@ -3093,7 +3110,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 	// * 以下を追加
 	// [O1o1o0g22o1o2o0]
 	var onMasonry = func() bool {
-		logg.C.Infof("? masonry my_stone:%s point:%d\n", stone, point)
+		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, point)
 		logg.J.Infow("error", "my_stone", stone, "point", point)
 		return false
 	}
@@ -3538,8 +3555,8 @@ Output > Log > JSON:
 	// ...略...
 	// [O1o1o0g22o3o1o0]
 	var onOpponentEye = func() bool {
-		logg.C.Infof("? opponent_eye my_stone:%s point:%d\n", stone, point)
-		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", point)
+		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
+		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
@@ -3582,7 +3599,7 @@ Output > Log > JSON:
 	// return true
 ```
 
-## Step [O1o1o0g22o3o2o0] 動作確認
+### Step [O1o1o0g22o3o2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -3607,7 +3624,7 @@ Output > Console:
 
 ```plaintext
 [2022-09-17 00:41:29]   # play white C3
-[2022-09-17 00:41:29]   ? opponent_eye my_stone:o point:66
+[2022-09-17 00:41:29]   ? opponent_eye my_stone:o point:C3
 ```
 
 TODO 自殺手の可／不可指定  

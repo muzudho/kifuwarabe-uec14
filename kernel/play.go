@@ -29,15 +29,15 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// [O1o1o0g22o1o2o0]
 	var onMasonry = func() bool {
-		logg.C.Infof("? masonry my_stone:%s point:%d\n", stone, point)
-		logg.J.Infow("error masonry", "my_stone", stone, "point", point)
+		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
+		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
 	// [O1o1o0g22o3o1o0]
 	var onOpponentEye = func() bool {
-		logg.C.Infof("? opponent_eye my_stone:%s point:%d\n", stone, point)
-		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", point)
+		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
+		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
