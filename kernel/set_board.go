@@ -56,7 +56,6 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			return
 		}
 	}
-
 }
 
 // EOF [O1o1o0g15o__14o1o0]
