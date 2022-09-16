@@ -94,7 +94,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		return true
 
 	case "set_board": // [O1o1o0g15o__14o2o0]
-		// Example: `set_board file data/board.txt`
+		// Example: `set_board file data/board1.txt`
 		k.DoSetBoard(command, logg)
 		return true
 

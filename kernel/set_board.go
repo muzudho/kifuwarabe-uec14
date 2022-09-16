@@ -10,8 +10,8 @@ import (
 // DoSetBoard - 盤面を設定する
 //
 // コマンドラインの複数行入力は難しいので、ファイルから取ることにする
-// * `command` - Example: `set_board file data/board.txt`
-// ........................--------- ---- --------------
+// * `command` - Example: `set_board file data/board1.txt`
+// ........................--------- ---- ---------------
 // ........................0         1    2
 func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")

@@ -2522,14 +2522,14 @@ Moved to `[O1o1o0g11o__10o_6o0]`
 
 # Step [O1o1o0g15o__14o0] 初期盤面を設定する - set_board コマンド
 
-## Step [O1o1o0g15o__14o1o_1o0] データファイル作成 - data/board.txt ファイル
+## Step [O1o1o0g15o__14o1o_1o0] データファイル作成 - data/board1.txt ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 data
-👉 	│	└── 📄 board.txt
+👉 	│	└── 📄 board1.txt
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
@@ -2610,8 +2610,8 @@ import (
 // DoSetBoard - 盤面を設定する
 //
 // コマンドラインの複数行入力は難しいので、ファイルから取ることにする
-// * `command` - Example: `set_board file data/board.txt`
-// ........................--------- ---- --------------
+// * `command` - Example: `set_board file data/board1.txt`
+// ........................--------- ---- ---------------
 // ........................0         1    2
 func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
@@ -2695,7 +2695,7 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	// ...略...
 
 	case "set_board": // [O1o1o0g15o__14o2o0]
-		// Example: `set_board file data/board.txt`
+		// Example: `set_board file data/board1.txt`
 		k.DoSetBoard(command, logg)
 		return true
 
@@ -2722,7 +2722,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board.txt
+set_board file data/board1.txt
 board
 ```
 
