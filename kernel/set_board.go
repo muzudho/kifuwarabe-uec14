@@ -10,10 +10,9 @@ import (
 // DoSetBoard - 盤面を設定する
 //
 // コマンドラインの複数行入力は難しいので、ファイルから取ることにする
-//
-//   - `command` - Example: `set_board file input.txt`
-//     --------- ---- ---------
-//     0         1    2
+// * `command` - Example: `set_board file data/board.txt`
+// ........................--------- ---- --------------
+// ........................0         1    2
 func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 
@@ -31,16 +30,30 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			return false, Space
 		}
 
+		var size = k.Board.getMemoryArea()
 		var i Point = 0
 		for _, c := range string(fileData) {
 			var str = string([]rune{c})
-			var isOk, stone = GetStoneFromName(str, getDefaultStone)
+			var isOk, stone = GetStoneFromChar(str, getDefaultStone)
 
 			if isOk {
-				k.Board.SetStoneAt(i, stone)
-			}
+				if size <= int(i) {
+					// 配列サイズ超過
+					logg.C.Infof("? board out of bounds i:%d size:%d\n", i, size)
+					logg.J.Infow("error board out of bounds", "i", i, "size", size)
+					return
+				}
 
-			i++
+				k.Board.SetStoneAt(i, stone)
+				i++
+			}
+		}
+
+		// サイズが足りていないなら、エラー
+		if int(i) != size {
+			logg.C.Infof("? not enough size i:%d size:%d\n", i, size)
+			logg.J.Infow("error not enough size", "i", i, "size", size)
+			return
 		}
 	}
 

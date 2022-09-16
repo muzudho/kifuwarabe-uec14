@@ -93,6 +93,11 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		k.DoPlay(command, logg)
 		return true
 
+	case "set_board": // [O1o1o0g15o__14o2o0]
+		// Example: `set_board file data/board.txt`
+		k.DoSetBoard(command, logg)
+		return true
+
 	case "test_coord": // [O1o1o0g12o__10o2o0]
 		// Example: "test_coord A13"
 		var point = k.Board.GetPointFromCode(tokens[1])

@@ -34,6 +34,27 @@ func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (b
 	}
 }
 
+// GetStoneFromChar - １文字与えると、Stone値を返します
+//
+// Returns
+// -------
+// isOk : bool
+// stone : Stone
+func GetStoneFromChar(stoneChar string, getDefaultStone func() (bool, Stone)) (bool, Stone) {
+	switch stoneChar {
+	case ".":
+		return true, Space
+	case "x":
+		return true, Black
+	case "o":
+		return true, White
+	case "+":
+		return true, Wall
+	default:
+		return getDefaultStone()
+	}
+}
+
 // String - 文字列化
 func (s Stone) String() string {
 	switch s {

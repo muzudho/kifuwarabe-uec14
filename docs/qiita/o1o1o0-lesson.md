@@ -1383,6 +1383,27 @@ func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (b
 	}
 }
 
+// GetStoneFromChar - １文字与えると、Stone値を返します
+//
+// Returns
+// -------
+// isOk : bool
+// stone : Stone
+func GetStoneFromChar(stoneChar string, getDefaultStone func() (bool, Stone)) (bool, Stone) {
+	switch stoneChar {
+	case ".":
+		return true, Space
+	case "x":
+		return true, Black
+	case "o":
+		return true, White
+	case "+":
+		return true, Wall
+	default:
+		return getDefaultStone()
+	}
+}
+
 // String - 文字列化
 func (s Stone) String() string {
 	switch s {
@@ -2177,7 +2198,7 @@ go mod tidy
 
 # Step [O1o1o0g13o_1o0] 盤表示 - board コマンド
 
-## Step [O1o1o0g13o0] 実装 - kernel.go ファイル
+## Step [O1o1o0g13o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -2356,7 +2377,7 @@ Output:
 
 # Step [O1o1o0g15o__10o0] 盤サイズの変更 - resize コマンド
 
-## Step [O1o1o0g15o__11o0] 実装 - kernel.go ファイル
+## Step [O1o1o0g15o__11o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -2501,6 +2522,57 @@ Moved to `[O1o1o0g11o__10o_6o0]`
 
 # Step [O1o1o0g15o__14o0] 初期盤面を設定する - set_board コマンド
 
+## Step [O1o1o0g15o__14o1o_1o0] データファイル作成 - data/board.txt ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+👉 	│	└── 📄 board.txt
+	├── 📂 kernel
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 set_board.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```plaintext
+    ABCDEFGHJKLMNOPQRST
+   +++++++++++++++++++++
+ 1 +...................+
+ 2 +.xxx...............+
+ 3 +.x.x...............+
+ 4 +.xxx...............+
+ 5 +...................+
+ 6 +...................+
+ 7 +...................+
+ 8 +...................+
+ 9 +...................+
+10 +...................+
+11 +...................+
+12 +...................+
+13 +...................+
+14 +...................+
+15 +...................+
+16 +...................+
+17 +...................+
+18 +...................+
+19 +...................+
+   +++++++++++++++++++++
+```
+
 ## Step [O1o1o0g15o__14o1o0] ファイル作成 - set_board.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
@@ -2530,7 +2602,107 @@ Moved to `[O1o1o0g11o__10o_6o0]`
 
 package kernel
 
+import (
+	"os"
+	"strings"
+)
+
+// DoSetBoard - 盤面を設定する
+//
+// コマンドラインの複数行入力は難しいので、ファイルから取ることにする
+// * `command` - Example: `set_board file data/board.txt`
+// ........................--------- ---- --------------
+// ........................0         1    2
+func (k *Kernel) DoSetBoard(command string, logg *Logger) {
+	var tokens = strings.Split(command, " ")
+
+	if tokens[1] == "file" {
+		var filePath = tokens[2]
+
+		var fileData, err = os.ReadFile(filePath)
+		if err != nil {
+			logg.C.Infof("? unexpected file:%s\n", filePath)
+			logg.J.Infow("error", "file", filePath)
+			return
+		}
+
+		var getDefaultStone = func() (bool, Stone) {
+			return false, Space
+		}
+
+		var size = k.Board.getMemoryArea()
+		var i Point = 0
+		for _, c := range string(fileData) {
+			var str = string([]rune{c})
+			var isOk, stone = GetStoneFromChar(str, getDefaultStone)
+
+			if isOk {
+				if size <= int(i) {
+					// 配列サイズ超過
+					logg.C.Infof("? board out of bounds i:%d size:%d\n", i, size)
+					logg.J.Infow("error board out of bounds", "i", i, "size", size)
+					return
+				}
+
+				k.Board.SetStoneAt(i, stone)
+				i++
+			}
+		}
+
+		// サイズが足りていないなら、エラー
+		if int(i) != size {
+			logg.C.Infof("? not enough size i:%d size:%d\n", i, size)
+			logg.J.Infow("error not enough size", "i", i, "size", size)
+			return
+		}
+	}
+
+}
+
 // EOF [O1o1o0g15o__14o1o0]
+```
+
+## Step [O1o1o0g15o__14o2o0] コマンド実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 set_board.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+	// ...略...
+	// この下にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+
+	case "set_board": // [O1o1o0g15o__14o2o0]
+		// Example: `set_board file data/board.txt`
+		k.DoSetBoard(command, logg)
+		return true
+
+	// ...略...
+	// この上にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
 ```
 
 # Step [O1o1o0g15o_1o0] 座標の定義
@@ -3423,5 +3595,9 @@ TODO コウの禁止（自分が１手前に置いたところに２手続けて
 ### 文字列
 
 📖 [Go: 1文字ずつアクセスする](https://blog.sarabande.jp/post/61104920128)  
+
+### ファイル入出力
+
+📖 [Read a file in Go](https://gosamples.dev/read-file/#:~:text=The%20simplest%20way%20of%20reading,by%20line%20or%20in%20chunks.)  
 
 .
