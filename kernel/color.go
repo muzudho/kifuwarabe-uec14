@@ -14,8 +14,8 @@ const (
 )
 
 // String - 文字列化
-func (s Color) String() string {
-	switch s {
+func (c Color) String() string {
+	switch c {
 	case Color_None:
 		return ""
 	case Color_Black:
@@ -25,7 +25,45 @@ func (s Color) String() string {
 	case Color_Mixed:
 		return "xo"
 	default:
-		panic(fmt.Sprintf("%d", int(s)))
+		panic(fmt.Sprintf("unexpected color:%d", int(c)))
+	}
+}
+
+// GetAdded - 色の加算
+func (c1 Color) GetAdded(c2 Color) Color {
+	switch c1 {
+	case Color_None:
+		return c2
+	case Color_Black:
+		switch c2 {
+		case Color_None:
+			return Color_Black
+		case Color_Black:
+			return Color_Black
+		case Color_White:
+			return Color_Mixed
+		case Color_Mixed:
+			return Color_Mixed
+		default:
+			panic(fmt.Sprintf("unexpected my_color:%s adds_color:%s", c1, c2))
+		}
+	case Color_White:
+		switch c2 {
+		case Color_None:
+			return Color_White
+		case Color_Black:
+			return Color_Mixed
+		case Color_White:
+			return Color_White
+		case Color_Mixed:
+			return Color_Mixed
+		default:
+			panic(fmt.Sprintf("unexpected my_color:%s adds_color:%s", c1, c2))
+		}
+	case Color_Mixed:
+		return Color_Mixed
+	default:
+		panic(fmt.Sprintf("unexpected my_color:%s adds_color:%s", c1, c2))
 	}
 }
 

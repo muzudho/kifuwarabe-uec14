@@ -14,6 +14,8 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	k.Ren = new(Ren)
 	// 連の色
 	k.Ren.Color = k.Board.GetColorAt(arbitraryPoint)
+	// 隣接する連の色
+	k.Ren.AdjacentColor = Color_None
 	// ４方向（東、北、西、南）の番地への相対インデックス
 	k.Direction = [4]int{1, -k.Board.GetMemoryWidth(), -1, k.Board.GetMemoryWidth()}
 
