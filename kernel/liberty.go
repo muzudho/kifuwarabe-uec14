@@ -46,7 +46,11 @@ func (k *Kernel) searchRen(here Point) {
 			continue
 		}
 
-		if adjacentS.GetColor() == k.Ren.Color { // 同色の石
+		var adjacentC = adjacentS.GetColor()
+		// 隣接する色、追加
+		k.Ren.AdjacentColor = k.Ren.AdjacentColor.GetAdded(adjacentC)
+
+		if adjacentC == k.Ren.Color { // 同色の石
 			k.searchRen(adjacentP) // 再帰
 		}
 	}

@@ -3075,7 +3075,11 @@ func (k *Kernel) searchRen(here Point) {
 			continue
 		}
 
-		if adjacentS.GetColor() == k.Ren.Color { // 同色の石
+		var adjacentC = adjacentS.GetColor()
+		// 隣接する色、追加
+		k.Ren.AdjacentColor = k.Ren.AdjacentColor.GetAdded(adjacentC)
+
+		if adjacentC == k.Ren.Color { // 同色の石
 			k.searchRen(adjacentP) // 再帰
 		}
 	}
@@ -3130,8 +3134,8 @@ func (k *Kernel) searchRen(here Point) {
 		// Example: "test_get_liberty B2"
 		var point = k.Board.GetPointFromCode(tokens[1])
 		var ren = k.GetLiberty(point)
-		logg.C.Infof("= ren color:%s area:%d libertyArea:%d\n", ren.Color, ren.Area, ren.LibertyArea)
-		logg.J.Infow("output ren", "color", ren.Color, "area", ren.Area, "libertyArea", ren.LibertyArea)
+		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.Color, ren.Area, ren.LibertyArea, ren.AdjacentColor)
+		logg.J.Infow("output ren", "color", ren.Color, "area", ren.Area, "libertyArea", ren.LibertyArea, "adjacentColor", ren.AdjacentColor)
 		return true
 
 	// この上にコマンドを挟んでいく
@@ -3171,7 +3175,7 @@ Output > Console:
 [2022-09-14 23:36:15]   =
 
 [2022-09-14 23:36:21]   # test_get_liberty B2
-[2022-09-14 23:36:21]   = ren color:x area:1 libertyArea:4
+[2022-09-14 23:36:21]   = ren color:x area:1 libertyArea:4 adjacentColor:
 ```
 
 Output > Log > PlainText:  
@@ -3181,7 +3185,7 @@ Output > Log > PlainText:
 2022-09-14T23:36:15.556+0900	=
 
 2022-09-14T23:36:21.463+0900	# test_get_liberty B2
-2022-09-14T23:36:21.464+0900	= ren color:x area:1 libertyArea:4
+2022-09-14T23:36:21.464+0900	= ren color:x area:1 libertyArea:4 adjacentColor:
 ```
 
 Output > Log > JSON:  
@@ -3190,7 +3194,7 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-14T23:36:15.556+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"play black B2"}
 {"level":"info","ts":"2022-09-14T23:36:15.556+0900","caller":"kernel/play.go:43","msg":"ok"}
 {"level":"info","ts":"2022-09-14T23:36:21.464+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_get_liberty B2"}
-{"level":"info","ts":"2022-09-14T23:36:21.465+0900","caller":"kernel/kernel.go:115","msg":"output ren","color":"x","area":1,"libertyArea":4}
+{"level":"info","ts":"2022-09-14T23:36:21.465+0900","caller":"kernel/kernel.go:115","msg":"output ren","color":"x","area":1,"libertyArea":4,"adjacentColor":""}
 ```
 
 ## Step [O1o1o0g22o3o0] 連の隣接連の色判定 - GetAdjacentRenColor 関数作成
