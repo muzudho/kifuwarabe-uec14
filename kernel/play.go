@@ -27,14 +27,14 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var coord = tokens[2]
 	var point = k.Board.GetPointFromCode(coord)
 
-	// [O1o1o0g22o1o2o0]
+	// [O1o1o0g22o1o2o0] 石（または壁）の上に石を置こうとしました
 	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
-	// [O1o1o0g22o3o1o0]
+	// [O1o1o0g22o3o1o0] 相手の眼に石を置こうとしました
 	var onOpponentEye = func() bool {
 		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -72,12 +72,12 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 
 	// [O1o1o0g22o3o1o0]
 	var renC = k.GetLiberty(pointB)
-	if renC.Area == 1 && stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
-		// 石Aを置いた交点を含む連Cについて、
-		// 連Cの面積が1であり、かつ、
-		// 連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
-		// 相手の眼に石を置こうとしたとみなし、この手をエラーとする
-		return onOpponentEye()
+	if renC.Area == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
+		if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
+			// 相手の眼に石を置こうとしたとみなし、この手をエラーとする
+			return onOpponentEye()
+		}
 	}
 
 	k.Board.cells[pointB] = stoneA
