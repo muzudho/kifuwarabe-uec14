@@ -67,4 +67,20 @@ func (c1 Color) GetAdded(c2 Color) Color {
 	}
 }
 
+// GetOpponent - 色の反転
+func (c Color) GetOpponent() Color {
+	switch c {
+	case Color_None:
+		return Color_Mixed
+	case Color_Black:
+		return Color_White
+	case Color_White:
+		return Color_Black
+	case Color_Mixed:
+		return Color_None
+	default:
+		panic(fmt.Sprintf("unexpected color:%d", int(c)))
+	}
+}
+
 // EOF [O1o1o0g11o_4o1o0]

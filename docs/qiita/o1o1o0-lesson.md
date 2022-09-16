@@ -1261,6 +1261,22 @@ func (c1 Color) GetAdded(c2 Color) Color {
 	}
 }
 
+// GetOpponent - 色の反転
+func (c Color) GetOpponent() Color {
+	switch c {
+	case Color_None:
+		return Color_Mixed
+	case Color_Black:
+		return Color_White
+	case Color_White:
+		return Color_Black
+	case Color_Mixed:
+		return Color_None
+	default:
+		panic(fmt.Sprintf("unexpected color:%d", int(c)))
+	}
+}
+
 // EOF [O1o1o0g11o_4o1o0]
 ```
 
@@ -1345,6 +1361,24 @@ const (
 	White
 	Wall
 )
+
+// GetStoneFromString - 文字列を元に値を返します
+func GetStoneFromString(stoneName string, logg *Logger, getDefaultStone func() Stone) Stone {
+	switch stoneName {
+	case "empty":
+		return Empty
+	case "black":
+		return Black
+	case "white":
+		return White
+	case "wall":
+		return Wall
+	default:
+		logg.C.Infof("? unexpected stone:%s\n", stoneName)
+		logg.J.Infow("error", "stone", stoneName)
+		return getDefaultStone()
+	}
+}
 
 // String - 文字列化
 func (s Stone) String() string {
@@ -2550,24 +2584,29 @@ import "strings"
 func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 
-	var stone Stone
-	switch tokens[1] {
-	case "empty":
-		stone = Empty
-	case "black":
-		stone = Black
-	case "white":
-		stone = White
-	case "wall":
-		stone = Wall
-	default:
-		logg.C.Infof("? unexpected stone:%s\n", tokens[1])
-		logg.J.Infow("error", "stone", tokens[1])
+	var isErr = false
+	var getDefaultStone = func() Stone {
+		isErr = true
+		return Empty
+	}
+
+	var stone = GetStoneFromString(tokens[1], logg, getDefaultStone)
+	if isErr {
 		return
 	}
 
 	var point = k.Board.GetPointFromCode(tokens[2])
-	var isOk = k.Play(stone, point, logg)
+
+	// [O1o1o0g22o1o2o0]
+	var onMasonry = func() bool {
+		logg.C.Infof("? masonry my_stone:%s point:%d\n", stone, point)
+		logg.J.Infow("error", "my_stone", stone, "point", point)
+		return false
+	}
+
+	var isOk = k.Play(stone, point, logg,
+		// [O1o1o0g22o1o2o0] ,onMasonry
+		onMasonry)
 	if isOk {
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
@@ -2580,7 +2619,15 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 // -------
 // isOk : bool
 //		石を置けたら真、置けなかったら偽
-func (k *Kernel) Play(stone Stone, point Point, logg *Logger) bool {
+func (k *Kernel) Play(stone Stone, point Point, logg *Logger,
+	// [O1o1o0g22o1o2o0] onMasonry
+	onMasonry func() bool) bool {
+
+	// [O1o1o0g22o1o2o0]
+	if k.IsMasonryError(stone, point) {
+		return onMasonry()
+	}
+
 	k.Board.cells[point] = stone
 	return true
 }
@@ -2800,7 +2847,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 
 	// * 以下を追加
 	// [O1o1o0g22o1o2o0]
-	var onMasonryError = func() bool {
+	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%d\n", stone, point)
 		logg.J.Infow("error", "my_stone", stone, "point", point)
 		return false
@@ -2808,20 +2855,20 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 
 	// var isOk = k.Play(stone, point, logg,
 		// * 以下を追加
-		// [O1o1o0g22o1o2o0] ,onMasonryError
-		onMasonryError//)
+		// [O1o1o0g22o1o2o0] ,onMasonry
+		onMasonry//)
 	// ...略...
 // }
 
 // func (k *Kernel) Play(stone Stone, point Point, logg *Logger,
 	// * 以下を追加
-	// [O1o1o0g22o1o2o0] onMasonryError
-	onMasonryError func() bool//) bool {
+	// [O1o1o0g22o1o2o0] onMasonry
+	onMasonry func() bool//) bool {
 
 	// * 以下を追加
 	// [O1o1o0g22o1o2o0]
 	if k.IsMasonryError(stone, point) {
-		return onMasonryError()
+		return onMasonry()
 	}
 
 //	k.Board.cells[point] = stone
@@ -2836,8 +2883,12 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 * `連` - Ren、れん。コンピューター囲碁用語。説明は省略
 * `呼吸点` - Liberty、こきゅうてん。コンピューター囲碁用語。説明は省略
 
-呼吸点を数えるために探索すると、連も認識できる。  
-そのような探索を行う関数を `GetLiberty` と名付けることにする  
+👇 呼吸点を数えるために探索すると、一緒に以下のことも行える  
+
+* 連の認識
+* 隣接する連の色の取得
+
+このような探索を行う関数を `GetLiberty` と名付けることにする  
 
 ### ~~Step [O1o1o0g22o2o1o0]~~
 
@@ -3197,14 +3248,96 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-14T23:36:21.465+0900","caller":"kernel/kernel.go:115","msg":"output ren","color":"x","area":1,"libertyArea":4,"adjacentColor":""}
 ```
 
-## Step [O1o1o0g22o3o0] 連の隣接連の色判定 - GetAdjacentRenColor 関数作成
+## Step [O1o1o0g22o3o0] 相手の眼に石を置くことの禁止
 
-任意に指定した交点を含む連について、その連に隣接する色の組み合わせを取得する。  
-ここで、壁は対象外とする。  
+囲碁のルールでは、相手の眼へは石を置けない。これを判定する
+
+### Step [O1o1o0g22o3o1o0] ファイル編集 - kernel.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+👉 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって挿入してほしい  
+
+```go
+// func (k *Kernel) DoPlay(command string, logg *Logger) {
+
+	// ...略...
+	// [O1o1o0g22o3o1o0]
+	var onOpponentEye = func() bool {
+		logg.C.Infof("? opponent_eye my_stone:%s point:%d\n", stone, point)
+		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", point)
+		return false
+	}
+
+//	var isOk = k.Play(stone, point, logg,
+//		// [O1o1o0g22o1o2o0] ,onMasonry
+//		onMasonry,
+		// [O1o1o0g22o3o1o0] ,onOpponentEye
+		onOpponentEye//)
+//
+//	if isOk {
+//		logg.C.Info("=\n")
+//		logg.J.Infow("ok")
+//	}
+// }
+
+// func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
+	// // [O1o1o0g22o1o2o0] onMasonry
+	// onMasonry func() bool,
+	// [O1o1o0g22o3o1o0] onOpponentEye
+	onOpponentEye func() bool//) bool {
+
+	// ...略...
+	// // [O1o1o0g22o1o2o0]
+	// if k.IsMasonryError(stone, point) {
+	//	return onMasonry()
+	// }
+
+	// [O1o1o0g22o3o1o0]
+	var renC = k.GetLiberty(pointB)
+	if renC.Area == 1 && stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+		// 石Aを置いた交点を含む連Cについて、
+		// 連Cの面積が1であり、かつ、
+		// 連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
+		// 相手の眼に石を置こうとしたとみなし、この手をエラーとする
+		return onOpponentEye()
+	}
+
+	// ...略...
+	// k.Board.cells[point] = stone
+	// return true
+```
 
 TODO 自殺手の可／不可指定  
 
-TODO 相手の眼への自殺手の判定と、その禁止（ルール上禁止）  
+TODO   
 
 TODO 自分の眼への自殺手の判定と、その禁止または許可（明らかに損な手）  
 
