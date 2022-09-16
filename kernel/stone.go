@@ -7,23 +7,28 @@ import "fmt"
 type Stone uint
 
 const (
-	Empty Stone = iota
+	Space Stone = iota
 	Black
 	White
 	Wall
 )
 
-// GetStoneFromString - 文字列を元に値を返します
-func GetStoneFromString(stoneName string, getDefaultStone func() Stone) Stone {
+// GetStoneFromName - 文字列の名前を与えると、Stone値を返します
+//
+// Returns
+// -------
+// isOk : bool
+// stone : Stone
+func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (bool, Stone) {
 	switch stoneName {
-	case "empty":
-		return Empty
+	case "space":
+		return true, Space
 	case "black":
-		return Black
+		return true, Black
 	case "white":
-		return White
+		return true, White
 	case "wall":
-		return Wall
+		return true, Wall
 	default:
 		return getDefaultStone()
 	}
@@ -32,7 +37,7 @@ func GetStoneFromString(stoneName string, getDefaultStone func() Stone) Stone {
 // String - 文字列化
 func (s Stone) String() string {
 	switch s {
-	case Empty:
+	case Space:
 		return "."
 	case Black:
 		return "x"
@@ -48,7 +53,7 @@ func (s Stone) String() string {
 // GetColor - 色の取得
 func (s Stone) GetColor() Color {
 	switch s {
-	case Empty:
+	case Space:
 		return Color_None
 	case Black:
 		return Color_Black

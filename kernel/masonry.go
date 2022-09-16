@@ -8,7 +8,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 	var target = k.Board.cells[point]
 
 	switch target {
-	case Empty:
+	case Space:
 		return false
 	case Black, White, Wall:
 		return true

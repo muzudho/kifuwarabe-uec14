@@ -27,15 +27,19 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			return
 		}
 
-		var getDefaultStone = func() Stone {
-			return Empty
+		var getDefaultStone = func() (bool, Stone) {
+			return false, Space
 		}
 
 		var i Point = 0
 		for _, c := range string(fileData) {
 			var str = string([]rune{c})
-			var stone = GetStoneFromString(str, getDefaultStone)
-			k.Board.SetStoneAt(i, stone)
+			var isOk, stone = GetStoneFromName(str, getDefaultStone)
+
+			if isOk {
+				k.Board.SetStoneAt(i, stone)
+			}
+
 			i++
 		}
 	}

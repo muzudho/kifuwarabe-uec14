@@ -13,16 +13,14 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 	var stoneName = tokens[1]
 
-	var isErr = false
-	var getDefaultStone = func() Stone {
+	var getDefaultStone = func() (bool, Stone) {
 		logg.C.Infof("? unexpected stone:%s\n", stoneName)
 		logg.J.Infow("error", "stone", stoneName)
-		isErr = true
-		return Empty
+		return false, Space
 	}
 
-	var stone = GetStoneFromString(stoneName, getDefaultStone)
-	if isErr {
+	var isOk1, stone = GetStoneFromName(stoneName, getDefaultStone)
+	if !isOk1 {
 		return
 	}
 

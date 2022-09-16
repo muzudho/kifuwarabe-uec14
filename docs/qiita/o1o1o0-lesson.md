@@ -1356,23 +1356,28 @@ import "fmt"
 type Stone uint
 
 const (
-	Empty Stone = iota
+	Space Stone = iota
 	Black
 	White
 	Wall
 )
 
-// GetStoneFromString - 文字列を元に値を返します
-func GetStoneFromString(stoneName string, getDefaultStone func() Stone) Stone {
+// GetStoneFromName - 文字列の名前を与えると、Stone値を返します
+//
+// Returns
+// -------
+// isOk : bool
+// stone : Stone
+func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (bool, Stone) {
 	switch stoneName {
-	case "empty":
-		return Empty
+	case "space":
+		return true, Space
 	case "black":
-		return Black
+		return true, Black
 	case "white":
-		return White
+		return true, White
 	case "wall":
-		return Wall
+		return true, Wall
 	default:
 		return getDefaultStone()
 	}
@@ -1381,7 +1386,7 @@ func GetStoneFromString(stoneName string, getDefaultStone func() Stone) Stone {
 // String - 文字列化
 func (s Stone) String() string {
 	switch s {
-	case Empty:
+	case Space:
 		return "."
 	case Black:
 		return "x"
@@ -1397,7 +1402,7 @@ func (s Stone) String() string {
 // GetColor - 色の取得
 func (s Stone) GetColor() Color {
 	switch s {
-	case Empty:
+	case Space:
 		return Color_None
 	case Black:
 		return Color_Black
@@ -2091,7 +2096,7 @@ func (b *Board) Init(width int, height int) {
 		for y := 1; y < height; y++ {
 			for x := 1; x < width; x++ {
 				var i = b.GetPointFromXy(x, y)
-				b.cells[i] = Empty
+				b.cells[i] = Space
 			}
 		}
 	}
@@ -2626,16 +2631,14 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 	var stoneName = tokens[1]
 
-	var isErr = false
-	var getDefaultStone = func() Stone {
+	var getDefaultStone = func() (bool, Stone) {
 		logg.C.Infof("? unexpected stone:%s\n", stoneName)
 		logg.J.Infow("error", "stone", stoneName)
-		isErr = true
-		return Empty
+		return false, Space
 	}
 
-	var stone = GetStoneFromString(stoneName, getDefaultStone)
-	if isErr {
+	var isOk1, stone = GetStoneFromName(stoneName, getDefaultStone)
+	if !isOk1 {
 		return
 	}
 
@@ -2844,7 +2847,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 	var target = k.Board.cells[point]
 
 	switch target {
-	case Empty:
+	case Space:
 		return false
 	case Black, White, Wall:
 		return true
@@ -3163,7 +3166,7 @@ func (k *Kernel) searchRen(here Point) {
 		}
 
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
-		if adjacentS == Empty { // 空点
+		if adjacentS == Space { // 空点
 			k.CheckBoard.Check(adjacentP)
 			k.Ren.LibertyArea++
 			continue

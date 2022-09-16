@@ -38,7 +38,7 @@ func (k *Kernel) searchRen(here Point) {
 		}
 
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
-		if adjacentS == Empty { // 空点
+		if adjacentS == Space { // 空点
 			k.CheckBoard.Check(adjacentP)
 			k.Ren.LibertyArea++
 			continue

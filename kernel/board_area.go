@@ -50,7 +50,7 @@ func (b *Board) Init(width int, height int) {
 		for y := 1; y < height; y++ {
 			for x := 1; x < width; x++ {
 				var i = b.GetPointFromXy(x, y)
-				b.cells[i] = Empty
+				b.cells[i] = Space
 			}
 		}
 	}
