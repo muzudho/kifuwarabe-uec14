@@ -14,7 +14,7 @@ const (
 )
 
 // GetStoneFromString - 文字列を元に値を返します
-func GetStoneFromString(stoneName string, logg *Logger, getDefaultStone func() Stone) Stone {
+func GetStoneFromString(stoneName string, getDefaultStone func() Stone) Stone {
 	switch stoneName {
 	case "empty":
 		return Empty
@@ -25,8 +25,6 @@ func GetStoneFromString(stoneName string, logg *Logger, getDefaultStone func() S
 	case "wall":
 		return Wall
 	default:
-		logg.C.Infof("? unexpected stone:%s\n", stoneName)
-		logg.J.Infow("error", "stone", stoneName)
 		return getDefaultStone()
 	}
 }

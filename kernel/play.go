@@ -7,21 +7,27 @@ import "strings"
 // DoPlay - 打つ
 //
 // * `command` - Example: `play black A19`
+//                         ---- ----- ---
+//                         0    1     2
 func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
+	var stoneName = tokens[1]
 
 	var isErr = false
 	var getDefaultStone = func() Stone {
+		logg.C.Infof("? unexpected stone:%s\n", stoneName)
+		logg.J.Infow("error", "stone", stoneName)
 		isErr = true
 		return Empty
 	}
 
-	var stone = GetStoneFromString(tokens[1], logg, getDefaultStone)
+	var stone = GetStoneFromString(stoneName, getDefaultStone)
 	if isErr {
 		return
 	}
 
-	var point = k.Board.GetPointFromCode(tokens[2])
+	var coord = tokens[2]
+	var point = k.Board.GetPointFromCode(coord)
 
 	// [O1o1o0g22o1o2o0]
 	var onMasonry = func() bool {

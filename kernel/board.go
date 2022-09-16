@@ -41,6 +41,11 @@ func (b *Board) GetStoneAt(i Point) Stone {
 	return b.cells[i]
 }
 
+// SetStoneAt - 指定座標の石を設定
+func (b *Board) SetStoneAt(i Point, s Stone) {
+	b.cells[i] = s
+}
+
 // GetColorAt - 指定座標の石の色を取得
 func (b *Board) GetColorAt(i Point) Color {
 	return b.cells[i].GetColor()

@@ -1363,7 +1363,7 @@ const (
 )
 
 // GetStoneFromString - 文字列を元に値を返します
-func GetStoneFromString(stoneName string, logg *Logger, getDefaultStone func() Stone) Stone {
+func GetStoneFromString(stoneName string, getDefaultStone func() Stone) Stone {
 	switch stoneName {
 	case "empty":
 		return Empty
@@ -1374,8 +1374,6 @@ func GetStoneFromString(stoneName string, logg *Logger, getDefaultStone func() S
 	case "wall":
 		return Wall
 	default:
-		logg.C.Infof("? unexpected stone:%s\n", stoneName)
-		logg.J.Infow("error", "stone", stoneName)
 		return getDefaultStone()
 	}
 }
@@ -1872,6 +1870,11 @@ func (b *Board) GetStoneAt(i Point) Stone {
 	return b.cells[i]
 }
 
+// SetStoneAt - 指定座標の石を設定
+func (b *Board) SetStoneAt(i Point, s Stone) {
+	b.cells[i] = s
+}
+
 // GetColorAt - 指定座標の石の色を取得
 func (b *Board) GetColorAt(i Point) Color {
 	return b.cells[i].GetColor()
@@ -2167,7 +2170,7 @@ Input:
 go mod tidy
 ```
 
-# Step [O1o1o0g13o_1o0] board コマンド（盤表示）
+# Step [O1o1o0g13o_1o0] 盤表示 - board コマンド
 
 ## Step [O1o1o0g13o0] 実装 - kernel.go ファイル
 
@@ -2236,7 +2239,7 @@ go mod tidy
 // ...略...
 ```
 
-## Step [O1o1o0g14o0] 実行
+## Step [O1o1o0g14o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -2346,7 +2349,7 @@ Output:
 
 `quit` コマンドで 思考エンジンを終了してほしい  
 
-# Step [O1o1o0g15o__10o0] resize コマンド（盤サイズの変更）
+# Step [O1o1o0g15o__10o0] 盤サイズの変更 - resize コマンド
 
 ## Step [O1o1o0g15o__11o0] 実装 - kernel.go ファイル
 
@@ -2401,7 +2404,7 @@ Output:
 // ...略...
 ```
 
-## Step [O1o1o0g15o__12o0] 実行
+## Step [O1o1o0g15o__12o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -2491,6 +2494,40 @@ Merged to `[O1o1o0g11o_3o0]`
 
 Moved to `[O1o1o0g11o__10o_6o0]`  
 
+# Step [O1o1o0g15o__14o0] 初期盤面を設定する - set_board コマンド
+
+## Step [O1o1o0g15o__14o1o0] ファイル作成 - set_board.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+👉 	│	├── 📄 set_board.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g15o__14o1o0]
+
+package kernel
+
+// EOF [O1o1o0g15o__14o1o0]
+```
+
 # Step [O1o1o0g15o_1o0] 座標の定義
 
 ## ~~Step [O1o1o0g15o0]~~
@@ -2547,7 +2584,9 @@ Moved to `[O1o1o0g12o__10o2o0]`
 
 Moved to `[O1o1o0g12o__10o3o0]`  
 
-# Step [O1o1o0g19o0] play コマンド（石を打つ）
+# Step [O1o1o0g19o_1o0] 石を打つ - play コマンド
+
+## Step [O1o1o0g19o0] ファイル作成 - play.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -2581,21 +2620,27 @@ import "strings"
 // DoPlay - 打つ
 //
 // * `command` - Example: `play black A19`
+//                         ---- ----- ---
+//                         0    1     2
 func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
+	var stoneName = tokens[1]
 
 	var isErr = false
 	var getDefaultStone = func() Stone {
+		logg.C.Infof("? unexpected stone:%s\n", stoneName)
+		logg.J.Infow("error", "stone", stoneName)
 		isErr = true
 		return Empty
 	}
 
-	var stone = GetStoneFromString(tokens[1], logg, getDefaultStone)
+	var stone = GetStoneFromString(stoneName, getDefaultStone)
 	if isErr {
 		return
 	}
 
-	var point = k.Board.GetPointFromCode(tokens[2])
+	var coord = tokens[2]
+	var point = k.Board.GetPointFromCode(coord)
 
 	// [O1o1o0g22o1o2o0]
 	var onMasonry = func() bool {
@@ -3371,5 +3416,9 @@ TODO コウの禁止（自分が１手前に置いたところに２手続けて
 
 📖 [Concatenating and Building Strings in Go 1.10+](https://www.calhoun.io/concatenating-and-building-strings-in-go/)  
 📖 [Convert interface to string](https://yourbasic.org/golang/interface-to-string/)  
+
+### 文字列
+
+📖 [Go: 1文字ずつアクセスする](https://blog.sarabande.jp/post/61104920128)  
 
 .
