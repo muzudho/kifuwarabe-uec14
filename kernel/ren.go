@@ -7,7 +7,7 @@ type Ren struct {
 	// Area - 面積
 	Area int
 	// Color - 色
-	Color Stone
+	Color Color
 	// LibertyArea - 呼吸点の面積
 	LibertyArea int
 }

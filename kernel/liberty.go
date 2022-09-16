@@ -13,7 +13,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	// 連の初期化
 	k.Ren = new(Ren)
 	// 連の色
-	k.Ren.Color = k.Board.GetStoneAt(arbitraryPoint)
+	k.Ren.Color = k.Board.GetColorAt(arbitraryPoint)
 	// ４方向（東、北、西、南）の番地への相対インデックス
 	k.Direction = [4]int{1, -k.Board.GetMemoryWidth(), -1, k.Board.GetMemoryWidth()}
 
@@ -29,16 +29,23 @@ func (k *Kernel) searchRen(here Point) {
 
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
-		var adjacent = here + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentP = here + Point(k.Direction[dir]) // 隣接する交点
 		// 探索済みならスキップ
-		if k.CheckBoard.IsChecked(adjacent) {
+		if k.CheckBoard.IsChecked(adjacentP) {
 			continue
 		}
-		if k.Board.GetStoneAt(adjacent) == Empty { // 空点
-			k.CheckBoard.Check(adjacent)
+
+		var adjacentS = k.Board.GetStoneAt(adjacentP)
+		if adjacentS == Empty { // 空点
+			k.CheckBoard.Check(adjacentP)
 			k.Ren.LibertyArea++
-		} else if k.Board.GetStoneAt(adjacent) == k.Ren.Color { // 同色の石
-			k.searchRen(adjacent) // 再帰
+			continue
+		} else if adjacentS == Wall { // 壁
+			continue
+		}
+
+		if adjacentS.GetColor() == k.Ren.Color { // 同色の石
+			k.searchRen(adjacentP) // 再帰
 		}
 	}
 }

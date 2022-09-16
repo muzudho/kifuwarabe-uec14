@@ -41,6 +41,11 @@ func (b *Board) GetStoneAt(i Point) Stone {
 	return b.cells[i]
 }
 
+// GetColorAt - 指定座標の石の色を取得
+func (b *Board) GetColorAt(i Point) Color {
+	return b.cells[i].GetColor()
+}
+
 // GetPointFromXy - 座標変換 (x,y) → Point
 //
 // Parameters
