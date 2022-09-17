@@ -1955,7 +1955,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 	// [O1o1o0g22o7o1o0] コウの判定
 	// 2手前に着手して石をぴったり１つ打ち上げたとき、その着手点はコウだ
 	var i = r.GetCurrent()
-	return 1 <= i && r.ko[i-2] == placePlay
+	return 2 <= i && r.ko[i-2] == placePlay
 }
 
 // EOF [O1o1o0g12o__11o_2o0]
@@ -3236,7 +3236,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var coord = tokens[2]
 	var point = k.Board.GetPointFromCode(coord)
 
-	// [O1o1o0g22o1o2o0] 石（または壁）の上に石を置こうとしました
+	// [O1o1o0g22o1o2o0] 石（または壁）の上に石を置こうとした
 	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -4094,7 +4094,7 @@ Output > Log > JSON:
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// ...略...
-	// [O1o1o0g22o3o1o0] 相手の眼に石を置こうとしました
+	// [O1o1o0g22o3o1o0] 相手の眼に石を置こうとした
 	var onOpponentEye = func() bool {
 		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -4221,7 +4221,7 @@ Output > Console:
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// ...略...
-	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとしました
+	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとした
 	var onForbiddenMyEye = func() bool {
 		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -4796,6 +4796,45 @@ Output > Console:
 ```
 
 ```go
+// func (k *Kernel) DoPlay(command string, logg *Logger) {
+
+	// ...略...
+	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとした
+	// var onForbiddenMyEye = func() bool {
+		// ...略...
+	// }
+
+	// [O1o1o0g22o7o2o0] コウに石を置こうとした
+	var onKo = func() bool {
+		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
+		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
+		return false
+	}
+
+	// var isOk = k.Play(stone, point, logg,
+		// // [O1o1o0g22o1o2o0] ,onMasonry
+		// onMasonry,
+		// // [O1o1o0g22o3o1o0] ,onOpponentEye
+		// onOpponentEye,
+		// // [O1o1o0g22o4o1o0] ,onForbiddenMyEye
+		// onForbiddenMyEye,
+		// // [O1o1o0g22o7o2o0] ,onKo
+		onKo//)
+	// ...略...
+
+// }
+// ...略...
+
+// func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
+	// // [O1o1o0g22o1o2o0] onMasonry
+	// onMasonry func() bool,
+	// // [O1o1o0g22o3o1o0] onOpponentEye
+	// onOpponentEye func() bool,
+	// // [O1o1o0g22o4o1o0] onForbiddenMyEye
+	// onForbiddenMyEye func() bool,
+	// [O1o1o0g22o7o2o0] onKo
+	onKo func() bool//) bool {
+
 	// [O1o1o0g22o1o2o0]
 	// if k.IsMasonryError(stoneA, pointB) {
 	// 	return onMasonry()
@@ -4804,7 +4843,7 @@ Output > Console:
 
 	// [O1o1o0g22o7o2o0] コウの判定
 	if k.Record.IsKo(pointB) {
-
+		return onKo()
 	}
 	// ...略...
 

@@ -27,24 +27,31 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var coord = tokens[2]
 	var point = k.Board.GetPointFromCode(coord)
 
-	// [O1o1o0g22o1o2o0] 石（または壁）の上に石を置こうとしました
+	// [O1o1o0g22o1o2o0] 石（または壁）の上に石を置こうとした
 	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
-	// [O1o1o0g22o3o1o0] 相手の眼に石を置こうとしました
+	// [O1o1o0g22o3o1o0] 相手の眼に石を置こうとした
 	var onOpponentEye = func() bool {
 		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
-	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとしました
+	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとした
 	var onForbiddenMyEye = func() bool {
 		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
+		return false
+	}
+
+	// [O1o1o0g22o7o2o0] コウに石を置こうとした
+	var onKo = func() bool {
+		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
+		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
 	}
 
@@ -54,7 +61,9 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 		// [O1o1o0g22o3o1o0] ,onOpponentEye
 		onOpponentEye,
 		// [O1o1o0g22o4o1o0] ,onForbiddenMyEye
-		onForbiddenMyEye)
+		onForbiddenMyEye,
+		// [O1o1o0g22o7o2o0] ,onKo
+		onKo)
 
 	if isOk {
 		logg.C.Info("=\n")
@@ -74,7 +83,9 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// [O1o1o0g22o3o1o0] onOpponentEye
 	onOpponentEye func() bool,
 	// [O1o1o0g22o4o1o0] onForbiddenMyEye
-	onForbiddenMyEye func() bool) bool {
+	onForbiddenMyEye func() bool,
+	// [O1o1o0g22o7o2o0] onKo
+	onKo func() bool) bool {
 
 	// [O1o1o0g22o1o2o0]
 	if k.IsMasonryError(stoneA, pointB) {
@@ -83,7 +94,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 
 	// [O1o1o0g22o7o2o0] コウの判定
 	if k.Record.IsKo(pointB) {
-
+		return onKo()
 	}
 
 	// [O1o1o0g22o6o1o0] Captured ルール
