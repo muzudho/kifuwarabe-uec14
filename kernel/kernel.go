@@ -156,8 +156,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		// Example: "test_get_liberty B2"
 		var point = k.Board.GetPointFromCode(tokens[1])
 		var ren = k.GetLiberty(point)
-		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.Color, ren.Area, ren.LibertyArea, ren.AdjacentColor)
-		logg.J.Infow("output ren", "color", ren.Color, "area", ren.Area, "libertyArea", ren.LibertyArea, "adjacentColor", ren.AdjacentColor)
+		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.Color, ren.GetArea(), ren.LibertyArea, ren.AdjacentColor)
+		logg.J.Infow("output ren", "color", ren.Color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.AdjacentColor)
 		return true
 
 	case "test_get_point_from_xy": // [O1o1o0g12o__11o2o0]

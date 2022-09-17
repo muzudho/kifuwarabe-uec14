@@ -27,7 +27,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 // 再帰関数。連の探索
 func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
-	k.Ren.Area++
+	k.Ren.Elements = append(k.Ren.Elements, here)
 
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {

@@ -1319,14 +1319,19 @@ package kernel
 
 // Ren - 連，れん
 type Ren struct {
-	// Area - 面積
-	Area int
 	// Color - 色
 	Color Color
 	// AdjacentColor - 隣接する石の色
 	AdjacentColor Color
 	// LibertyArea - 呼吸点の面積
 	LibertyArea int
+	// Elements - 要素の石の位置
+	Elements []Point
+}
+
+// GetArea - 面積
+func (r *Ren) GetArea() int {
+	return len(r.Elements)
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
@@ -3145,7 +3150,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 // }
 ```
 
-## Step [O1o1o0g22o2o0] 連の認識と、呼吸点のカウント - GetLiberty関数作成
+## Step [O1o1o0g22o2o0] 連の認識と、呼吸点のカウント - GetLiberty 関数作成
 
 盤上の座標を指定することで、そこにある `連` の `呼吸点` の数を算出したい  
 
@@ -3157,7 +3162,8 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 * 連の認識
 * 隣接する連の色の取得
 
-このような探索を行う関数を `GetLiberty` と名付けることにする  
+このような探索を行う関数に名前を付ける。  
+`GetRen` がふさわしいが、慣習を優先して `GetLiberty` と名付けることにする  
 
 ### ~~Step [O1o1o0g22o2o1o0]~~
 
@@ -3376,7 +3382,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 // 再帰関数。連の探索
 func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
-	k.Ren.Area++
+	k.Ren.Elements = append(k.Ren.Elements, here)
 
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
@@ -3454,8 +3460,8 @@ func (k *Kernel) searchRen(here Point) {
 		// Example: "test_get_liberty B2"
 		var point = k.Board.GetPointFromCode(tokens[1])
 		var ren = k.GetLiberty(point)
-		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.Color, ren.Area, ren.LibertyArea, ren.AdjacentColor)
-		logg.J.Infow("output ren", "color", ren.Color, "area", ren.Area, "libertyArea", ren.LibertyArea, "adjacentColor", ren.AdjacentColor)
+		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.Color, ren.GetArea(), ren.LibertyArea, ren.AdjacentColor)
+		logg.J.Infow("output ren", "color", ren.Color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.AdjacentColor)
 		return true
 
 	// この上にコマンドを挟んでいく
@@ -3593,7 +3599,7 @@ Output > Log > JSON:
 
 	// [O1o1o0g22o3o1o0]
 	var renC = k.GetLiberty(pointB)
-	if renC.Area == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
+	if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
@@ -3719,7 +3725,7 @@ Output > Console:
 	// ...略...
 	// // [O1o1o0g22o3o1o0]
 	// var renC = k.GetLiberty(pointB)
-	// if renC.Area == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
+	// if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 	// 	if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
@@ -3863,14 +3869,9 @@ Output > Console:
 [2022-09-17 09:11:48]   ? my_eye my_stone:x point:C3
 ```
 
-TODO 自殺手の可／不可指定  
+## Step [O1o1o0g22o5o0] 任意の連の打ち上げ - RemoveRen 関数作成
 
-TODO 自分の眼への自殺手の判定と、その禁止または許可（明らかに損な手）  
-
-TODO ダメの眼への自殺手の判定と、その禁止または許可  
-
-TODO 石の打ち上げ
-
+TODO 死に石の連の打ち上げ
 TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
 
 # 参考にした記事
