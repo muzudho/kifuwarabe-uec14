@@ -170,6 +170,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "set_board": // [O1o1o0g15o__14o2o0]
 		// Example: `set_board file data/board1.txt`
 		k.DoSetBoard(command, logg)
+		logg.C.Infof("=\n")
+		logg.J.Infow("ok")
 		return true
 
 	case "test_coord": // [O1o1o0g12o__10o2o0]

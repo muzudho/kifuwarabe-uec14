@@ -3000,6 +3000,8 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	case "set_board": // [O1o1o0g15o__14o2o0]
 		// Example: `set_board file data/board1.txt`
 		k.DoSetBoard(command, logg)
+		logg.C.Infof("=\n")
+		logg.J.Infow("ok")
 		return true
 
 	// ...略...
@@ -3425,6 +3427,61 @@ Output > Console:
  4 +.xo.ox.............+
  5 +..xox..............+
  6 +...x...............+
+ 7 +...................+
+ 8 +...................+
+ 9 +...................+
+10 +...................+
+11 +...................+
+12 +...................+
+13 +...................+
+14 +...................+
+15 +...................+
+16 +...................+
+17 +...................+
+18 +...................+
+19 +...................+
+   +++++++++++++++++++++
+```
+
+# Step [O1o1o0g22o_2o0] データファイル作成 - data/board3.txt ファイル
+
+あとで使うファイルを先に作成する  
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+👉 	│	└── 📄 board3.txt
+	├── 📂 kernel
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 set_board.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```plaintext
+    ABCDEFGHJKLMNOPQRST
+   +++++++++++++++++++++
+ 1 +...................+
+ 2 +..xo...............+
+ 3 +.xo.o..............+
+ 4 +..xo...............+
+ 5 +...................+
+ 6 +...................+
  7 +...................+
  8 +...................+
  9 +...................+
@@ -4758,6 +4815,36 @@ Output > Console:
 		// [O1o1o0g22o7o2o0] コウの判定
 		ko//)
 
+```
+
+### Step [O1o1o0g22o7o3o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+set_board file data/board3.txt
+play black D3
+play white C3
+play black D3
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-17 14:35:58]   # play black D4
+[2022-09-17 14:35:58]   =
 ```
 
 TODO 東、北、西、南に隣接する連の重複を省く
