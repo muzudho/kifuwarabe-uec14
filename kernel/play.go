@@ -124,12 +124,10 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 
 	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
 	if isExists4rensToRemove {
-		k.Remove4Rens(o4rensToRemove)
-	}
-
-	for dir := 0; dir < 4; dir++ {
-		if o4rensToRemove[dir] != nil {
-			k.RemoveRen(o4rensToRemove[dir])
+		for dir := 0; dir < 4; dir++ {
+			if o4rensToRemove[dir] != nil {
+				k.RemoveRen(o4rensToRemove[dir])
+			}
 		}
 	}
 
@@ -160,16 +158,6 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	k.Board.ForeachNeumannNeighborhood(placePlay, setAdjacentPoint)
 
 	return isExists, rensToRemove
-}
-
-// Remove4Rens - 最大４つの連を盤上から打ち上げます
-func (k *Kernel) Remove4Rens(o4rensToRemove [4]*Ren) {
-	// [O1o1o0g22o6o1o0]
-	for dir := 0; dir < 4; dir++ {
-		if o4rensToRemove[dir] != nil {
-			k.RemoveRen(o4rensToRemove[dir])
-		}
-	}
 }
 
 // EOF [O1o1o0g19o0]
