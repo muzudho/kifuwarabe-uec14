@@ -1909,19 +1909,37 @@ type Record struct {
 	// 先行
 	playFirst Stone
 
-	// 着手点
-	points []Point
-
 	// 現在位置
 	current int
+
+	// 手毎
+	items []*RecordItem
 }
 
 // NewRecord - 棋譜の新規作成
 func NewRecord(maxMoves int, playFirst Stone) *Record {
 	var r = new(Record)
 	r.playFirst = playFirst
-	r.points = make([]Point, maxMoves)
+
+	// 棋譜の一手分毎
+	r.items = make([]*RecordItem, maxMoves)
+	for i := 0; i < maxMoves; i++ {
+		r.items[i] = NewRecordItem()
+	}
+
 	return r
+}
+
+// RecordItem - 棋譜の一手分
+type RecordItem struct {
+	// 着手点
+	placePlay Point
+}
+
+// NewRecordItem - 棋譜の一手分
+func NewRecordItem() *RecordItem {
+	var ri = new(RecordItem)
+	return ri
 }
 
 // GetCurrent - 現在位置
@@ -1931,22 +1949,25 @@ func (r *Record) GetCurrent() int {
 
 // Push - 末尾に追加
 func (r *Record) Push(placePlay Point) {
-	r.points[r.current] = placePlay
+
+	var item = r.items[r.current]
+	item.placePlay = placePlay
+
 	r.current++
 }
 
 // Push - 末尾を削除
-func (r *Record) Pop(placePlay Point) Point {
+func (r *Record) Pop(placePlay Point) *RecordItem {
 	r.current--
-	var tail = r.points[r.current]
-	r.points[r.current] = Point(0)
+	var tail = r.items[r.current]
+	r.items[r.current] = NewRecordItem()
 	return tail
 }
 
-// Foreach - 各要素
-func (r *Record) Foreach(setPoint func(int, Point)) {
+// ForeachItem - 各要素
+func (r *Record) ForeachItem(setItem func(int, *RecordItem)) {
 	for i := 0; i < r.current; i++ {
-		setPoint(i, r.points[i])
+		setItem(i, r.items[i])
 	}
 }
 
@@ -1955,7 +1976,12 @@ func (r *Record) IsKo(placePlay Point) bool {
 	// [O1o1o0g22o7o1o0] コウの判定
 	// 2手前に着手して石をぴったり１つ打ち上げたとき、その着手点はコウだ
 	var i = r.GetCurrent()
-	return 2 <= i && r.ko[i-2] == placePlay
+	if 2 <= i {
+		var item = r.items[i-2]
+		return item.ko == placePlay
+	}
+
+	return false
 }
 
 // EOF [O1o1o0g12o__11o_2o0]
@@ -2069,11 +2095,12 @@ func (r *Record) IsKo(placePlay Point) bool {
 		// Example: "record"
 		var sb strings.Builder
 
-		var setPoint = func(i int, point Point) {
-			sb.WriteString(fmt.Sprintf("%d.%s ", i, k.Board.GetCodeFromPoint(point)))
+		var setPoint = func(i int, item *RecordItem) {
+			var ordinals = i + 1 // 基数を序数に変換
+			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, k.Board.GetCodeFromPoint(item.placePlay)))
 		}
 
-		k.Record.Foreach(setPoint)
+		k.Record.ForeachItem(setPoint)
 
 		var text = sb.String()
 		text = text[:len(text)-1]
@@ -4729,33 +4756,24 @@ Output > Console:
 ```
 
 ```go
-// type Record struct {
-	// ...略...
-
-	// ko - [O1o1o0g22o7o1o0] コウの位置
-	ko []Point
-// }
-// ...略...
-
-// NewRecord - 棋譜の新規作成
-// func NewRecord(maxMoves int, playFirst Stone) *Record {
+// type RecordItem struct {
 	// ...略...
 
 	// [O1o1o0g22o7o1o0] コウの位置
-	r.points = make([]Point, maxMoves)
-
-	// return r
+	ko Point
 // }
+// ...略...
 
 // Push - 末尾に追加
 // func (r *Record) Push(placePlay Point,
 	// [O1o1o0g22o7o1o0] コウの位置
 	ko Point//) {
 
-	// r.points[r.current] = placePlay
+	// var item = r.items[r.current]
+	// item.placePlay = placePlay
 
 	// [O1o1o0g22o7o1o0] コウの位置
-	r.ko[r.current] = ko
+	item.ko = ko
 
 	// r.current++
 // }

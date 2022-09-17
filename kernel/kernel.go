@@ -145,12 +145,12 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		// Example: "record"
 		var sb strings.Builder
 
-		var setPoint = func(i int, point Point) {
+		var setPoint = func(i int, item *RecordItem) {
 			var ordinals = i + 1 // 基数を序数に変換
-			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, k.Board.GetCodeFromPoint(point)))
+			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, k.Board.GetCodeFromPoint(item.placePlay)))
 		}
 
-		k.Record.Foreach(setPoint)
+		k.Record.ForeachItem(setPoint)
 
 		var text = sb.String()
 		text = text[:len(text)-1]
