@@ -197,8 +197,9 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "test_get_point_from_code": // [O1o1o0g16o1o0]
 		// Example: "test_get_point_from_code A1"
 		var point = k.Board.GetPointFromCode(tokens[1])
-		logg.C.Infof("= %d", point)
-		logg.J.Infow("ok", "point", point)
+		var code = k.Board.GetCodeFromPoint(point)
+		logg.C.Infof("= %d %s", point, code)
+		logg.J.Infow("ok", "point", point, "code", code)
 		return true
 
 	case "test_get_point_from_xy": // [O1o1o0g12o__11o2o0]

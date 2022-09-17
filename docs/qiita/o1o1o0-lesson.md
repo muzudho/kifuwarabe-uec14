@@ -3089,8 +3089,9 @@ func (b *Board) GetCodeFromPoint(point Point) string {
 	case "test_get_point_from_code": // [O1o1o0g16o1o0]
 		// Example: "test_get_point_from_code A1"
 		var point = k.Board.GetPointFromCode(tokens[1])
-		logg.C.Infof("= %d", point)
-		logg.J.Infow("ok", "point", point)
+		var code = k.Board.GetCodeFromPoint(point)
+		logg.C.Infof("= %d %s", point, code)
+		logg.J.Infow("ok", "point", point, "code", code)
 		return true
 
 	// ...略...
@@ -3122,8 +3123,8 @@ test_get_point_from_code A1
 Output > Console:  
 
 ```plaintext
-[2022-09-17 17:09:41]   # test_get_point_from_code A1
-[2022-09-17 17:09:41]   = 22
+[2022-09-17 17:18:46]   # test_get_point_from_code A1
+[2022-09-17 17:18:46]   = 22 A1
 ```
 
 ## ~~Step [O1o1o0g17o0]~~
@@ -4661,6 +4662,10 @@ TODO 東、北、西、南に隣接する連の重複を省く
 ### 文字列
 
 📖 [Go: 1文字ずつアクセスする](https://blog.sarabande.jp/post/61104920128)  
+
+### 配列
+
+📖 [スライス操作(要素の追加・削除, ソート, 他のスライスと結合)](https://www.wakuwakubank.com/posts/782-go-slice/)  
 
 ### ファイル入出力
 
