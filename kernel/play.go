@@ -98,7 +98,25 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 		}
 	}
 
+	// 石を置く
 	k.Board.cells[pointB] = stoneA
+
+	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
+	var renToRemove [4]*Ren
+	for dir := 0; dir < 4; dir++ { // 東、北、西、南
+		var adjacentP = pointB + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentR = k.GetLiberty(adjacentP)
+		if adjacentR.LibertyArea < 1 {
+			renToRemove[dir] = adjacentR
+		}
+	}
+
+	for dir := 0; dir < 4; dir++ {
+		if renToRemove[dir] != nil {
+			k.RemoveRen(renToRemove[dir])
+		}
+	}
+
 	return true
 }
 
