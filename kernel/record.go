@@ -9,6 +9,9 @@ type Record struct {
 
 	// 着手点
 	points []Point
+
+	// 現在位置
+	current int
 }
 
 // NewRecord - 棋譜の新規作成
@@ -21,14 +24,15 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 
 // Push - 末尾に追加
 func (r *Record) Push(placePlay Point) {
-	r.points = append(r.points, placePlay)
+	r.points[r.current] = placePlay
+	r.current++
 }
 
 // Push - 末尾を削除
 func (r *Record) Pop(placePlay Point) Point {
-	var lastIndex = len(r.points) - 1
-	var tail = r.points[lastIndex]
-	r.points = r.points[:lastIndex]
+	r.current--
+	var tail = r.points[r.current]
+	r.points[r.current] = Point(0)
 	return tail
 }
 

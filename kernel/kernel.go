@@ -147,7 +147,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "record": // [O1o1o0g12o__11o_5o0]
 		// Example: "record"
 		var sb strings.Builder
-		for i, point := range k.Record.points {
+		for i := 0; i < k.Record.current; i++ {
+			var point = k.Record.points[i]
 			sb.WriteString(fmt.Sprintf("%d.%s ", i, k.Board.GetCodeFromPoint(point)))
 		}
 		var text = sb.String()
