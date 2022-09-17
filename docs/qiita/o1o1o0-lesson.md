@@ -1969,7 +1969,7 @@ func (r *Record) Pop(placePlay Point) Point {
 
 // NewKernel - カーネルの新規作成
 // func NewKernel(
-	// [O1o1o0g12o__11o_2o0] 棋譜のサイズ
+	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
 	maxMoves int, playFirst Stone//) *Kernel {
 	// ...略...
 
