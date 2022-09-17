@@ -35,6 +35,11 @@ func NewKernel() *Kernel {
 }
 
 // Execute - 実行
+//
+// Returns
+// -------
+// isHandled : bool
+// 正常終了またはエラーなら真、無視したら偽
 func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	var tokens = strings.Split(command, " ")
@@ -90,6 +95,38 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		logg.J.Infow("ok")
 
 		return true
+
+	case "can_not_put_on_my_eye": // [O1o1o0g22o4o2o_1o0]
+		// Example 1: "can_not_put_on_my_eye get"
+		// Example 2: "can_not_put_on_my_eye set true"
+		var method = tokens[1]
+		switch method {
+		case "get":
+			var value = k.CanNotPutOnMyEye
+			logg.C.Infof("= %t\n", value)
+			logg.J.Infow("ok", "value", value)
+			return true
+
+		case "set":
+			var value = tokens[2]
+			switch value {
+			case "true":
+				k.CanNotPutOnMyEye = true
+				return true
+			case "false":
+				k.CanNotPutOnMyEye = false
+				return true
+			default:
+				logg.C.Infof("? unexpected method:%s value:%s\n", method, value)
+				logg.J.Infow("error", "method", method, "value", value)
+				return true
+			}
+
+		default:
+			logg.C.Infof("? unexpected method:%s\n", method)
+			logg.J.Infow("error", "method", method)
+			return true
+		}
 
 	case "play": // [O1o1o0g20o0]
 		// Example: `play black A19`

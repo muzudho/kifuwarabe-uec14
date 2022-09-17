@@ -1078,6 +1078,11 @@ func NewKernel() *Kernel {
 }
 
 // Execute - 実行
+//
+// Returns
+// -------
+// isHandled : bool
+// 処理済なら真
 func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	var tokens = strings.Split(command, " ")
@@ -3634,7 +3639,7 @@ Output > Console:
 囲碁のルール上可能だが、明らかに損な手は、プレイアウトから除外したい。  
 対局時には許可し、プレイアウト時には禁止するよう、選択できるようにする  
 
-### Step [O1o1o0g22o4o1o0] ファイル編集 - kernel.go
+### Step [O1o1o0g22o4o1o0] ファイル編集 - play.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3733,6 +3738,86 @@ Output > Console:
 	// return true
 ```
 
+### Step [O1o1o0g22o4o2o_1o0] ファイル編集 - kernel.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 board1.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって挿入してほしい  
+
+```go
+	// ...略...
+	// この下にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "can_not_put_on_my_eye": // [O1o1o0g22o4o2o_1o0]
+		// Example 1: "can_not_put_on_my_eye get"
+		// Example 2: "can_not_put_on_my_eye set true"
+		var method = tokens[1]
+		switch method {
+		case "get":
+			var value = k.CanNotPutOnMyEye
+			logg.C.Infof("= %t\n", value)
+			logg.J.Infow("ok", "value", value)
+			return true
+
+		case "set":
+			var value = tokens[2]
+			switch value {
+			case "true":
+				k.CanNotPutOnMyEye = true
+				return true
+			case "false":
+				k.CanNotPutOnMyEye = false
+				return true
+			default:
+				logg.C.Infof("? unexpected method:%s value:%s\n", method, value)
+				logg.J.Infow("error", "method", method, "value", value)
+				return true
+			}
+
+		default:
+			logg.C.Infof("? unexpected method:%s\n", method)
+			logg.J.Infow("error", "method", method)
+			return true
+		}
+
+	// ...略...
+	// この上にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+```
+
 ### Step [O1o1o0g22o4o2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
@@ -3751,6 +3836,23 @@ Input:
 
 ```shell
 set_board file data/board1.txt
+play black C3
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-17 09:11:48]   # play black C3
+[2022-09-17 09:11:48]   =
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+set_board file data/board1.txt
+can_not_put_on_my_eye set true
 play black C3
 ```
 
