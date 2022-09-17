@@ -1878,6 +1878,47 @@ Output > Log > JSON:
 
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義
 
+## Step [O1o1o0g12o__11o_2o_1o0] ファイル作成 - record_item.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+👉	│	├── 📄 record_item.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// BOF[O1o1o0g12o__11o_2o_1o0]
+
+package kernel
+
+// RecordItem - 棋譜の一手分
+type RecordItem struct {
+	// 着手点
+	placePlay Point
+}
+
+// NewRecordItem - 棋譜の一手分
+func NewRecordItem() *RecordItem {
+	var ri = new(RecordItem)
+	return ri
+}
+
+// EOF[O1o1o0g12o__11o_2o_1o0]
+```
+
 ## Step [O1o1o0g12o__11o_2o0] ファイル作成 - record.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
@@ -1889,6 +1930,7 @@ Output > Log > JSON:
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
 	│	├── 📄 point.go
+	│	├── 📄 record_item.go
 👉	│	├── 📄 record.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1928,18 +1970,6 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 	}
 
 	return r
-}
-
-// RecordItem - 棋譜の一手分
-type RecordItem struct {
-	// 着手点
-	placePlay Point
-}
-
-// NewRecordItem - 棋譜の一手分
-func NewRecordItem() *RecordItem {
-	var ri = new(RecordItem)
-	return ri
 }
 
 // GetCurrent - 現在位置
@@ -4720,6 +4750,53 @@ Output > Console:
 
 自分が１手前に置いたところに２手続けて置けない
 
+### Step [O1o1o0g22o7o1o0] ファイル編集 - record_item.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 board1.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+👉	│	├── 📄 record_item.go
+	│	├── 📄 record.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// ...略...
+// type RecordItem struct {
+	// ...略...
+
+	// [O1o1o0g22o7o1o0] コウの位置
+	ko Point
+// }
+// ...略...
+```
+
 ### Step [O1o1o0g22o7o1o0] ファイル編集 - record.go
 
 👇 以下の既存ファイルを編集してほしい  
@@ -4744,6 +4821,7 @@ Output > Console:
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
  	│	├── 📄 point.go
+	│	├── 📄 record_item.go
 👉	│	├── 📄 record.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
@@ -4756,14 +4834,7 @@ Output > Console:
 ```
 
 ```go
-// type RecordItem struct {
-	// ...略...
-
-	// [O1o1o0g22o7o1o0] コウの位置
-	ko Point
-// }
 // ...略...
-
 // Push - 末尾に追加
 // func (r *Record) Push(placePlay Point,
 	// [O1o1o0g22o7o1o0] コウの位置

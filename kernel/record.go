@@ -28,21 +28,6 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 	return r
 }
 
-// RecordItem - 棋譜の一手分
-type RecordItem struct {
-	// 着手点
-	placePlay Point
-
-	// [O1o1o0g22o7o1o0] コウの位置
-	ko Point
-}
-
-// NewRecordItem - 棋譜の一手分
-func NewRecordItem() *RecordItem {
-	var ri = new(RecordItem)
-	return ri
-}
-
 // GetCurrent - 現在位置
 func (r *Record) GetCurrent() int {
 	return r.current
