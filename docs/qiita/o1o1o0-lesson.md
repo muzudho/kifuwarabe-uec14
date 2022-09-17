@@ -928,7 +928,9 @@ Output:
 2022-09-11T14:43:54.112+0900	info	kifuwarabe-uec14/main.go:41	Welcome! a:1 b:2 c:3
 ```
 
-# Step [O1o1o0g11o_1o0] インタープリター 作成
+# Step [O1o1o0g11o__10o0] インタープリター 作成
+
+## Step [O1o1o0g11o_1o0] コマンド実装 ⊃ ファイル編集 ⊃ main.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -999,7 +1001,7 @@ import (
 // ...略...
 ```
 
-## Step [O1o1o0g11o_2o0] 実行
+## Step [O1o1o0g11o_2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -3668,11 +3670,20 @@ Output > Console:
 👇 がんばって挿入してほしい  
 
 ```go
+// ...略...
+// type Kernel struct {
+	// ...略...
+
+	// CanNotPutOnMyEye - [O1o1o0g22o4o1o0] 自分の眼に石を置くことはできません
+	CanNotPutOnMyEye bool
+// }
+// ...略...
+
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// ...略...
 	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとしました
-	var onMyEye = func() bool {
+	var onForbiddenMyEye = func() bool {
 		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
 		return false
@@ -3683,8 +3694,8 @@ Output > Console:
 //		onMasonry,
 //		// [O1o1o0g22o3o1o0] ,onOpponentEye
 //		onOpponentEye,
-		// [O1o1o0g22o4o1o0] ,onMyEye
-		onMyEye//)
+		// [O1o1o0g22o4o1o0] ,onForbiddenMyEye
+		onForbiddenMyEye//)
 //
 //	if isOk {
 //		logg.C.Info("=\n")
@@ -3698,7 +3709,7 @@ Output > Console:
 	// [O1o1o0g22o3o1o0] onOpponentEye
 	onOpponentEye func() bool,
 	// [O1o1o0g22o4o1o0]
-	onMyEye func() bool//) bool {
+	onForbiddenMyEye func() bool//) bool {
 
 	// ...略...
 	// // [O1o1o0g22o3o1o0]
@@ -3709,11 +3720,11 @@ Output > Console:
 			// 相手の眼に石を置こうとしたとみなす
 	// 		return onOpponentEye()
 
-		} else if stoneA.GetColor() == renC.AdjacentColor {
+		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.AdjacentColor {
 			// [O1o1o0g22o4o1o0]
 			// かつ、連Cに隣接する連の色が、石Aの色であったなら、
 			// 自分の眼に石を置こうとしたとみなす
-			return onMyEye()
+			return onForbiddenMyEye()
 
 	// }
 
