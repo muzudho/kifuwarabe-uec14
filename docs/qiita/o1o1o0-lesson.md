@@ -3577,9 +3577,13 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-14T23:36:21.465+0900","caller":"kernel/kernel.go:115","msg":"output ren","color":"x","area":1,"libertyArea":4,"adjacentColor":""}
 ```
 
-## Step [O1o1o0g22o3o0] 相手の眼に石を置くことの禁止
+## Step [O1o1o0g22o3o0] 相手の眼に石を置くことの禁止 - OpponentEye
 
-囲碁のルールでは、相手の眼へは石を置けない。これを判定する
+囲碁のルールでは、相手の眼へは石を置けない。これを判定する  
+
+とりあえず、このルールへ直訳で短い名前を付ける。 仮に `OpponentEye` とでも呼ぶことにする  
+
+このルールは、あとで出てくる `Captured` のルールよりは優先度が低いとする  
 
 ### Step [O1o1o0g22o3o1o0] ファイル編集 - kernel.go
 
@@ -4060,11 +4064,12 @@ Output > Console:
 [2022-09-17 12:17:02]   =
 ```
 
-## Step [O1o1o0g22o6o0] 死に石の連の打ち上げ
+## Step [O1o1o0g22o6o0] 死に石の連の打ち上げ - Captured
 
-石Aを盤上に置いて指を離したばかりの盤面とする  
+石Aを盤上に置いて指を離したばかりの盤面とする。  
+石Aに隣接する相手の石の連のうち、呼吸点が０のものは打ち上げる。  
 
-石Aに隣接する相手の石の連のうち、呼吸点が０のものは打ち上げる  
+このとき、 `OpponentEye` のルールと相反することがある
 
 ### Step [O1o1o0g22o6o1o0] ファイル編集 - play.go
 
@@ -4104,29 +4109,85 @@ Output > Console:
 
 ```go
 // func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
+
+	// [O1o1o0g22o6o1o0] Captured ルール
+	var isExists4rensToRemove = false
+	var o4rensToRemove [4]*Ren
+	var isChecked4rensToRemove = false
+
+	// ...略...
+	// [O1o1o0g22o3o1o0]
+	// var renC = k.GetLiberty(pointB)
+	// if renC.GetArea() == 1 {
+		// if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+
+			// * 以下を追加
+			// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
+			isChecked4rensToRemove = true
+			if !isExists4rensToRemove {
+				// `Captured` ルールと被らなければ
+				return onOpponentEye()
+			}
+
+			// * 以下を削除
+			// onOpponentEye()
+
+		// } else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.AdjacentColor {
+			// ...略...
+		// }
+	// }
+
 	// ...略...
 	// 石を置く
 	// k.Board.cells[pointB] = stoneA
 
 	// * 以下を追加
-	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
-	var renToRemove [4]*Ren
-	for dir := 0; dir < 4; dir++ { // 東、北、西、南
-		var adjacentP = pointB + Point(k.Direction[dir]) // 隣接する交点
-		var adjacentR = k.GetLiberty(adjacentP)
-		if adjacentR.LibertyArea < 1 {
-			renToRemove[dir] = adjacentR
-		}
+	// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+	if !isChecked4rensToRemove {
+		isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 	}
 
-	for dir := 0; dir < 4; dir++ {
-		if renToRemove[dir] != nil {
-			k.RemoveRen(renToRemove[dir])
-		}
+	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
+	if isExists4rensToRemove {
+		k.Remove4Rens(o4rensToRemove)
 	}
 
 	// return true
 // }
+
+// GetRenToCapture - 現在、着手後の盤面とします。打ち上げられる石の連を返します
+//
+// Returns
+// -------
+// isExists : bool
+// renToRemove : [4]*Ren
+// 隣接する東、北、西、南にある石を含む連
+func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
+	// [O1o1o0g22o6o1o0]
+	var isExists bool
+	var rensToRemove [4]*Ren
+	for dir := 0; dir < 4; dir++ { // 東、北、西、南
+		var adjacentP = placePlay + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentR = k.GetLiberty(adjacentP)
+		if adjacentR.LibertyArea < 1 {
+			isExists = true
+			rensToRemove[dir] = adjacentR
+		}
+	}
+
+	return isExists, rensToRemove
+}
+
+// Remove4Rens - 最大４つの連を盤上から打ち上げます
+func (k *Kernel) Remove4Rens(o4rensToRemove [4]*Ren) {
+	// [O1o1o0g22o6o1o0]
+	for dir := 0; dir < 4; dir++ {
+		if o4rensToRemove[dir] != nil {
+			k.RemoveRen(o4rensToRemove[dir])
+		}
+	}
+}
 ```
 
 ### Step [O1o1o0g22o6o2o0] 動作確認
@@ -4159,6 +4220,7 @@ Output > Console:
 
 TODO 死に石の連の打ち上げ
 TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
+TODO 東、北、西、南に隣接する連の重複を省く
 
 # 参考にした記事
 

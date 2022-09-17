@@ -81,13 +81,25 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 		return onMasonry()
 	}
 
+	// [O1o1o0g22o6o1o0] Captured ルール
+	var isExists4rensToRemove = false
+	var o4rensToRemove [4]*Ren
+	var isChecked4rensToRemove = false
+
 	// [O1o1o0g22o3o1o0]
 	var renC = k.GetLiberty(pointB)
 	if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
-			return onOpponentEye()
+
+			// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
+			isChecked4rensToRemove = true
+			if !isExists4rensToRemove {
+				// `Captured` ルールと被らなければ
+				return onOpponentEye()
+			}
 
 		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.AdjacentColor {
 			// [O1o1o0g22o4o1o0]
@@ -101,23 +113,56 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// 石を置く
 	k.Board.cells[pointB] = stoneA
 
+	// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+	if !isChecked4rensToRemove {
+		isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
+	}
+
 	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
-	var renToRemove [4]*Ren
-	for dir := 0; dir < 4; dir++ { // 東、北、西、南
-		var adjacentP = pointB + Point(k.Direction[dir]) // 隣接する交点
-		var adjacentR = k.GetLiberty(adjacentP)
-		if adjacentR.LibertyArea < 1 {
-			renToRemove[dir] = adjacentR
-		}
+	if isExists4rensToRemove {
+		k.Remove4Rens(o4rensToRemove)
 	}
 
 	for dir := 0; dir < 4; dir++ {
-		if renToRemove[dir] != nil {
-			k.RemoveRen(renToRemove[dir])
+		if o4rensToRemove[dir] != nil {
+			k.RemoveRen(o4rensToRemove[dir])
 		}
 	}
 
 	return true
+}
+
+// GetRenToCapture - 現在、着手後の盤面とします。打ち上げられる石の連を返します
+//
+// Returns
+// -------
+// isExists : bool
+// renToRemove : [4]*Ren
+// 隣接する東、北、西、南にある石を含む連
+func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
+	// [O1o1o0g22o6o1o0]
+	var isExists bool
+	var rensToRemove [4]*Ren
+	for dir := 0; dir < 4; dir++ { // 東、北、西、南
+		var adjacentP = placePlay + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentR = k.GetLiberty(adjacentP)
+		if adjacentR.LibertyArea < 1 {
+			isExists = true
+			rensToRemove[dir] = adjacentR
+		}
+	}
+
+	return isExists, rensToRemove
+}
+
+// Remove4Rens - 最大４つの連を盤上から打ち上げます
+func (k *Kernel) Remove4Rens(o4rensToRemove [4]*Ren) {
+	// [O1o1o0g22o6o1o0]
+	for dir := 0; dir < 4; dir++ {
+		if o4rensToRemove[dir] != nil {
+			k.RemoveRen(o4rensToRemove[dir])
+		}
+	}
 }
 
 // EOF [O1o1o0g19o0]
