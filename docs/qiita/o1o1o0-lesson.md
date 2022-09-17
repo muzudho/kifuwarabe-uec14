@@ -2893,16 +2893,18 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 // -------
 // isOk : bool
 //		石を置けたら真、置けなかったら偽
-func (k *Kernel) Play(stone Stone, point Point, logg *Logger,
+func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// [O1o1o0g22o1o2o0] onMasonry
 	onMasonry func() bool) bool {
 
 	// [O1o1o0g22o1o2o0]
-	if k.IsMasonryError(stone, point) {
+	if k.IsMasonryError(stoneA, pointB) {
 		return onMasonry()
 	}
 
-	k.Board.cells[point] = stone
+	// 石を置く
+	k.Board.SetStoneAt(pointB, stoneA)
+
 	return true
 }
 
@@ -4123,8 +4125,11 @@ Output > Console:
 
 			// * 以下を追加
 			// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+			k.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
 			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 			isChecked4rensToRemove = true
+			k.Board.SetStoneAt(pointB, Space) // 石を取り除く
+
 			if !isExists4rensToRemove {
 				// `Captured` ルールと被らなければ
 				return onOpponentEye()
@@ -4140,7 +4145,7 @@ Output > Console:
 
 	// ...略...
 	// 石を置く
-	// k.Board.cells[pointB] = stoneA
+	// k.Board.SetStoneAt(pointB, stoneA)
 
 	// * 以下を追加
 	// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
@@ -4214,11 +4219,10 @@ play black D4
 Output > Console:  
 
 ```plaintext
-[2022-09-17 09:11:48]   # play black C3
-[2022-09-17 09:11:48]   =
+[2022-09-17 14:35:58]   # play black D4
+[2022-09-17 14:35:58]   =
 ```
 
-TODO 死に石の連の打ち上げ
 TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
 TODO 東、北、西、南に隣接する連の重複を省く
 

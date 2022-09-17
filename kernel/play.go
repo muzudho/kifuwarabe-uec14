@@ -94,8 +94,11 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 			// 相手の眼に石を置こうとしたとみなす
 
 			// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+			k.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
 			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 			isChecked4rensToRemove = true
+			k.Board.SetStoneAt(pointB, Space) // 石を取り除く
+
 			if !isExists4rensToRemove {
 				// `Captured` ルールと被らなければ
 				return onOpponentEye()
@@ -111,7 +114,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	}
 
 	// 石を置く
-	k.Board.cells[pointB] = stoneA
+	k.Board.SetStoneAt(pointB, stoneA)
 
 	// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
 	if !isChecked4rensToRemove {
