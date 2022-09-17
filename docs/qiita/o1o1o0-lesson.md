@@ -416,6 +416,9 @@ BoardData = '''
 + + + + + + + + + + + + + + + + + + + + +
 '''
 
+# PlayFirst - 先行。 black か white
+PlayFirst = "black"
+
 # ファイルやフォルダーのパスの設定
 [Paths]
 
@@ -517,6 +520,11 @@ func (c *Config) GetMaxMovesNum() int {
 	return int(c.Game.MaxMoves)
 }
 
+// GetPlayFirst - 先行。 black か white
+func (c *Config) GetPlayFirst() string {
+	return c.Game.PlayFirst
+}
+
 // GetPlainTextLog - PlainTextLog - コンソールのより詳細なログ
 func (c *Config) GetPlainTextLog() string {
 	return c.Paths.PlainTextLog
@@ -540,6 +548,9 @@ type Game struct {
 
 	// BoardData - 盤面データ
 	BoardData string
+
+	// PlayFirst - 先行。 black か white
+	PlayFirst string
 }
 
 // Paths - ファイルやフォルダーのパスの設定
@@ -1134,6 +1145,14 @@ import (
 )
 // ...略...
 
+		// [O1o1o0g12o__11o_4o0] 棋譜の初期化に利用
+		var onUnknownTurn = func() kernel.Stone {
+			var errMsg = fmt.Sprintf("? unexpected play_first:%s", engineConfig.GetPlayFirst())
+			logg.C.Info(errMsg)
+			logg.J.Infow("error", "play_first", engineConfig.GetPlayFirst())
+			panic(errMsg)
+		}
+
 		// [O1o1o0g11o_3o0]
 		var kernel1 = kernel.NewKernel()
 		// 設定ファイルの内容をカーネルへ反映
@@ -1391,6 +1410,22 @@ func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (b
 		return true, White
 	case "wall":
 		return true, Wall
+	default:
+		return getDefaultStone()
+	}
+}
+
+// GetStoneOrDefaultFromTurn - black または white を与えると、Stone値を返します
+//
+// Returns
+// -------
+// stone : Stone
+func GetStoneOrDefaultFromTurn(stoneName string, getDefaultStone func() Stone) Stone {
+	switch stoneName {
+	case "black":
+		return Black
+	case "white":
+		return White
 	default:
 		return getDefaultStone()
 	}
@@ -1872,18 +1907,31 @@ package kernel
 // Record - 棋譜
 type Record struct {
 	// 先行
-	playFirst []Stone
+	playFirst Stone
 
 	// 着手点
 	points []Point
 }
 
 // NewRecord - 棋譜の新規作成
-func NewRecord(maxMoves int) *Record {
+func NewRecord(maxMoves int, playFirst Stone) *Record {
 	var r = new(Record)
-	r.playFirst = make([]Stone, maxMoves)
+	r.playFirst = playFirst
 	r.points = make([]Point, maxMoves)
 	return r
+}
+
+// Push - 末尾に追加
+func (r *Record) Push(placePlay Point) {
+	r.points = append(r.points, placePlay)
+}
+
+// Push - 末尾を削除
+func (r *Record) Pop(placePlay Point) Point {
+	var lastIndex = len(r.points) - 1
+	var tail = r.points[lastIndex]
+	r.points = r.points[:lastIndex]
+	return tail
 }
 
 // EOF [O1o1o0g12o__11o_2o0]
@@ -1922,12 +1970,12 @@ func NewRecord(maxMoves int) *Record {
 // NewKernel - カーネルの新規作成
 // func NewKernel(
 	// [O1o1o0g12o__11o_2o0] 棋譜のサイズ
-	maxMoves int//) *Kernel {
+	maxMoves int, playFirst Stone//) *Kernel {
 	// ...略...
 
 	// * 以下を追加
 	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
-	k.Record = *NewRecord(maxMoves)
+	k.Record = *NewRecord(maxMoves, playFirst)
 
 	// ...略...
 	// return k
@@ -1958,8 +2006,9 @@ func NewRecord(maxMoves int) *Record {
 ```go
 		// [O1o1o0g11o_3o0]
 		//var kernel1 = kernel.NewKernel(
-			// [O1o1o0g12o__11o_4o0] 棋譜のサイズ
-			engineConfig.GetMaxMovesNum()//)
+			// [O1o1o0g12o__11o_4o0] 棋譜の初期化
+			engineConfig.GetMaxMovesNum(),
+			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
 ```
 
 # Step [O1o1o0g12o__11o0] 盤定義（土台）

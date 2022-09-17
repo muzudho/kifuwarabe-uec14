@@ -53,6 +53,11 @@ func (c *Config) GetMaxMovesNum() int {
 	return int(c.Game.MaxMoves)
 }
 
+// GetPlayFirst - 先行。 black か white
+func (c *Config) GetPlayFirst() string {
+	return c.Game.PlayFirst
+}
+
 // GetPlainTextLog - PlainTextLog - コンソールのより詳細なログ
 func (c *Config) GetPlainTextLog() string {
 	return c.Paths.PlainTextLog
@@ -76,6 +81,9 @@ type Game struct {
 
 	// BoardData - 盤面データ
 	BoardData string
+
+	// PlayFirst - 先行。 black か white
+	PlayFirst string
 }
 
 // Paths - ファイルやフォルダーのパスの設定

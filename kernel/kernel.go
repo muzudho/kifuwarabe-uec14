@@ -33,7 +33,7 @@ type Kernel struct {
 // NewKernel - カーネルの新規作成
 func NewKernel(
 	// [O1o1o0g12o__11o_2o0] 棋譜のサイズ
-	maxMoves int) *Kernel {
+	maxMoves int, playFirst Stone) *Kernel {
 
 	var k = new(Kernel)
 	k.Board = NewBoard()
@@ -42,7 +42,7 @@ func NewKernel(
 	k.CheckBoard = NewCheckBoard()
 
 	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
-	k.Record = *NewRecord(maxMoves)
+	k.Record = *NewRecord(maxMoves, playFirst)
 
 	return k
 }

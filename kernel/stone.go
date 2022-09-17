@@ -34,6 +34,22 @@ func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (b
 	}
 }
 
+// GetStoneOrDefaultFromTurn - black または white を与えると、Stone値を返します
+//
+// Returns
+// -------
+// stone : Stone
+func GetStoneOrDefaultFromTurn(stoneName string, getDefaultStone func() Stone) Stone {
+	switch stoneName {
+	case "black":
+		return Black
+	case "white":
+		return White
+	default:
+		return getDefaultStone()
+	}
+}
+
 // GetStoneFromChar - １文字与えると、Stone値を返します
 //
 // Returns

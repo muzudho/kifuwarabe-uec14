@@ -63,10 +63,19 @@ func main() {
 
 		// fmt.Println("go run . {programName}")
 
+		// [O1o1o0g12o__11o_4o0] 棋譜の初期化に利用
+		var onUnknownTurn = func() kernel.Stone {
+			var errMsg = fmt.Sprintf("? unexpected play_first:%s", engineConfig.GetPlayFirst())
+			logg.C.Info(errMsg)
+			logg.J.Infow("error", "play_first", engineConfig.GetPlayFirst())
+			panic(errMsg)
+		}
+
 		// [O1o1o0g11o_3o0]
 		var kernel1 = kernel.NewKernel(
-			// [O1o1o0g12o__11o_4o0] 棋譜のサイズ
-			engineConfig.GetMaxMovesNum())
+			// [O1o1o0g12o__11o_4o0] 棋譜の初期化
+			engineConfig.GetMaxMovesNum(),
+			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn))
 		// 設定ファイルの内容をカーネルへ反映
 		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 

@@ -34,6 +34,9 @@ BoardData = '''
 + + + + + + + + + + +
 '''
 
+# PlayFirst - 先行。 black か white
+PlayFirst = "black"
+
 # ファイルやフォルダーのパスの設定
 [Paths]
 
