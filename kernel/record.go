@@ -61,4 +61,12 @@ func (r *Record) Foreach(setPoint func(int, Point)) {
 	}
 }
 
+// IsKo - コウか？
+func (r *Record) IsKo(placePlay Point) bool {
+	// [O1o1o0g22o7o1o0] コウの判定
+	// 2手前に着手して石をぴったり１つ打ち上げたとき、その着手点はコウだ
+	var i = r.GetCurrent()
+	return 1 <= i && r.ko[i-2] == placePlay
+}
+
 // EOF [O1o1o0g12o__11o_2o0]

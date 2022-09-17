@@ -81,6 +81,11 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 		return onMasonry()
 	}
 
+	// [O1o1o0g22o7o2o0] コウの判定
+	if k.Record.IsKo(pointB) {
+
+	}
+
 	// [O1o1o0g22o6o1o0] Captured ルール
 	var isExists4rensToRemove = false
 	var o4rensToRemove [4]*Ren
@@ -122,7 +127,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	}
 
 	// [O1o1o0g22o7o2o0] コウの判定
-	var ko Point = Point(0)
+	var capturedCount = 0
 
 	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
 	if isExists4rensToRemove {
@@ -132,11 +137,15 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 				k.RemoveRen(ren)
 
 				// [O1o1o0g22o7o2o0] コウの判定
-				if ren.LibertyArea == 1 && 1 <= k.Record.GetCurrent() {
-					ko = ren.Elements[0]
-				}
+				capturedCount += ren.LibertyArea
 			}
 		}
+	}
+
+	// [O1o1o0g22o7o2o0] コウの判定
+	var ko = Point(0)
+	if capturedCount == 1 {
+		ko = pointB
 	}
 
 	// 棋譜に追加

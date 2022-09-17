@@ -1950,6 +1950,14 @@ func (r *Record) Foreach(setPoint func(int, Point)) {
 	}
 }
 
+// IsKo - コウか？
+func (r *Record) IsKo(placePlay Point) bool {
+	// [O1o1o0g22o7o1o0] コウの判定
+	// 2手前に着手して石をぴったり１つ打ち上げたとき、その着手点はコウだ
+	var i = r.GetCurrent()
+	return 1 <= i && r.ko[i-2] == placePlay
+}
+
 // EOF [O1o1o0g12o__11o_2o0]
 ```
 
@@ -4788,9 +4796,21 @@ Output > Console:
 ```
 
 ```go
+	// [O1o1o0g22o1o2o0]
+	// if k.IsMasonryError(stoneA, pointB) {
+	// 	return onMasonry()
+	// }
+	// ...略...
+
+	// [O1o1o0g22o7o2o0] コウの判定
+	if k.Record.IsKo(pointB) {
+
+	}
+	// ...略...
+
 	// * 以下を追加
 	// [O1o1o0g22o7o2o0] コウの判定
-	var ko Point = Point(0)
+	var capturedCount = 0
 
 //	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
 //	if isExists4rensToRemove {
@@ -4801,13 +4821,17 @@ Output > Console:
 
 				// * 以下を追加
 				// [O1o1o0g22o7o2o0] コウの判定
-				if ren.LibertyArea == 1 && 1 <= k.Record.GetCurrent() {
-					ko = ren.Elements[0]
-				}
+				capturedCount += ren.LibertyArea
 
 //			}
 //		}
 //	}
+
+	// [O1o1o0g22o7o2o0] コウの判定
+	var ko = Point(0)
+	if capturedCount == 1 {
+		ko = pointB
+	}
 
 	// 棋譜に追加
 	//k.Record.Push(pointB,
