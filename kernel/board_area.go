@@ -62,10 +62,17 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 }
 
 // ForeachNeumannNeighborhood - [O1o1o0g13o__10o0] 隣接する４方向の定義
-func (b *Board) ForeachNeumannNeighborhood() {
+func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacentPoint func(int, Point)) {
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
-		//var adjacentP = here + Point(k.Board.Direction[dir]) // 隣接する交点
+		var adjacentP = here + Point(b.Direction[dir]) // 隣接する交点
+
+		// 範囲外チェック
+		if adjacentP < 1 && b.getMemoryArea() <= int(adjacentP) {
+			continue
+		}
+
+		setAdjacentPoint(dir, adjacentP)
 	}
 }
 

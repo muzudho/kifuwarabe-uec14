@@ -147,14 +147,17 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	// [O1o1o0g22o6o1o0]
 	var isExists bool
 	var rensToRemove [4]*Ren
-	for dir := 0; dir < 4; dir++ { // 東、北、西、南
-		var adjacentP = placePlay + Point(k.Board.Direction[dir]) // 隣接する交点
+
+	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		var adjacentR = k.GetLiberty(adjacentP)
 		if adjacentR.LibertyArea < 1 {
 			isExists = true
 			rensToRemove[dir] = adjacentR
 		}
 	}
+
+	// 隣接する４方向
+	k.Board.ForeachNeumannNeighborhood(placePlay, setAdjacentPoint)
 
 	return isExists, rensToRemove
 }

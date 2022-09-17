@@ -27,21 +27,19 @@ func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
 	k.Ren.Elements = append(k.Ren.Elements, here)
 
-	// 東、北、西、南
-	for dir := 0; dir < 4; dir++ {
-		var adjacentP = here + Point(k.Board.Direction[dir]) // 隣接する交点
+	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
 		if k.CheckBoard.IsChecked(adjacentP) {
-			continue
+			return
 		}
 
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		if adjacentS == Space { // 空点
 			k.CheckBoard.Check(adjacentP)
 			k.Ren.LibertyArea++
-			continue
+			return
 		} else if adjacentS == Wall { // 壁
-			continue
+			return
 		}
 
 		var adjacentC = adjacentS.GetColor()
@@ -52,6 +50,9 @@ func (k *Kernel) searchRen(here Point) {
 			k.searchRen(adjacentP) // 再帰
 		}
 	}
+
+	// 隣接する４方向
+	k.Board.ForeachNeumannNeighborhood(here, setAdjacentPoint)
 }
 
 // EOF [O1o1o0g22o2o4o0]

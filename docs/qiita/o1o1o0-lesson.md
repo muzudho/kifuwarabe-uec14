@@ -2223,7 +2223,6 @@ func (b *Board) getMemoryArea() int {
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
-  	│	├── 📄 board_area.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
@@ -2240,12 +2239,9 @@ func (b *Board) getMemoryArea() int {
 👇 がんばって、 Execute メソッドに挿入してほしい  
 
 ```go
-// ...略...
-
-
+	// ...略...
 	// この下にコマンドを挟んでいく
 	// -------------------------
-
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
@@ -2271,9 +2267,7 @@ func (b *Board) getMemoryArea() int {
 
 	// この上にコマンドを挟んでいく
 	// -------------------------
-
-
-// ...略...
+	// ...略...
 ```
 
 ## Step [O1o1o0g12o__11o3o0] 動作確認
@@ -2406,6 +2400,21 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 	}
 }
 
+// ForeachNeumannNeighborhood - [O1o1o0g13o__10o0] 隣接する４方向の定義
+func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacentPoint func(int, Point)) {
+	// 東、北、西、南
+	for dir := 0; dir < 4; dir++ {
+		var adjacentP = here + Point(b.Direction[dir]) // 隣接する交点
+
+		// 範囲外チェック
+		if adjacentP < 1 && b.getMemoryArea() <= int(adjacentP) {
+			continue
+		}
+
+		setAdjacentPoint(dir, adjacentP)
+	}
+}
+
 // EOF [O1o1o0g12o0]
 ```
 
@@ -2490,8 +2499,7 @@ go mod tidy
 👇 がんばって、 Execute メソッドに挿入してほしい  
 
 ```go
-// ...略...
-
+	// ...略...
 	// この下にコマンドを挟んでいく
 	// -------------------------
 
@@ -2529,8 +2537,7 @@ go mod tidy
 
 	// この上にコマンドを挟んでいく
 	// -------------------------
-
-// ...略...
+	// ...略...
 ```
 
 ## Step [O1o1o0g14o0] 動作確認
@@ -3808,21 +3815,19 @@ func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
 	k.Ren.Elements = append(k.Ren.Elements, here)
 
-	// 東、北、西、南
-	for dir := 0; dir < 4; dir++ {
-		var adjacentP = here + Point(k.Board.Direction[dir]) // 隣接する交点
+	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
 		if k.CheckBoard.IsChecked(adjacentP) {
-			continue
+			return
 		}
 
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		if adjacentS == Space { // 空点
 			k.CheckBoard.Check(adjacentP)
 			k.Ren.LibertyArea++
-			continue
+			return
 		} else if adjacentS == Wall { // 壁
-			continue
+			return
 		}
 
 		var adjacentC = adjacentS.GetColor()
@@ -3833,6 +3838,9 @@ func (k *Kernel) searchRen(here Point) {
 			k.searchRen(adjacentP) // 再帰
 		}
 	}
+
+	// 隣接する４方向
+	k.Board.ForeachNeumannNeighborhood(here, setAdjacentPoint)
 }
 
 // EOF [O1o1o0g22o2o4o0]
@@ -4542,14 +4550,17 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	// [O1o1o0g22o6o1o0]
 	var isExists bool
 	var rensToRemove [4]*Ren
-	for dir := 0; dir < 4; dir++ { // 東、北、西、南
-		var adjacentP = placePlay + Point(k.Board.Direction[dir]) // 隣接する交点
+
+	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		var adjacentR = k.GetLiberty(adjacentP)
 		if adjacentR.LibertyArea < 1 {
 			isExists = true
 			rensToRemove[dir] = adjacentR
 		}
 	}
+
+	// 隣接する４方向
+	k.Board.ForeachNeumannNeighborhood(placePlay, setAdjacentPoint)
 
 	return isExists, rensToRemove
 }
