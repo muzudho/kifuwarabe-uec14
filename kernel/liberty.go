@@ -11,7 +11,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
 	// 連の初期化
-	k.Ren = new(Ren)
+	k.Ren = NewRen()
 	// 連の色
 	k.Ren.Color = k.Board.GetColorAt(arbitraryPoint)
 	// 隣接する連の色

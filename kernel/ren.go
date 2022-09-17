@@ -2,6 +2,8 @@
 
 package kernel
 
+import "math"
+
 // Ren - 連，れん
 type Ren struct {
 	// Color - 色
@@ -10,8 +12,17 @@ type Ren struct {
 	AdjacentColor Color
 	// LibertyArea - 呼吸点の面積
 	LibertyArea int
-	// locations - 要素の石の位置
+	// 要素の石の位置
 	locations []Point
+	// 最小の場所。Idとして利用することを想定
+	minimumLocation Point
+}
+
+// NewRen - 連を新規作成
+func NewRen() *Ren {
+	var r = new(Ren)
+	r.minimumLocation = math.MaxInt
+	return r
 }
 
 // GetArea - 面積。アゲハマの数
@@ -19,9 +30,17 @@ func (r *Ren) GetArea() int {
 	return len(r.locations)
 }
 
+// GetMinimumLocation - 最小の場所。Idとして利用することを想定
+func (r *Ren) GetMinimumLocation() Point {
+	return r.minimumLocation
+}
+
 // AddLocation - 場所の追加
 func (r *Ren) AddLocation(location Point) {
 	r.locations = append(r.locations, location)
+
+	// 最小の数を更新
+	r.minimumLocation = Point(math.Min(float64(r.minimumLocation), float64(location)))
 }
 
 // ForeachLocation - 場所毎に
