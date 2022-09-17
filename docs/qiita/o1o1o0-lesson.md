@@ -1349,7 +1349,7 @@ type Ren struct {
 	Elements []Point
 }
 
-// GetArea - 面積
+// GetArea - 面積。アゲハマの数
 func (r *Ren) GetArea() int {
 	return len(r.Elements)
 }
@@ -4947,7 +4947,7 @@ Output > Console:
 
 	// * 以下を追加
 	// [O1o1o0g22o7o2o0] コウの判定
-	var capturedCount = 0
+	var capturedCount = 0 // アゲハマ
 
 //	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
 //	if isExists4rensToRemove {
@@ -4958,7 +4958,7 @@ Output > Console:
 
 				// * 以下を追加
 				// [O1o1o0g22o7o2o0] コウの判定
-				capturedCount += ren.LibertyArea
+				capturedCount += ren.GetArea()
 
 //			}
 //		}
@@ -5079,8 +5079,21 @@ play black D3
 Output > Console:  
 
 ```plaintext
-[2022-09-17 14:35:58]   # play black D4
-[2022-09-17 14:35:58]   =
+set_board file data/board3.txt
+[2022-09-17 22:39:55]   # set_board file data/board3.txt
+[2022-09-17 22:39:55]   =
+
+play black D3
+[2022-09-17 22:39:55]   # play black D3
+[2022-09-17 22:39:55]   =
+
+play white C3
+[2022-09-17 22:39:55]   # play white C3
+[2022-09-17 22:39:55]   =
+
+play black D3
+[2022-09-17 22:39:55]   # play black D3
+[2022-09-17 22:39:55]   ? ko my_stone:x point:D3
 ```
 
 TODO 東、北、西、南に隣接する連の重複を省く

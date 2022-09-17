@@ -2,13 +2,15 @@
 
 package kernel
 
-import "strings"
+import (
+	"strings"
+)
 
 // DoPlay - 打つ
 //
-// * `command` - Example: `play black A19`
-//                         ---- ----- ---
-//                         0    1     2
+//   - `command` - Example: `play black A19`
+//     ---- ----- ---
+//     0    1     2
 func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 	var stoneName = tokens[1]
@@ -76,7 +78,8 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 // Returns
 // -------
 // isOk : bool
-//		石を置けたら真、置けなかったら偽
+//
+//	石を置けたら真、置けなかったら偽
 func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// [O1o1o0g22o1o2o0] onMasonry
 	onMasonry func() bool,
@@ -138,17 +141,18 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	}
 
 	// [O1o1o0g22o7o2o0] コウの判定
-	var capturedCount = 0
+	var capturedCount = 0 // アゲハマ
 
 	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
 	if isExists4rensToRemove {
 		for dir := 0; dir < 4; dir++ {
 			var ren = o4rensToRemove[dir]
+
 			if ren != nil {
 				k.RemoveRen(ren)
 
 				// [O1o1o0g22o7o2o0] コウの判定
-				capturedCount += ren.LibertyArea
+				capturedCount += ren.GetArea()
 			}
 		}
 	}

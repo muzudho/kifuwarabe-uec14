@@ -14,7 +14,7 @@ type Ren struct {
 	Elements []Point
 }
 
-// GetArea - 面積
+// GetArea - 面積。アゲハマの数
 func (r *Ren) GetArea() int {
 	return len(r.Elements)
 }
