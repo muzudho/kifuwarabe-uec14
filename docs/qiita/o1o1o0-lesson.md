@@ -3589,7 +3589,7 @@ Output > Log > JSON:
 	if renC.Area == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
-			// 相手の眼に石を置こうとしたとみなし、この手をエラーとする
+			// 相手の眼に石を置こうとしたとみなす
 			return onOpponentEye()
 		}
 	}
@@ -3625,6 +3625,129 @@ Output > Console:
 ```plaintext
 [2022-09-17 00:41:29]   # play white C3
 [2022-09-17 00:41:29]   ? opponent_eye my_stone:o point:C3
+```
+
+## Step [O1o1o0g22o4o0] 自分の眼に石を置くことの任意の禁止
+
+囲碁のルール上可能だが、明らかに損な手は、プレイアウトから除外したい。  
+対局時には許可し、プレイアウト時には禁止するよう、選択できるようにする  
+
+### Step [O1o1o0g22o4o1o0] ファイル編集 - kernel.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 board1.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+👉 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって挿入してほしい  
+
+```go
+// func (k *Kernel) DoPlay(command string, logg *Logger) {
+
+	// ...略...
+	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとしました
+	var onMyEye = func() bool {
+		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
+		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
+		return false
+	}
+
+//	var isOk = k.Play(stone, point, logg,
+//		// [O1o1o0g22o1o2o0] ,onMasonry
+//		onMasonry,
+//		// [O1o1o0g22o3o1o0] ,onOpponentEye
+//		onOpponentEye,
+		// [O1o1o0g22o4o1o0] ,onMyEye
+		onMyEye//)
+//
+//	if isOk {
+//		logg.C.Info("=\n")
+//		logg.J.Infow("ok")
+//	}
+// }
+
+// func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
+	// // [O1o1o0g22o1o2o0] onMasonry
+	// onMasonry func() bool,
+	// [O1o1o0g22o3o1o0] onOpponentEye
+	onOpponentEye func() bool,
+	// [O1o1o0g22o4o1o0]
+	onMyEye func() bool//) bool {
+
+	// ...略...
+	// // [O1o1o0g22o3o1o0]
+	// var renC = k.GetLiberty(pointB)
+	// if renC.Area == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
+	// 	if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
+			// 相手の眼に石を置こうとしたとみなす
+	// 		return onOpponentEye()
+
+		} else if stoneA.GetColor() == renC.AdjacentColor {
+			// [O1o1o0g22o4o1o0]
+			// かつ、連Cに隣接する連の色が、石Aの色であったなら、
+			// 自分の眼に石を置こうとしたとみなす
+			return onMyEye()
+
+	// }
+
+	// ...略...
+	// k.Board.cells[point] = stone
+	// return true
+```
+
+### Step [O1o1o0g22o4o2o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+set_board file data/board1.txt
+play black C3
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-17 09:11:48]   # play black C3
+[2022-09-17 09:11:48]   ? my_eye my_stone:x point:C3
 ```
 
 TODO 自殺手の可／不可指定  
