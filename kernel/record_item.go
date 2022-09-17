@@ -17,4 +17,10 @@ func NewRecordItem() *RecordItem {
 	return ri
 }
 
+// Clear - 空っぽにします
+func (ri *RecordItem) Clear() {
+	ri.placePlay = Point(0)
+	ri.ko = Point(0)
+}
+
 // EOF[O1o1o0g12o__11o_2o_1o0]

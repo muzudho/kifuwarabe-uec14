@@ -47,12 +47,10 @@ func (r *Record) Push(placePlay Point,
 	r.current++
 }
 
-// Push - 末尾を削除
-func (r *Record) Pop(placePlay Point) *RecordItem {
+// RemoveTail - 末尾を削除
+func (r *Record) RemoveTail(placePlay Point) {
 	r.current--
-	var tail = r.items[r.current]
-	r.items[r.current] = NewRecordItem()
-	return tail
+	r.items[r.current].Clear()
 }
 
 // ForeachItem - 各要素
