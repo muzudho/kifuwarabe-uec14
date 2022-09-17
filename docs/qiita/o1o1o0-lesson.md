@@ -2045,7 +2045,8 @@ func (r *Record) Pop(placePlay Point) Point {
 		// Example: "record"
 		var sb strings.Builder
 		for i, point := range k.Record.points {
-			sb.WriteString(fmt.Sprintf("%d.%s ", i, k.Board.GetCodeFromPoint(point)))
+			var ordinals = i+1	// 基数を序数へ変換
+			sb.WriteString(fmt.Sprintf("%d.%s ", ordinals, k.Board.GetCodeFromPoint(point)))
 		}
 		var text = sb.String()
 		text = text[:len(text)-1]
@@ -2081,6 +2082,7 @@ play black B2
 play black C3
 play black D4
 play black E5
+record
 ```
 
 Output > Console:  
@@ -2129,6 +2131,16 @@ type Board struct {
 	//
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
 	cells []Stone
+}
+
+// NewBoard - 新規作成
+func NewBoard() *Board {
+	var b = new(Board)
+
+	// 盤のサイズ指定と、盤面の初期化
+	b.resize(19, 19)
+
+	return b
 }
 
 // GetMemoryWidth - 枠の厚みを含んだ横幅
@@ -2334,16 +2346,6 @@ Output > Log > JSON:
 // BOF [O1o1o0g12o0]
 
 package kernel
-
-// NewBoard - 新規作成
-func NewBoard() *Board {
-	var b = new(Board)
-
-	// 盤のサイズ指定と、盤面の初期化
-	b.resize(19, 19)
-
-	return b
-}
 
 // Init - 盤面初期化
 func (b *Board) Init(width int, height int) {
@@ -3642,6 +3644,54 @@ func (b *CheckBoard) getMemoryArea() int {
 // EOF [O1o1o0g22o2o2o0]
 ```
 
+### Step [O1o1o0g22o2o3o_1o0] ファイル編集 - board.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📂 play_rule
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+👉 	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// type Board struct {
+// ...略...
+
+	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
+	Direction [4]int
+
+// }
+// ...略...
+
+// func (b *Board) resize(width int, height int) {
+	// ...略...
+
+	// ４方向（東、北、西、南）の番地への相対インデックス
+	b.Direction = [4]int{1, -b.GetMemoryWidth(), -1, b.GetMemoryWidth()}
+
+// }
+```
+
 ### Step [O1o1o0g22o2o3o0] ファイル編集 - kernel.go
 
 👇 以下の既存ファイルを編集してほしい  
@@ -3684,8 +3734,6 @@ func (b *CheckBoard) getMemoryArea() int {
 	CheckBoard *CheckBoard
 	// Ren - 呼吸点の探索時に使います
 	Ren *Ren
-	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
-	Direction [4]int
 //}
 
 // func NewKernel() *Kernel {
@@ -3749,8 +3797,6 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	k.Ren.Color = k.Board.GetColorAt(arbitraryPoint)
 	// 隣接する連の色
 	k.Ren.AdjacentColor = Color_None
-	// ４方向（東、北、西、南）の番地への相対インデックス
-	k.Direction = [4]int{1, -k.Board.GetMemoryWidth(), -1, k.Board.GetMemoryWidth()}
 
 	k.searchRen(arbitraryPoint)
 
@@ -3764,7 +3810,7 @@ func (k *Kernel) searchRen(here Point) {
 
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
-		var adjacentP = here + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentP = here + Point(k.Board.Direction[dir]) // 隣接する交点
 		// 探索済みならスキップ
 		if k.CheckBoard.IsChecked(adjacentP) {
 			continue
@@ -4497,7 +4543,7 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	var isExists bool
 	var rensToRemove [4]*Ren
 	for dir := 0; dir < 4; dir++ { // 東、北、西、南
-		var adjacentP = placePlay + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentP = placePlay + Point(k.Board.Direction[dir]) // 隣接する交点
 		var adjacentR = k.GetLiberty(adjacentP)
 		if adjacentR.LibertyArea < 1 {
 			isExists = true

@@ -16,8 +16,6 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	k.Ren.Color = k.Board.GetColorAt(arbitraryPoint)
 	// 隣接する連の色
 	k.Ren.AdjacentColor = Color_None
-	// ４方向（東、北、西、南）の番地への相対インデックス
-	k.Direction = [4]int{1, -k.Board.GetMemoryWidth(), -1, k.Board.GetMemoryWidth()}
 
 	k.searchRen(arbitraryPoint)
 
@@ -31,7 +29,7 @@ func (k *Kernel) searchRen(here Point) {
 
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
-		var adjacentP = here + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentP = here + Point(k.Board.Direction[dir]) // 隣接する交点
 		// 探索済みならスキップ
 		if k.CheckBoard.IsChecked(adjacentP) {
 			continue

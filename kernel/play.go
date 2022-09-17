@@ -148,7 +148,7 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	var isExists bool
 	var rensToRemove [4]*Ren
 	for dir := 0; dir < 4; dir++ { // 東、北、西、南
-		var adjacentP = placePlay + Point(k.Direction[dir]) // 隣接する交点
+		var adjacentP = placePlay + Point(k.Board.Direction[dir]) // 隣接する交点
 		var adjacentR = k.GetLiberty(adjacentP)
 		if adjacentR.LibertyArea < 1 {
 			isExists = true

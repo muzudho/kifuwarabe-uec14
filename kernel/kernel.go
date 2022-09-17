@@ -17,8 +17,6 @@ type Kernel struct {
 	CheckBoard *CheckBoard
 	// Ren - 呼吸点の探索時に使います
 	Ren *Ren
-	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
-	Direction [4]int
 
 	// CanNotPutOnMyEye - [O1o1o0g22o4o1o0] 自分の眼に石を置くことはできません
 	CanNotPutOnMyEye bool

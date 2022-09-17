@@ -14,6 +14,19 @@ type Board struct {
 	//
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
 	cells []Stone
+
+	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
+	Direction [4]int
+}
+
+// NewBoard - 新規作成
+func NewBoard() *Board {
+	var b = new(Board)
+
+	// 盤のサイズ指定と、盤面の初期化
+	b.resize(19, 19)
+
+	return b
 }
 
 // GetMemoryWidth - 枠の厚みを含んだ横幅
@@ -79,6 +92,9 @@ func (b *Board) resize(width int, height int) {
 	b.memoryWidth = width + 2
 	b.memoryHeight = height + 2
 	b.cells = make([]Stone, b.getMemoryArea())
+
+	// ４方向（東、北、西、南）の番地への相対インデックス
+	b.Direction = [4]int{1, -b.GetMemoryWidth(), -1, b.GetMemoryWidth()}
 }
 
 // 枠付き盤の面積

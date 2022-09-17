@@ -2,16 +2,6 @@
 
 package kernel
 
-// NewBoard - 新規作成
-func NewBoard() *Board {
-	var b = new(Board)
-
-	// 盤のサイズ指定と、盤面の初期化
-	b.resize(19, 19)
-
-	return b
-}
-
 // Init - 盤面初期化
 func (b *Board) Init(width int, height int) {
 	// 盤面のサイズが異なるなら、盤面を作り直す
@@ -68,6 +58,14 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 			var stone = b.cells[i]
 			setStone(stone)
 		}
+	}
+}
+
+// ForeachNeumannNeighborhood - [O1o1o0g13o__10o0] 隣接する４方向の定義
+func (b *Board) ForeachNeumannNeighborhood() {
+	// 東、北、西、南
+	for dir := 0; dir < 4; dir++ {
+		//var adjacentP = here + Point(k.Board.Direction[dir]) // 隣接する交点
 	}
 }
 
