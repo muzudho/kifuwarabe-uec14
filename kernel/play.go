@@ -57,6 +57,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 		onForbiddenMyEye)
 
 	if isOk {
+		k.Record.Push(point) // 棋譜に追加
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 	}
