@@ -147,10 +147,14 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "record": // [O1o1o0g12o__11o_5o0]
 		// Example: "record"
 		var sb strings.Builder
-		for i := 0; i < k.Record.current; i++ {
-			var point = k.Record.points[i]
-			sb.WriteString(fmt.Sprintf("%d.%s ", i, k.Board.GetCodeFromPoint(point)))
+
+		var setPoint = func(i int, point Point) {
+			var ordinals = i + 1 // 基数を序数に変換
+			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, k.Board.GetCodeFromPoint(point)))
 		}
+
+		k.Record.Foreach(setPoint)
+
 		var text = sb.String()
 		text = text[:len(text)-1]
 		logg.C.Infof("= record:'%s'\n", text)

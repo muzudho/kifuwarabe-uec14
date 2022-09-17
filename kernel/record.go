@@ -36,4 +36,11 @@ func (r *Record) Pop(placePlay Point) Point {
 	return tail
 }
 
+// Foreach - 各要素
+func (r *Record) Foreach(setPoint func(int, Point)) {
+	for i := 0; i < r.current; i++ {
+		setPoint(i, r.points[i])
+	}
+}
+
 // EOF [O1o1o0g12o__11o_2o0]

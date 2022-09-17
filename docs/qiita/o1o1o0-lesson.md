@@ -1938,6 +1938,13 @@ func (r *Record) Pop(placePlay Point) Point {
 	return tail
 }
 
+// Foreach - 各要素
+func (r *Record) Foreach(setPoint func(int, Point)) {
+	for i := 0; i < r.current; i++ {
+		setPoint(i, r.points[i])
+	}
+}
+
 // EOF [O1o1o0g12o__11o_2o0]
 ```
 
@@ -2048,10 +2055,13 @@ func (r *Record) Pop(placePlay Point) Point {
 	case "record": // [O1o1o0g12o__11o_5o0]
 		// Example: "record"
 		var sb strings.Builder
-		for i := 0; i < k.Record.current; i++ {
-			var point = k.Record.points[i]
+
+		var setPoint = func(i int, point Point) {
 			sb.WriteString(fmt.Sprintf("%d.%s ", i, k.Board.GetCodeFromPoint(point)))
 		}
+
+		k.Record.Foreach(setPoint)
+
 		var text = sb.String()
 		text = text[:len(text)-1]
 		logg.C.Infof("= record:'%s'\n", text)
@@ -2092,8 +2102,8 @@ record
 Output > Console:  
 
 ```plaintext
-[2022-09-17 18:55:26]   # record
-[2022-09-17 18:55:26]   = record:'0.A1 1.B2 2.C3 3.D4 4.E5'
+[2022-09-17 19:05:16]   # record
+[2022-09-17 19:05:16]   = record:'[1]A1 [2]B2 [3]C3 [4]D4 [5]E5'
 ```
 
 # Step [O1o1o0g12o__11o0] 盤定義（土台）
