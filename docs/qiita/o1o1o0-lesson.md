@@ -818,10 +818,10 @@ func main() {
 	// ---------------------------
 
 	// [O1o1o0g11o__10o3o0] ログファイル
-	var plainTextLogFile, _ = os.OpenFile(engineConfig.PlainTextLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	var plainTextLogFile, _ = os.OpenFile(engineConfig.GetPlainTextLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer plainTextLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// ログファイル
-	var jsonLogFile, _ = os.OpenFile(engineConfig.JsonLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	var jsonLogFile, _ = os.OpenFile(engineConfig.GetJsonLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
 	var logg = kernel.NewSugaredLoggerForGame(plainTextLogFile, jsonLogFile) // customized LOGGer
