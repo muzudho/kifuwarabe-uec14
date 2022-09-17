@@ -22,14 +22,27 @@ type Kernel struct {
 
 	// CanNotPutOnMyEye - [O1o1o0g22o4o1o0] 自分の眼に石を置くことはできません
 	CanNotPutOnMyEye bool
+
+	// Record - [O1o1o0g12o__11o_3o0] 棋譜
+	Record Record
+
+	// Ko - [O1o1o0g22o7o1o0] コウの位置
+	Ko Point
 }
 
-func NewKernel() *Kernel {
+// NewKernel - カーネルの新規作成
+func NewKernel(
+	// [O1o1o0g12o__11o_2o0] 棋譜のサイズ
+	maxMoves int) *Kernel {
+
 	var k = new(Kernel)
 	k.Board = NewBoard()
 
 	// [O1o1o0g22o2o3o0]
 	k.CheckBoard = NewCheckBoard()
+
+	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
+	k.Record = *NewRecord(maxMoves)
 
 	return k
 }

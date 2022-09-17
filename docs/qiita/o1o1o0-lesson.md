@@ -500,30 +500,30 @@ type Config struct {
 	Paths Paths
 }
 
-// BoardSize - 何路盤か
-func (c *Config) BoardSize() int {
+// GetBoardSize - 何路盤か
+func (c *Config) GetBoardSize() int {
 	return int(c.Game.BoardSize)
 }
 
-// Komi - コミ
+// GetKomi - コミ
 //
 // * float 32bit で足りるが、実行速度優先で float 64bit に変換して返す
-func (c *Config) Komi() float64 {
+func (c *Config) GetKomi() float64 {
 	return float64(c.Game.Komi)
 }
 
-// MaxMovesNum - 最大手数
-func (c *Config) MaxMovesNum() int {
+// GetMaxMovesNum - 最大手数
+func (c *Config) GetMaxMovesNum() int {
 	return int(c.Game.MaxMoves)
 }
 
-// PlainTextLog - PlainTextLog - コンソールのより詳細なログ
-func (c *Config) PlainTextLog() string {
+// GetPlainTextLog - PlainTextLog - コンソールのより詳細なログ
+func (c *Config) GetPlainTextLog() string {
 	return c.Paths.PlainTextLog
 }
 
-// JsonLog - コンピューター向けのログ
-func (c *Config) JsonLog() string {
+// GetJsonLog - コンピューター向けのログ
+func (c *Config) GetJsonLog() string {
 	return c.Paths.JsonLog
 }
 
@@ -1071,6 +1071,7 @@ type Kernel struct {
 	Board *Board
 }
 
+// NewKernel - カーネルの新規作成
 func NewKernel() *Kernel {
 	var k = new(Kernel)
 	k.Board = NewBoard()
@@ -1136,7 +1137,7 @@ import (
 		// [O1o1o0g11o_3o0]
 		var kernel1 = kernel.NewKernel()
 		// 設定ファイルの内容をカーネルへ反映
-		kernel1.Board.Init(engineConfig.BoardSize(), engineConfig.BoardSize())
+		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 
 		/*
 		...以下略...
@@ -1493,7 +1494,7 @@ Input:
 go mod tidy
 ```
 
-# Step [O1o1o0g12o__10o0] 盤座標符号定義
+# Step [O1o1o0g12o__10o0] 点定義、またはその盤座標符号定義
 
 盤を作る前に、これから盤座標符号を定義する  
 
@@ -1838,6 +1839,127 @@ Output > Log > JSON:
 ```json
 {"level":"info","ts":"2022-09-13T23:58:42.781+0900","caller":"kifuwarabe-uec14/main.go:76","msg":"input","command":"test_y 18"}
 {"level":"info","ts":"2022-09-13T23:58:42.782+0900","caller":"kernel/kernel.go:128","msg":"output","rank":"19"}
+```
+
+# Step [O1o1o0g12o__11o_1o0] 棋譜定義
+
+## Step [O1o1o0g12o__11o_2o0] ファイル作成 - record.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+👉	│	├── 📄 record.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g12o__11o_2o0]
+
+package kernel
+
+// Record - 棋譜
+type Record struct {
+	// 先行
+	playFirst []Stone
+
+	// 着手点
+	points []Point
+}
+
+// NewRecord - 棋譜の新規作成
+func NewRecord(maxMoves int) *Record {
+	var r = new(Record)
+	r.playFirst = make([]Stone, maxMoves)
+	r.points = make([]Point, maxMoves)
+	return r
+}
+
+// EOF [O1o1o0g12o__11o_2o0]
+```
+
+## Step [O1o1o0g12o__11o_3o0] ファイル編集 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+	│	├── 📄 record.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// type Kernel struct {
+	// ...略...
+
+	// Record - [O1o1o0g12o__11o_3o0] 棋譜
+	Record Record
+
+// }
+
+// NewKernel - カーネルの新規作成
+// func NewKernel(
+	// [O1o1o0g12o__11o_2o0] 棋譜のサイズ
+	maxMoves int//) *Kernel {
+	// ...略...
+
+	// * 以下を追加
+	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
+	k.Record = *NewRecord(maxMoves)
+
+	// ...略...
+	// return k
+// }
+```
+
+## Step [O1o1o0g12o__11o_4o0] ファイル編集 - main.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+	│	├── 📄 record.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉 	└── 📄 main.go
+```
+
+```go
+		// [O1o1o0g11o_3o0]
+		//var kernel1 = kernel.NewKernel(
+			// [O1o1o0g12o__11o_4o0] 棋譜のサイズ
+			engineConfig.GetMaxMovesNum()//)
 ```
 
 # Step [O1o1o0g12o__11o0] 盤定義（土台）
@@ -4223,7 +4345,91 @@ Output > Console:
 [2022-09-17 14:35:58]   =
 ```
 
-TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
+## Step [O1o1o0g22o7o0] コウの禁止 - Ko
+
+自分が１手前に置いたところに２手続けて置けない
+
+### Step [O1o1o0g22o7o1o0] ファイル編集 - kernel.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 board1.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+type Kernel struct {
+	// ...略...
+
+	// Ko - [O1o1o0g22o7o1o0] コウの位置
+	Ko Point
+}
+```
+
+### Step [O1o1o0g22o7o2o0] ファイル編集 - play.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 board1.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+👉 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+
+```
+
 TODO 東、北、西、南に隣接する連の重複を省く
 
 # 参考にした記事

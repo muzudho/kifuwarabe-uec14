@@ -36,30 +36,30 @@ type Config struct {
 	Paths Paths
 }
 
-// BoardSize - 何路盤か
-func (c *Config) BoardSize() int {
+// GetBoardSize - 何路盤か
+func (c *Config) GetBoardSize() int {
 	return int(c.Game.BoardSize)
 }
 
-// Komi - コミ
+// GetKomi - コミ
 //
 // * float 32bit で足りるが、実行速度優先で float 64bit に変換して返す
-func (c *Config) Komi() float64 {
+func (c *Config) GetKomi() float64 {
 	return float64(c.Game.Komi)
 }
 
-// MaxMovesNum - 最大手数
-func (c *Config) MaxMovesNum() int {
+// GetMaxMovesNum - 最大手数
+func (c *Config) GetMaxMovesNum() int {
 	return int(c.Game.MaxMoves)
 }
 
-// PlainTextLog - PlainTextLog - コンソールのより詳細なログ
-func (c *Config) PlainTextLog() string {
+// GetPlainTextLog - PlainTextLog - コンソールのより詳細なログ
+func (c *Config) GetPlainTextLog() string {
 	return c.Paths.PlainTextLog
 }
 
-// JsonLog - コンピューター向けのログ
-func (c *Config) JsonLog() string {
+// GetJsonLog - コンピューター向けのログ
+func (c *Config) GetJsonLog() string {
 	return c.Paths.JsonLog
 }
 

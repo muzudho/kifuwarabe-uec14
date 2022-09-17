@@ -64,9 +64,11 @@ func main() {
 		// fmt.Println("go run . {programName}")
 
 		// [O1o1o0g11o_3o0]
-		var kernel1 = kernel.NewKernel()
+		var kernel1 = kernel.NewKernel(
+			// [O1o1o0g12o__11o_4o0] 棋譜のサイズ
+			engineConfig.GetMaxMovesNum())
 		// 設定ファイルの内容をカーネルへ反映
-		kernel1.Board.Init(engineConfig.BoardSize(), engineConfig.BoardSize())
+		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
 		var scanner = bufio.NewScanner(os.Stdin)
