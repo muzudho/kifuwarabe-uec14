@@ -2419,6 +2419,11 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacentPoint func(int
 			continue
 		}
 
+		// 壁チェック
+		if b.GetStoneAt(adjacentP) == Wall {
+			continue
+		}
+
 		setAdjacentPoint(dir, adjacentP)
 	}
 }
