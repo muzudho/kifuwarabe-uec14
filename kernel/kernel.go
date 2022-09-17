@@ -146,6 +146,18 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		k.DoPlay(command, logg)
 		return true
 
+	case "record": // [O1o1o0g12o__11o_5o0]
+		// Example: "record"
+		var sb strings.Builder
+		for i, point := range k.Record.points {
+			sb.WriteString(fmt.Sprintf("%d.%s ", i, k.Board.GetCodeFromPoint(point)))
+		}
+		var text = sb.String()
+		text = text[:len(text)-1]
+		logg.C.Infof("= record:'%s'\n", text)
+		logg.J.Infow("ok", "record", text)
+		return true
+
 	case "remove_ren": // [O1o1o0g22o5o2o0]
 		// Example: "remove_ren B2"
 		var point = k.Board.GetPointFromCode(tokens[1])

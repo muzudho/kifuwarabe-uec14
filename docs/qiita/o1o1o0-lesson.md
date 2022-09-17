@@ -2011,6 +2011,83 @@ func (r *Record) Pop(placePlay Point) Point {
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
 ```
 
+### Step [O1o1o0g12o__11o_5o0] コマンド実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+	│	├── 📄 record.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+	// ...略...
+	// この下にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "record": // [O1o1o0g12o__11o_5o0]
+		// Example: "record"
+		var sb strings.Builder
+		for i, point := range k.Record.points {
+			sb.WriteString(fmt.Sprintf("%d.%s ", i, k.Board.GetCodeFromPoint(point)))
+		}
+		var text = sb.String()
+		text = text[:len(text)-1]
+		logg.C.Infof("= record:'%s'\n", text)
+		logg.J.Infow("ok", "record", text)
+		return true
+
+	// ...略...
+	// この上にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+```
+
+## Step [O1o1o0g12o__11o_6o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+play black A1
+play black B2
+play black C3
+play black D4
+play black E5
+```
+
+Output > Console:  
+
+```plaintext
+```
+
 # Step [O1o1o0g12o__11o0] 盤定義（土台）
 
 これから盤を作っていく前に、土台を作る  
