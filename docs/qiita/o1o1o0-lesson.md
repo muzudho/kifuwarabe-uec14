@@ -2131,7 +2131,8 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 		var setPoint = func(i int, item *RecordItem) {
 			var ordinals = i + 1 // 基数を序数に変換
-			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, k.Board.GetCodeFromPoint(item.placePlay)))
+			var coord = k.Board.GetCodeFromPoint(item.placePlay)
+			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, coord))
 		}
 
 		k.Record.ForeachItem(setPoint)
@@ -4861,7 +4862,9 @@ Output > Console:
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 data
- 	│	└── 📄 board1.txt
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+ 	│	└── 📄 board3.txt
 	├── 📂 kernel
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
@@ -4878,6 +4881,8 @@ Output > Console:
  	│	├── 📄 masonry.go
 👉 	│	├── 📄 play.go
  	│	├── 📄 point.go
+ 	│	├── 📄 record_item.go
+ 	│	├── 📄 record.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -4973,7 +4978,82 @@ Output > Console:
 
 ```
 
-### Step [O1o1o0g22o7o3o0] 動作確認
+### Step [O1o1o0g22o7o4o0] コマンド編集 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+ 	│	└── 📄 board3.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 record_item.go
+ 	│	├── 📄 record.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+	// ...略...
+	// この下にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	// case "record": // [O1o1o0g12o__11o_5o0]
+		// ...略...
+
+		// var setPoint = func(i int, item *RecordItem) {
+			// var ordinals = i + 1 // 基数を序数に変換
+			// var coord = k.Board.GetCodeFromPoint(item.placePlay)
+
+			// * 以下を削除
+			// sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, coord))
+
+			// * 以下を追加
+			// [O1o1o0g22o7o4o0] コウを追加
+			var koStr string
+			if item.ko == Point(0) {
+				koStr = ""
+			} else {
+				koStr = fmt.Sprintf("(%s)", k.Board.GetCodeFromPoint(item.ko))
+			}
+			sb.WriteString(fmt.Sprintf("[%d]%s%s ", ordinals, coord, koStr))
+		// }
+		// ...略...
+
+	// ...略...
+	// この上にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+```
+
+### Step [O1o1o0g22o7o4o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 

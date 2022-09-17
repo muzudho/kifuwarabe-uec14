@@ -147,7 +147,17 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 		var setPoint = func(i int, item *RecordItem) {
 			var ordinals = i + 1 // 基数を序数に変換
-			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, k.Board.GetCodeFromPoint(item.placePlay)))
+			var coord = k.Board.GetCodeFromPoint(item.placePlay)
+			// sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, coord))
+
+			// [O1o1o0g22o7o4o0] コウを追加
+			var koStr string
+			if item.ko == Point(0) {
+				koStr = ""
+			} else {
+				koStr = fmt.Sprintf("(%s)", k.Board.GetCodeFromPoint(item.ko))
+			}
+			sb.WriteString(fmt.Sprintf("[%d]%s%s ", ordinals, coord, koStr))
 		}
 
 		k.Record.ForeachItem(setPoint)
