@@ -4742,9 +4742,19 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	// [O1o1o0g22o6o1o0]
 	var isExists bool
 	var rensToRemove [4]*Ren
+	var renIds = [4]Point{math.MaxInt, math.MaxInt, math.MaxInt, math.MaxInt}
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		var adjacentR = k.GetLiberty(adjacentP)
+
+		// 同じ連を数え上げるのを防止する
+		var renId = adjacentR.GetMinimumLocation()
+		for i := 0; i < dir; i++ {
+			if renIds[i] == renId { // Idが既存
+				return
+			}
+		}
+		
 		if adjacentR.LibertyArea < 1 {
 			isExists = true
 			rensToRemove[dir] = adjacentR
