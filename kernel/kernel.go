@@ -133,6 +133,15 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		k.DoPlay(command, logg)
 		return true
 
+	case "remove_ren": // [O1o1o0g22o5o2o0]
+		// Example: "remove_ren B2"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		var ren = k.GetLiberty(point)
+		k.RemoveRen(ren)
+		logg.C.Infof("=\n")
+		logg.J.Infow("ok")
+		return true
+
 	case "set_board": // [O1o1o0g15o__14o2o0]
 		// Example: `set_board file data/board1.txt`
 		k.DoSetBoard(command, logg)

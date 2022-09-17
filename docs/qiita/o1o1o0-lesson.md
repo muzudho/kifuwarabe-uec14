@@ -930,7 +930,7 @@ Output:
 
 # Step [O1o1o0g11o__10o0] インタープリター 作成
 
-## Step [O1o1o0g11o_1o0] コマンド実装 ⊃ ファイル編集 ⊃ main.go
+## Step [O1o1o0g11o_1o0] コマンド実装 - ファイル編集 - main.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3870,6 +3870,145 @@ Output > Console:
 ```
 
 ## Step [O1o1o0g22o5o0] 任意の連の打ち上げ - RemoveRen 関数作成
+
+### Step [O1o1o0g22o5o1o0] ファイル作成 - kernel_facade.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 board1.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+👉 	│	├── 📄 kernel_facade.go
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g22o5o1o0]
+
+package kernel
+
+// RemoveRen - 石の連を打ち上げます
+func (k *Kernel) RemoveRen(ren *Ren) {
+	for _, point := range ren.Elements {
+		k.Board.SetStoneAt(point, Space)
+	}
+}
+
+// EOF [O1o1o0g22o5o1o0]
+```
+
+### Step [O1o1o0g22o5o2o0] コマンド実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 board1.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+// ...略...
+
+
+	// この下にコマンドを挟んでいく
+	// -------------------------
+
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "remove_ren": // [O1o1o0g22o5o2o0]
+		// Example: "remove_ren B2"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		var ren = k.GetLiberty(point)
+		k.RemoveRen(ren)
+		logg.C.Infof("=\n")
+		logg.J.Infow("ok")
+		return true
+
+	// この上にコマンドを挟んでいく
+	// -------------------------
+
+
+// ...略...
+```
+
+### Step [O1o1o0g22o5o3o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+set_board file data/board1.txt
+remove_ren B2
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-17 09:11:48]   # remove_ren B2
+[2022-09-17 09:11:48]   =
+```
 
 TODO 死に石の連の打ち上げ
 TODO コウの禁止（自分が１手前に置いたところに２手続けて置けない）
