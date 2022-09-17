@@ -1715,7 +1715,7 @@ func GetRankFromCode(code string) string {
 // ...略...
 ```
 
-## Step [O1o1o0g12o__10o3o0] 実行
+## Step [O1o1o0g12o__10o3o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -2011,7 +2011,7 @@ func (r *Record) Pop(placePlay Point) Point {
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
 ```
 
-### Step [O1o1o0g12o__11o_5o0] コマンド実装 - kernel.go ファイル
+## Step [O1o1o0g12o__11o_5o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3002,7 +3002,7 @@ board
 
 Moved to `[O1o1o0g12o__10o1o0]`  
 
-## Step [O1o1o0g16o0] 座標の算出
+## Step [O1o1o0g16o0] ファイル作成 - board_coord.go ファイル
 
 👇 以下の既存ファイルを新規作成してほしい  
 
@@ -3053,6 +3053,77 @@ func (b *Board) GetCodeFromPoint(point Point) string {
 }
 
 // EOF [O1o1o0g16o0]
+```
+
+### Step [O1o1o0g16o1o0] コマンド実装 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 board_coord.go
+  	│	├── 📄 board_area.go
+  	│	├── 📄 board.go
+	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+	// ...略...
+	// この下にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "test_get_point_from_code": // [O1o1o0g16o1o0]
+		// Example: "test_get_point_from_code A1"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		logg.C.Infof("= %d", point)
+		logg.J.Infow("ok", "point", point)
+		return true
+
+	// ...略...
+	// この上にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+```
+
+## Step [O1o1o0g16o2o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+test_get_point_from_code A1
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-17 17:09:41]   # test_get_point_from_code A1
+[2022-09-17 17:09:41]   = 22
 ```
 
 ## ~~Step [O1o1o0g17o0]~~

@@ -194,6 +194,13 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		logg.J.Infow("output ren", "color", ren.Color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.AdjacentColor)
 		return true
 
+	case "test_get_point_from_code": // [O1o1o0g16o1o0]
+		// Example: "test_get_point_from_code A1"
+		var point = k.Board.GetPointFromCode(tokens[1])
+		logg.C.Infof("= %d", point)
+		logg.J.Infow("ok", "point", point)
+		return true
+
 	case "test_get_point_from_xy": // [O1o1o0g12o__11o2o0]
 		// Example: "test_get_point_from_xy 2 3"
 		var x, errX = strconv.Atoi(tokens[1])
