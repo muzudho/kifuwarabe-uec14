@@ -23,9 +23,6 @@ type Kernel struct {
 
 	// Record - [O1o1o0g12o__11o_3o0] 棋譜
 	Record Record
-
-	// Ko - [O1o1o0g22o7o1o0] コウの位置
-	Ko Point
 }
 
 // NewKernel - カーネルの新規作成

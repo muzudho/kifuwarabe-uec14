@@ -12,6 +12,9 @@ type Record struct {
 
 	// 現在位置
 	current int
+
+	// ko - [O1o1o0g22o7o1o0] コウの位置
+	ko []Point
 }
 
 // NewRecord - 棋譜の新規作成
@@ -19,12 +22,27 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 	var r = new(Record)
 	r.playFirst = playFirst
 	r.points = make([]Point, maxMoves)
+
+	// [O1o1o0g22o7o1o0] コウの位置
+	r.ko = make([]Point, maxMoves)
+
 	return r
 }
 
+// GetCurrent - 現在位置
+func (r *Record) GetCurrent() int {
+	return r.current
+}
+
 // Push - 末尾に追加
-func (r *Record) Push(placePlay Point) {
+func (r *Record) Push(placePlay Point,
+	// [O1o1o0g22o7o1o0] コウの位置
+	ko Point) {
 	r.points[r.current] = placePlay
+
+	// [O1o1o0g22o7o1o0] コウの位置
+	r.ko[r.current] = ko
+
 	r.current++
 }
 

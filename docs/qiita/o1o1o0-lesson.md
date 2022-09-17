@@ -1924,6 +1924,11 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 	return r
 }
 
+// GetCurrent - 現在位置
+func (r *Record) GetCurrent() int {
+	return r.current
+}
+
 // Push - 末尾に追加
 func (r *Record) Push(placePlay Point) {
 	r.points[r.current] = placePlay
@@ -3233,7 +3238,6 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 		onMasonry)
 
 	if isOk {
-		k.Record.Push(point) // 棋譜に追加
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 	}
@@ -3256,6 +3260,8 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 
 	// 石を置く
 	k.Board.SetStoneAt(pointB, stoneA)
+
+	k.Record.Push(pointB) // 棋譜に追加
 
 	return true
 }
@@ -4037,7 +4043,6 @@ Output > Log > JSON:
 		onOpponentEye//)
 //
 //	if isOk {
-//		k.Record.Push(point)
 //		logg.C.Info("=\n")
 //		logg.J.Infow("ok")
 //	}
@@ -4167,7 +4172,6 @@ Output > Console:
 		onForbiddenMyEye//)
 //
 //	if isOk {
-//		k.Record.Push(point)
 //		logg.C.Info("=\n")
 //		logg.J.Infow("ok")
 //	}
@@ -4555,8 +4559,9 @@ Output > Console:
 	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
 	if isExists4rensToRemove {
 		for dir := 0; dir < 4; dir++ {
-			if o4rensToRemove[dir] != nil {
-				k.RemoveRen(o4rensToRemove[dir])
+			var ren = o4rensToRemove[dir]
+			if ren != nil {
+				k.RemoveRen(ren)
 			}
 		}
 	}
@@ -4623,7 +4628,7 @@ Output > Console:
 
 自分が１手前に置いたところに２手続けて置けない
 
-### Step [O1o1o0g22o7o1o0] ファイル編集 - kernel.go
+### Step [O1o1o0g22o7o1o0] ファイル編集 - record.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -4641,12 +4646,13 @@ Output > Console:
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel_facade.go
-👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 kernel.go
  	│	├── 📄 liberty.go
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
  	│	├── 📄 point.go
+👉	│	├── 📄 record.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -4658,12 +4664,36 @@ Output > Console:
 ```
 
 ```go
-type Kernel struct {
+// type Record struct {
 	// ...略...
 
-	// Ko - [O1o1o0g22o7o1o0] コウの位置
-	Ko Point
-}
+	// ko - [O1o1o0g22o7o1o0] コウの位置
+	ko []Point
+// }
+// ...略...
+
+// NewRecord - 棋譜の新規作成
+// func NewRecord(maxMoves int, playFirst Stone) *Record {
+	// ...略...
+
+	// [O1o1o0g22o7o1o0] コウの位置
+	r.points = make([]Point, maxMoves)
+
+	// return r
+// }
+
+// Push - 末尾に追加
+// func (r *Record) Push(placePlay Point,
+	// [O1o1o0g22o7o1o0] コウの位置
+	ko Point//) {
+
+	// r.points[r.current] = placePlay
+
+	// [O1o1o0g22o7o1o0] コウの位置
+	r.ko[r.current] = ko
+
+	// r.current++
+// }
 ```
 
 ### Step [O1o1o0g22o7o2o0] ファイル編集 - play.go
@@ -4701,6 +4731,32 @@ type Kernel struct {
 ```
 
 ```go
+	// * 以下を追加
+	// [O1o1o0g22o7o2o0] コウの判定
+	var ko Point = Point(0)
+
+//	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
+//	if isExists4rensToRemove {
+//		for dir := 0; dir < 4; dir++ {
+//			var ren = o4rensToRemove[dir]
+//			if ren != nil {
+//				k.RemoveRen(ren)
+
+				// * 以下を追加
+				// [O1o1o0g22o7o2o0] コウの判定
+				if ren.LibertyArea == 1 && 1 <= k.Record.GetCurrent() {
+					ko = ren.Elements[0]
+				}
+
+//			}
+//		}
+//	}
+
+	// 棋譜に追加
+	//k.Record.Push(pointB,
+		// * 以下を追加
+		// [O1o1o0g22o7o2o0] コウの判定
+		ko//)
 
 ```
 

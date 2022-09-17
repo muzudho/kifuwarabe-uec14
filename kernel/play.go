@@ -57,7 +57,6 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 		onForbiddenMyEye)
 
 	if isOk {
-		k.Record.Push(point) // 棋譜に追加
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 	}
@@ -122,14 +121,28 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 		isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 	}
 
+	// [O1o1o0g22o7o2o0] コウの判定
+	var ko Point = Point(0)
+
 	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
 	if isExists4rensToRemove {
 		for dir := 0; dir < 4; dir++ {
-			if o4rensToRemove[dir] != nil {
-				k.RemoveRen(o4rensToRemove[dir])
+			var ren = o4rensToRemove[dir]
+			if ren != nil {
+				k.RemoveRen(ren)
+
+				// [O1o1o0g22o7o2o0] コウの判定
+				if ren.LibertyArea == 1 && 1 <= k.Record.GetCurrent() {
+					ko = ren.Elements[0]
+				}
 			}
 		}
 	}
+
+	// 棋譜に追加
+	k.Record.Push(pointB,
+		// [O1o1o0g22o7o2o0] コウの判定
+		ko)
 
 	return true
 }
