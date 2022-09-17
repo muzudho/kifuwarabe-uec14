@@ -1345,13 +1345,25 @@ type Ren struct {
 	AdjacentColor Color
 	// LibertyArea - 呼吸点の面積
 	LibertyArea int
-	// Elements - 要素の石の位置
-	Elements []Point
+	// locations - 要素の石の位置
+	locations []Point
 }
 
 // GetArea - 面積。アゲハマの数
 func (r *Ren) GetArea() int {
-	return len(r.Elements)
+	return len(r.locations)
+}
+
+// AddLocation - 場所の追加
+func (r *Ren) AddLocation(location Point) {
+	r.locations = append(r.locations, location)
+}
+
+// ForeachLocation - 場所毎に
+func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
+	for i, point := range r.locations {
+		setLocation(i, point)
+	}
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
@@ -3967,7 +3979,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 // 再帰関数。連の探索
 func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
-	k.Ren.Elements = append(k.Ren.Elements, here)
+	k.Ren.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
@@ -4502,9 +4514,13 @@ package kernel
 
 // RemoveRen - 石の連を打ち上げます
 func (k *Kernel) RemoveRen(ren *Ren) {
-	for _, point := range ren.Elements {
-		k.Board.SetStoneAt(point, Space)
+	// 空点をセット
+	var setLocation = func(i int, location Point) {
+		k.Board.SetStoneAt(location, Space)
 	}
+
+	// 場所毎に
+	ren.ForeachLocation(setLocation)
 }
 
 // EOF [O1o1o0g22o5o1o0]
@@ -5097,6 +5113,7 @@ play black D3
 ```
 
 TODO 東、北、西、南に隣接する連の重複を省く
+TODO アンドゥ
 
 # 参考にした記事
 

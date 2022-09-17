@@ -25,7 +25,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 // 再帰関数。連の探索
 func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
-	k.Ren.Elements = append(k.Ren.Elements, here)
+	k.Ren.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
