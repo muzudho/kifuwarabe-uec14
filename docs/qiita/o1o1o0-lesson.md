@@ -1926,6 +1926,117 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-13T23:58:42.782+0900","caller":"kernel/kernel.go:128","msg":"output","rank":"19"}
 ```
 
+# Step [O1o1o0g12o__11o__100o0] データファイル作成 - data/ren_db1.json ファイル
+
+あとで使うファイルを先に作成する  
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+👉 	│	└── 📄 ren_db1.json
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```plaintext
+{
+    "header": {
+        "boardWidth": 19,
+        "boardHeight": 19
+    },
+    "payload": {
+        "1,A1": {
+            "posNth": 1,
+            "locate": "A1 B2 C3 D4"
+        }
+    }
+}
+```
+
+# Step [O1o1o0g12o__11o__101o0] 連データベース出力ファイル定義 - ren_db_doc.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	└── 📄 ren_db1.json
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+👉 	│	├── 📄 ren_db_doc.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g12o__11o__101o0]
+
+package kernel
+
+import (
+	"encoding/json"
+	"os"
+)
+
+// LoadRenDbDoc - 連データベースの外部ファイル読取
+func LoadRenDbDoc(path string, onError func(error) *RenDbDoc) *RenDbDoc {
+	// ファイル読込
+	var fileData, err = os.ReadFile(path)
+	if err != nil {
+		return onError(err)
+	}
+
+	var renDbDoc = new(RenDbDoc)
+	json.Unmarshal(fileData, renDbDoc)
+
+	return renDbDoc
+}
+
+// RenDbDoc - 連データベースの外部ファイル
+type RenDbDoc struct {
+	// Header - ヘッダー
+	Header RenDbDocHeader
+	// Rens - 連のハッシュテーブル
+	Rens map[string]*RenDbDocRen
+}
+
+// RenDbDocHeader - ヘッダー
+type RenDbDocHeader struct {
+	// BoardWidth - 盤の横幅
+	BoardWidth int
+	// BoardHeight - 盤の縦幅
+	BoardHeight int
+}
+
+// RenDbDocRen - 連の要素
+type RenDbDocRen struct {
+	// PosNth - 何手目。序数
+	PosNth int
+	// Locate - 座標符号の空白区切りリスト
+	Locate string
+}
+
+// EOF [O1o1o0g12o__11o__101o0]
+```
+
 # Step [O1o1o0g12o__11o__10o0] 連データベース定義
 
 取った石の場所を記憶しておく構造を作成する  
@@ -2180,21 +2291,9 @@ dump_ren_db
 Output > Console:  
 
 ```plaintext
-set_board file data/board3.txt
-[2022-09-17 22:39:55]   # set_board file data/board3.txt
-[2022-09-17 22:39:55]   =
-
-play black D3
-[2022-09-17 22:39:55]   # play black D3
-[2022-09-17 22:39:55]   =
-
-play white C3
-[2022-09-17 22:39:55]   # play white C3
-[2022-09-17 22:39:55]   =
-
-play black D3
-[2022-09-17 22:39:55]   # play black D3
-[2022-09-17 22:39:55]   ? ko my_stone:x point:D3
+dump_ren_db
+[2022-09-18 17:08:29]   # dump_ren_db
+[2022-09-18 17:08:29]   = dump'''
 ```
 
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義
@@ -5549,6 +5648,10 @@ TODO アンドゥ
 ### ファイル入出力
 
 📖 [Read a file in Go](https://gosamples.dev/read-file/#:~:text=The%20simplest%20way%20of%20reading,by%20line%20or%20in%20chunks.)  
+
+### JSON
+
+📖 [Goにおけるjsonの扱い方を整理・考察してみた ~ データスキーマを添えて](https://zenn.dev/hsaki/articles/go-convert-json-struct)  
 
 ### コレクション
 
