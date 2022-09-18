@@ -145,12 +145,6 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			return true
 		}
 
-	case "dump_ren_db": // [O1o1o0g12o__11o__10o4o0]
-		var text = k.renDb.Dump()
-		logg.C.Infof("= dump'''%s\n'''\n", text)
-		logg.J.Infow("ok", "dump", text)
-		return true
-
 	case "play": // [O1o1o0g20o0]
 		// Example: `play black A19`
 		k.DoPlay(command, logg)
@@ -193,6 +187,26 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		logg.C.Infof("=\n")
 		logg.J.Infow("ok")
 		return true
+
+	case "rendb_dump": // [O1o1o0g12o__11o__10o4o0]
+		var text = k.renDb.Dump()
+		logg.C.Infof("= dump'''%s\n'''\n", text)
+		logg.J.Infow("ok", "dump", text)
+		return true
+
+	case "rendb_save": // [O1o1o0g12o__11o__10o4o0]
+		var onError = func(err error) bool {
+			logg.C.Infof("? error:%s\n", err)
+			logg.J.Infow("error", "err", err)
+			return false
+		}
+		var isOk = k.renDb.Save("data/ren_db_temp1.json", onError)
+		if isOk {
+			logg.C.Infof("=\n")
+			logg.J.Infow("ok")
+			return true
+		}
+		return false
 
 	case "set_board": // [O1o1o0g15o__14o2o0]
 		// Example: `set_board file data/board1.txt`

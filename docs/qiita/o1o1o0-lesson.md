@@ -2035,22 +2035,22 @@ type RenDb struct {
 }
 
 // Save - 連データベースの外部ファイル書込
-func Save(path string, renDb *RenDb, onError func(error)) {
+func (db *RenDb) Save(path string, onError func(error) bool) bool {
 
 	// Marshal関数でjsonエンコード
 	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
-	jsonBinary, errA := json.Marshal(renDb)
+	jsonBinary, errA := json.Marshal(db)
 	if errA != nil {
-		fmt.Println(errA)
-		return
+		return onError(errA)
 	}
 
 	// ファイル読込
 	var errB = os.WriteFile(path, jsonBinary, 0664)
 	if errB != nil {
-		onError(errB)
-		return
+		return onError(errB)
 	}
+
+	return true
 }
 
 // Load - 連データベースの外部ファイル読取
@@ -2204,11 +2204,25 @@ func (h *RenDbDocHeader) GetBoardMemoryArea() int {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "dump_ren_db": // [O1o1o0g12o__11o__10o4o0]
+	case "rendb_dump": // [O1o1o0g12o__11o__10o4o0]
 		var text = k.renDb.Dump()
 		logg.C.Info("= dump'''%s\n'''\n", text)
 		logg.J.Infow("ok", "dump", text)
 		return true
+
+	case "rendb_save": // [O1o1o0g12o__11o__10o4o0]
+		var onError = func(err error) bool {
+			logg.C.Infof("? error:%s\n", err)
+			logg.J.Infow("error", "err", err)
+			return false
+		}
+		var isOk = k.renDb.Save("data/ren_db_temp1.json", onError)
+		if isOk {
+			logg.C.Infof("=\n")
+			logg.J.Infow("ok")
+			return true
+		}
+		return false
 
 	// ...略...
 	// この上にコマンドを挟んでいく
@@ -2233,15 +2247,31 @@ go run .
 Input:  
 
 ```shell
-dump_ren_db
+rendb_dump
 ```
 
 Output > Console:  
 
 ```plaintext
-dump_ren_db
-[2022-09-18 17:08:29]   # dump_ren_db
+rendb_dump
+[2022-09-18 17:08:29]   # rendb_dump
 [2022-09-18 17:08:29]   = dump'''
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+rendb_save
+```
+
+Output > Console:  
+
+```plaintext
+rendb_save
+[2022-09-18 20:59:43]   # rendb_save
+[2022-09-18 20:59:43]   =
 ```
 
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義

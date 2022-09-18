@@ -26,22 +26,22 @@ type RenDb struct {
 }
 
 // Save - 連データベースの外部ファイル書込
-func Save(path string, renDb *RenDb, onError func(error)) {
+func (db *RenDb) Save(path string, onError func(error) bool) bool {
 
 	// Marshal関数でjsonエンコード
 	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
-	jsonBinary, errA := json.Marshal(renDb)
+	jsonBinary, errA := json.Marshal(db)
 	if errA != nil {
-		fmt.Println(errA)
-		return
+		return onError(errA)
 	}
 
 	// ファイル読込
 	var errB = os.WriteFile(path, jsonBinary, 0664)
 	if errB != nil {
-		onError(errB)
-		return
+		return onError(errB)
 	}
+
+	return true
 }
 
 // Load - 連データベースの外部ファイル読取
