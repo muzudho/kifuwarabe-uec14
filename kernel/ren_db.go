@@ -44,21 +44,21 @@ func (db *RenDb) Save(path string, onError func(error) bool) bool {
 	return true
 }
 
-// Load - 連データベースの外部ファイル読取
-func Load(path string, onError func(error) *RenDb) *RenDb {
+// LoadRenDb - 連データベースの外部ファイル読取
+func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 	// ファイル読込
-	var binary, err = os.ReadFile(path)
-	if err != nil {
-		return onError(err)
+	var binary, errA = os.ReadFile(path)
+	if errA != nil {
+		return onError(errA)
 	}
 
 	var renDb = new(RenDb)
 	var errB = json.Unmarshal(binary, renDb)
 	if errB != nil {
-		return onError(err)
+		return onError(errB)
 	}
 
-	return renDb
+	return renDb, true
 }
 
 // NewRenDb - 連データベースを新規作成

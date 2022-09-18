@@ -194,6 +194,24 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		logg.J.Infow("ok", "dump", text)
 		return true
 
+	case "rendb_load": // [O1o1o0g12o__11o__10o4o0]
+		// Example: `rendb_load data/ren_db_temp1.json`
+		// * ファイルパスにスペースがはいっていてはいけない
+		var path = tokens[1]
+		var onError = func(err error) (*RenDb, bool) {
+			logg.C.Infof("? error:%s\n", err)
+			logg.J.Infow("error", "err", err)
+			return nil, false
+		}
+		var renDb, isOk = LoadRenDb(path, onError)
+		if isOk {
+			k.renDb = renDb
+			logg.C.Infof("=\n")
+			logg.J.Infow("ok")
+			return true
+		}
+		return false
+
 	case "rendb_save": // [O1o1o0g12o__11o__10o4o0]
 		// Example: `rendb_save data/ren_db_temp1.json`
 		// * ファイルパスにスペースがはいっていてはいけない
