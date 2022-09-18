@@ -18,8 +18,8 @@ type Kernel struct {
 	// [O1o1o0g22o2o3o0]
 	// CheckBoard - 呼吸点の探索時に使います
 	CheckBoard *CheckBoard
-	// Ren - 呼吸点の探索時に使います
-	Ren *Ren
+	// tempRen - 呼吸点の探索時に使います
+	tempRen *Ren
 
 	// CanNotPutOnMyEye - [O1o1o0g22o4o1o0] 自分の眼に石を置くことはできません
 	CanNotPutOnMyEye bool

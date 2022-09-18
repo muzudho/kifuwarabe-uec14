@@ -13,4 +13,12 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	ren.ForeachLocation(setLocation)
 }
 
+// FindAllRens - [O1o1o0g23o_2o1o0] 盤上の全ての連を見つけます
+func (k *Kernel) FindAllRens() {
+	// チェックボードの初期化
+	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+
+	//
+}
+
 // EOF [O1o1o0g22o5o1o0]

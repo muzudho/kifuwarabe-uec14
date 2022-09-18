@@ -2,7 +2,8 @@
 
 package kernel
 
-// GetLiberty - 呼吸点の数え上げ。連の数え上げ
+// GetLiberty - 呼吸点の数え上げ。連の数え上げ。
+// `GetOneRen` とでもいう名前の方がふさわしいが、慣習に合わせた関数名にした
 //
 // Parameters
 // ----------
@@ -10,22 +11,28 @@ package kernel
 func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+
+	return k.getRen(arbitraryPoint)
+}
+
+// 連の取得
+func (k *Kernel) getRen(arbitraryPoint Point) *Ren {
 	// 連の初期化
-	k.Ren = NewRen()
+	k.tempRen = NewRen()
 	// 連の色
-	k.Ren.Color = k.Board.GetColorAt(arbitraryPoint)
+	k.tempRen.Color = k.Board.GetColorAt(arbitraryPoint)
 	// 隣接する連の色
-	k.Ren.AdjacentColor = Color_None
+	k.tempRen.AdjacentColor = Color_None
 
 	k.searchRen(arbitraryPoint)
 
-	return k.Ren
+	return k.tempRen
 }
 
 // 再帰関数。連の探索
 func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
-	k.Ren.AddLocation(here)
+	k.tempRen.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
@@ -36,7 +43,7 @@ func (k *Kernel) searchRen(here Point) {
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		if adjacentS == Space { // 空点
 			k.CheckBoard.Check(adjacentP)
-			k.Ren.LibertyArea++
+			k.tempRen.LibertyArea++
 			return
 		} else if adjacentS == Wall { // 壁
 			return
@@ -44,9 +51,9 @@ func (k *Kernel) searchRen(here Point) {
 
 		var adjacentC = adjacentS.GetColor()
 		// 隣接する色、追加
-		k.Ren.AdjacentColor = k.Ren.AdjacentColor.GetAdded(adjacentC)
+		k.tempRen.AdjacentColor = k.tempRen.AdjacentColor.GetAdded(adjacentC)
 
-		if adjacentC == k.Ren.Color { // 同色の石
+		if adjacentC == k.tempRen.Color { // 同色の石
 			k.searchRen(adjacentP) // 再帰
 		}
 	}

@@ -4003,62 +4003,6 @@ Output > Console:
    +++++++++++++++++++++
 ```
 
-# Step [O1o1o0g22o_3o0] データファイル作成 - data/board4.txt ファイル
-
-あとで使うファイルを先に作成する  
-
-👇 以下のファイルを新規作成してほしい  
-
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 data
- 	│	├── 📄 board1.txt
- 	│	├── 📄 board2.txt
- 	│	├── 📄 board3.txt
-👉 	│	└── 📄 board4.txt
-	├── 📂 kernel
-  	│	├── 📄 board_area.go
-  	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
-	│	├── 📄 go.mod
-	│	├── 📄 go.sum
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
- 	│	├── 📄 set_board.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
- 	├── 📄 engine_config.go
-  	├── 📄 engine.toml
-    ├── 📄 go.mod
-  	├── 📄 go.work
- 	└── 📄 main.go
-```
-
-```plaintext
-     A B C D E F G H J K L M N O P Q R S T
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- 1 + x . x x x . . . . . . . . . x x x . x +
- 2 + . . . . . . . . . . . . . . . . . . . +
- 3 + x . x x x x x . o o o . . . . . . . x +
- 4 + x . x . . . x . o o o x x x . . . . x +
- 5 + x . x . x . x . o o o x o x . . . . x +
- 6 + . . x x x . x . . . . x . x . . . . . +
- 7 + . . . . . . x . . . . x x x . . . . . +
- 8 + . . x x x x x . . . . . . o o o o o . +
- 9 + . . . . . . . . . . . . . o . o . o . +
-10 + o o o o o o o o o o o o o o o o o o o +
-11 + . . . . . . . x . . x . . . . . . . . +
-12 + . . . . . o . x x . x . x x x x x . . +
-13 + . . . . o x o . x x x . x . . . . . . +
-14 + . . . o x . x o . . . . x . x x x . . +
-15 + x . o x . . . x o . . . x . x . x . x +
-16 + x . . o x . x o . . . . x . . . x . x +
-17 + x . . . o x o . . . . . x x x x x . x +
-18 + . . . . . o . . . . . . . . . . . . . +
-19 + x . x x x . . . . . . . . . x x x . x +
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-```
-
 # Step [O1o1o0g22o0] 囲碁の石を打つルールの実装
 
 ## Step [O1o1o0g22o1o0] 空点以外のところ（石または壁の上）に石を置くことの禁止 - IsMasonryError関数作成
@@ -4384,8 +4328,8 @@ func (b *CheckBoard) getMemoryArea() int {
 	// [O1o1o0g22o2o3o0]
 	// CheckBoard - 呼吸点の探索時に使います
 	CheckBoard *CheckBoard
-	// Ren - 呼吸点の探索時に使います
-	Ren *Ren
+	// tempRen - 呼吸点の探索時に使います
+	tempRen *Ren
 //}
 
 // func NewKernel(boardWidht int, boardHeight int) *Kernel {
@@ -4435,7 +4379,8 @@ func (b *CheckBoard) getMemoryArea() int {
 
 package kernel
 
-// GetLiberty - 呼吸点の数え上げ。連の数え上げ
+// GetLiberty - 呼吸点の数え上げ。連の数え上げ。
+// `GetOneRen` とでもいう名前の方がふさわしいが、慣習に合わせた関数名にした
 //
 // Parameters
 // ----------
@@ -4443,22 +4388,28 @@ package kernel
 func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+
+	return k.getRen(arbitraryPoint)
+}
+
+// 連の取得
+func (k *Kernel) getRen(arbitraryPoint Point) *Ren {
 	// 連の初期化
-	k.Ren = NewRen()
+	k.tempRen = NewRen()
 	// 連の色
-	k.Ren.Color = k.Board.GetColorAt(arbitraryPoint)
+	k.tempRen.Color = k.Board.GetColorAt(arbitraryPoint)
 	// 隣接する連の色
-	k.Ren.AdjacentColor = Color_None
+	k.tempRen.AdjacentColor = Color_None
 
 	k.searchRen(arbitraryPoint)
 
-	return k.Ren
+	return k.tempRen
 }
 
 // 再帰関数。連の探索
 func (k *Kernel) searchRen(here Point) {
 	k.CheckBoard.Check(here)
-	k.Ren.AddLocation(here)
+	k.tempRen.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
@@ -4469,7 +4420,7 @@ func (k *Kernel) searchRen(here Point) {
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		if adjacentS == Space { // 空点
 			k.CheckBoard.Check(adjacentP)
-			k.Ren.LibertyArea++
+			k.tempRen.LibertyArea++
 			return
 		} else if adjacentS == Wall { // 壁
 			return
@@ -4477,9 +4428,9 @@ func (k *Kernel) searchRen(here Point) {
 
 		var adjacentC = adjacentS.GetColor()
 		// 隣接する色、追加
-		k.Ren.AdjacentColor = k.Ren.AdjacentColor.GetAdded(adjacentC)
+		k.tempRen.AdjacentColor = k.tempRen.AdjacentColor.GetAdded(adjacentC)
 
-		if adjacentC == k.Ren.Color { // 同色の石
+		if adjacentC == k.tempRen.Color { // 同色の石
 			k.searchRen(adjacentP) // 再帰
 		}
 	}
@@ -5601,7 +5552,132 @@ play black D3
 [2022-09-17 22:39:55]   ? ko my_stone:x point:D3
 ```
 
-## Step [O1o1o0g23o0] 打った石のアンドゥ - Undo
+# Step [O1o1o0g23o_1o0] データファイル作成 - data/board4.txt ファイル
+
+あとで使うファイルを先に作成する  
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+ 	│	├── 📄 board3.txt
+👉 	│	└── 📄 board4.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 record_item.go
+ 	│	├── 📄 record.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```plaintext
+     A B C D E F G H J K L M N O P Q R S T
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 1 + x . x x x . . . . . . . . . x x x . x +
+ 2 + . . . . . . . . . . . . . . . . . . . +
+ 3 + x . x x x x x . o o o . . . . . . . x +
+ 4 + x . x . . . x . o o o x x x . . . . x +
+ 5 + x . x . x . x . o o o x o x . . . . x +
+ 6 + . . x x x . x . . . . x . x . . . . . +
+ 7 + . . . . . . x . . . . x x x . . . . . +
+ 8 + . . x x x x x . . . . . . o o o o o . +
+ 9 + . . . . . . . . . . . . . o . o . o . +
+10 + o o o o o o o o o o o o o o o o o o o +
+11 + . . . . . . . x . . x . . . . . . . . +
+12 + . . . . . o . x x . x . x x x x x . . +
+13 + . . . . o x o . x x x . x . . . . . . +
+14 + . . . o x . x o . . . . x . x x x . . +
+15 + x . o x . . . x o . . . x . x . x . x +
+16 + x . . o x . x o . . . . x . . . x . x +
+17 + x . . . o x o . . . . . x x x x x . x +
+18 + . . . . . o . . . . . . . . . . . . . +
+19 + x . x x x . . . . . . . . . x x x . x +
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+# Step [O1o1o0g23o_2o0] 盤上の連のスキャン
+
+`石を打つ` ことを実装できたなら、呼吸点を調べるアルゴリズムも実装されていて、  
+着手点に隣接する上下左右にある石の連の認識はできているはずだ  
+
+次は、盤面全体に点在する連を認識できるか試したい  
+
+# Step [O1o1o0g23o_2o1o0] ファイル編集 - kernel_facade.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+ 	│	├── 📄 board3.txt
+ 	│	└── 📄 board4.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+👉 	│	├── 📄 kernel_facade.go
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 record_item.go
+ 	│	├── 📄 record.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって以下を追加してほしい  
+
+```go
+// ...略...
+// FindAllRens - [O1o1o0g23o_2o1o0] 盤上の全ての連を見つけます
+func (k *Kernel) FindAllRens() {
+
+}
+// ...略...
+```
+
+# Step [O1o1o0g23o0] 打った石のアンドゥ - Undo
+
+打った石をやっぱり止める、一手戻す、ということは、石を打つよりも実装がむずかしい  
 
 ### Step [O1o1o0g23o1o0] ファイル作成 - play_undo.go
 
