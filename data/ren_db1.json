@@ -6,7 +6,7 @@
     "rens": {
         "1,A1": {
             "posNth": 1,
-            "locate": "A1 B2 C3 D4"
+            "loc": "A1 B2 C3 D4"
         }
     }
 }

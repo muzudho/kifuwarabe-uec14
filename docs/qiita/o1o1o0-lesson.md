@@ -1346,6 +1346,11 @@ import "math"
 
 // Ren - 連，れん
 type Ren struct {
+	// PosNth - 何手目。序数。外部ファイルと入出力するときのみ使う
+	PosNth int
+	// Loc - 石の盤上の座標符号の空白区切りのリスト。ファイルの入出力時のみ使う
+	Loc string
+
 	// Color - 色
 	Color Color
 	// AdjacentColor - 隣接する石の色
@@ -1363,6 +1368,11 @@ func NewRen() *Ren {
 	var r = new(Ren)
 	r.minimumLocation = math.MaxInt
 	return r
+}
+
+// GetPositionNum - 何手目。基数。外部ファイルと入出力するときのみ使う
+func (r *Ren) GetPositionNum() int {
+	return r.PosNth - geta
 }
 
 // GetArea - 面積。アゲハマの数
@@ -1960,7 +1970,7 @@ Output > Log > JSON:
     "payload": {
         "1,A1": {
             "posNth": 1,
-            "locate": "A1 B2 C3 D4"
+            "loc": "A1 B2 C3 D4"
         }
     }
 }
@@ -2032,8 +2042,8 @@ type RenDbDocHeader struct {
 type RenDbDocRen struct {
 	// PosNth - 何手目。序数
 	PosNth int
-	// Locate - 座標符号の空白区切りリスト
-	Locate string
+	// Loc - 座標符号の空白区切りリスト
+	Loc string
 }
 
 // EOF [O1o1o0g12o__11o__101o0]
@@ -2071,6 +2081,10 @@ type RenDbDocRen struct {
 
 package kernel
 
+import (
+	"fmt"
+)
+
 // RenDbItemId - 連データベースの要素のId
 type RenDbItemId int
 
@@ -2081,8 +2095,8 @@ func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Poi
 
 // 連データベースの要素
 type RenDbItem struct {
-	// 何手目。基数（Position number）
-	posNum int
+	// 何手目。序数
+	PosNth int
 
 	// その連
 	ren *Ren
@@ -2091,14 +2105,14 @@ type RenDbItem struct {
 // NewRenDbItem - 連Dbの要素を新規作成する
 func NewRenDbItem(positionNumber int, ren *Ren) *RenDbItem {
 	var i = new(RenDbItem)
-	i.posNum = positionNumber
+	i.PosNth = positionNumber + geta
 	i.ren = ren
 	return i
 }
 
 // Dump - ダンプ
 func (ri *RenDbItem) Dump() string {
-	return fmt.Sprintf("n:%d ren:%s", ri.posNum, ri.ren.Dump())
+	return fmt.Sprintf("pos:%dth ren:%s", ri.PosNth, ri.ren.Dump())
 }
 
 // EOF [O1o1o0g12o__11o__10o1o0]
@@ -2131,18 +2145,24 @@ func (ri *RenDbItem) Dump() string {
 
 package kernel
 
+import (
+	"fmt"
+	"strings"
+)
+
 type RenDb struct {
-	// 盤サイズ
-	boardMemoryArea int
+	// Header - ヘッダー
+	Header RenDbDocHeader
 
 	// 要素
 	items map[RenDbItemId]*RenDbItem
 }
 
 // NewRenDb - 連データベースを新規作成
-func NewRenDb(boardMemoryArea int) *RenDb {
+func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 	var r = new(RenDb)
-	r.boardMemoryArea = boardMemoryArea
+	r.Header.BoardWidth = boardWidth
+	r.Header.BoardHeight = boardHeight
 	return r
 }
 
@@ -2159,7 +2179,7 @@ func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
 
 // RegisterRen - 連を登録
 func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renDbItemId = GetRenDbItemId(r.boardMemoryArea, positionNumber, ren.minimumLocation)
+	var renDbItemId = GetRenDbItemId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
 	r.items[renDbItemId] = NewRenDbItem(positionNumber, ren)
 }
 
@@ -2220,7 +2240,7 @@ func (r *RenDb) Dump() string {
 
 	// * 以下を追加
 	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
-	k.renDb = NewRenDb(k.Board.getMemoryArea())
+	k.renDb = NewRenDb(k.Board.GetWidth(), k.Board.GetHeight())
 
 //	return k
 // }

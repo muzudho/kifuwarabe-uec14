@@ -8,17 +8,18 @@ import (
 )
 
 type RenDb struct {
-	// 盤サイズ
-	boardMemoryArea int
+	// Header - ヘッダー
+	Header RenDbDocHeader
 
 	// 要素
 	items map[RenDbItemId]*RenDbItem
 }
 
 // NewRenDb - 連データベースを新規作成
-func NewRenDb(boardMemoryArea int) *RenDb {
+func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 	var r = new(RenDb)
-	r.boardMemoryArea = boardMemoryArea
+	r.Header.BoardWidth = boardWidth
+	r.Header.BoardHeight = boardHeight
 	return r
 }
 
@@ -35,7 +36,7 @@ func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
 
 // RegisterRen - 連を登録
 func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renDbItemId = GetRenDbItemId(r.boardMemoryArea, positionNumber, ren.minimumLocation)
+	var renDbItemId = GetRenDbItemId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
 	r.items[renDbItemId] = NewRenDbItem(positionNumber, ren)
 }
 

@@ -10,6 +10,11 @@ import (
 
 // Ren - 連，れん
 type Ren struct {
+	// PosNth - 何手目。序数。外部ファイルと入出力するときのみ使う
+	PosNth int
+	// Loc - 石の盤上の座標符号の空白区切りのリスト。ファイルの入出力時のみ使う
+	Loc string
+
 	// Color - 色
 	Color Color
 	// AdjacentColor - 隣接する石の色
@@ -27,6 +32,11 @@ func NewRen() *Ren {
 	var r = new(Ren)
 	r.minimumLocation = math.MaxInt
 	return r
+}
+
+// GetPositionNum - 何手目。基数。外部ファイルと入出力するときのみ使う
+func (r *Ren) GetPositionNum() int {
+	return r.PosNth - geta
 }
 
 // GetArea - 面積。アゲハマの数
@@ -55,6 +65,8 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 }
 
 // Dump - ダンプ
+//
+// Example: `A1 B2 C3 D4`
 func (r *Ren) Dump() string {
 	var sb strings.Builder
 

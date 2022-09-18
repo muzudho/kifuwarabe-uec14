@@ -46,7 +46,7 @@ func NewKernel(boardWidht int, boardHeight int,
 	k.Record = *NewRecord(maxMoves, playFirst)
 
 	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
-	k.renDb = NewRenDb(k.Board.getMemoryArea())
+	k.renDb = NewRenDb(k.Board.GetWidth(), k.Board.GetHeight())
 
 	return k
 }

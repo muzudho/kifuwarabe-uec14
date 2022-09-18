@@ -37,12 +37,18 @@ type RenDbDocHeader struct {
 	BoardHeight int
 }
 
+// GetBoardMemoryArea - 盤の面積
+func (h *RenDbDocHeader) GetBoardMemoryArea() int {
+	var wallWidth = 2
+	return (h.BoardWidth + wallWidth) * (h.BoardHeight + wallWidth)
+}
+
 // RenDbDocRen - 連の要素
 type RenDbDocRen struct {
 	// PosNth - 何手目。序数
 	PosNth int
-	// Locate - 座標符号の空白区切りリスト
-	Locate string
+	// Loc - 座標符号の空白区切りリスト
+	Loc string
 }
 
 // EOF [O1o1o0g12o__11o__101o0]
