@@ -1077,6 +1077,8 @@ package kernel
 
 import "strings"
 
+const geta = 1 // Japanese wooden clogs. Used to convert bases and ordinals.
+
 type Kernel struct {
 	// Board - 盤
 	Board *Board
@@ -2242,7 +2244,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 		var sb strings.Builder
 
 		var setPoint = func(positionNumber int, item *RecordItem) {
-			var positionOrdinals = positionNumber + 1 // 基数を序数に変換
+			var positionOrdinals = positionNumber + geta // 基数を序数に変換
 			var coord = k.Board.GetCodeFromPoint(item.placePlay)
 			sb.WriteString(fmt.Sprintf("[%d]%s ", positionOrdinals, coord))
 		}
