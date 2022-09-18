@@ -145,6 +145,12 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			return true
 		}
 
+	case "find_all_rens": // [O1o1o0g23o_2o2o0]
+		k.FindAllRens()
+		logg.C.Infof("=\n")
+		logg.J.Infow("ok")
+		return true
+
 	case "play": // [O1o1o0g20o0]
 		// Example: `play black A19`
 		k.DoPlay(command, logg)

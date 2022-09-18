@@ -103,6 +103,7 @@ go 1.19
 # この下に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
 # ---------------------------------------------------------------
 
+# [O1o1o0g6o0]
 go.work
 
 
@@ -658,6 +659,7 @@ go get -u go.uber.org/zap
 # ---------------------------------------------------------------
 # ...略...
 
+# [O1o1o0g11o__10o2_1o0]
 *.log
 
 # この上に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
@@ -2097,9 +2099,14 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 }
 
 // RegisterRen - 連を登録
+// * すでに Id が登録されているなら、上書きしない
 func (db *RenDb) RegisterRen(positionNumber int, ren *Ren) {
 	var renId = GetRenId(db.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
-	db.Rens[renId] = ren
+
+	var _, isExists = db.Rens[renId]
+	if !isExists {
+		db.Rens[renId] = ren
+	}
 }
 
 // Dump - ダンプ
@@ -2235,6 +2242,30 @@ func (h *RenDbDocHeader) GetBoardMemoryArea() int {
 	// この上にコマンドを挟んでいく
 	// -------------------------
 	// ...略...
+```
+
+## Step [O1o1o0g12o__11o__10o5o_1o0] 設定 - .gitignore ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+👉  └── 📄 .gitignore
+```
+
+👇 例えば冒頭に追加  
+
+```plaintext
+# この下に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
+# ---------------------------------------------------------------
+# ...略...
+
+# [O1o1o0g12o__11o__10o5o_1o0]
+*_temp.json
+
+# この上に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
+# ---------------------------------------------------------------
+# ...略...
 ```
 
 ## Step [O1o1o0g12o__11o__10o5o0] 動作確認
@@ -2918,6 +2949,18 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 			var i = b.GetPointFromXy(x, y)
 			var stone = b.cells[i]
 			setStone(stone)
+		}
+	}
+}
+
+// ForeachPayloadLocation - 枠や改行を含めない各セルの番地
+func (b *Board) ForeachPayloadLocation(setLocation func(Point)) {
+	var height = b.memoryHeight - 1
+	var width = b.memoryWidth - 1
+	for y := 1; y < height; y++ {
+		for x := 1; x < width; x++ {
+			var i = b.GetPointFromXy(x, y)
+			setLocation(i)
 		}
 	}
 }
@@ -5625,7 +5668,7 @@ play black D3
 
 次は、盤面全体に点在する連を認識できるか試したい  
 
-# Step [O1o1o0g23o_2o1o0] ファイル編集 - kernel_facade.go
+## Step [O1o1o0g23o_2o1o0] ファイル編集 - kernel_facade.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5669,10 +5712,112 @@ play black D3
 ```go
 // ...略...
 // FindAllRens - [O1o1o0g23o_2o1o0] 盤上の全ての連を見つけます
+// * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
+	// チェックボードの初期化
+	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
 
+	var setLocation = func(location Point) {
+		var ren = k.getRen(location)
+		k.renDb.RegisterRen(k.Record.posNum, ren)
+	}
+	// 盤上の枠の内側をスキャン
+	k.Board.ForeachPayloadLocation(setLocation)
 }
 // ...略...
+```
+
+## Step [O1o1o0g23o_2o2o0] コマンド編集 - kernel.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+ 	│	├── 📄 board3.txt
+ 	│	└── 📄 board4.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 record_item.go
+ 	│	├── 📄 record.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって、 Execute メソッドに挿入してほしい  
+
+```go
+	// ...略...
+	// この下にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+
+	// * アルファベット順になる位置に、以下のケース文を挿入
+	case "find_all_rens": // [O1o1o0g23o_2o2o0]
+		k.FindAllRens()
+		logg.C.Infof("=\n")
+		logg.J.Infow("ok")
+		return true
+
+	// ...略...
+	// この上にコマンドを挟んでいく
+	// -------------------------
+	// ...略...
+```
+
+## Step [O1o1o0g23o_2o2o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+set_board file data/board4.txt
+find_all_rens
+rendb_dump
+rendb_save data/ren_db_board4_temp.json
+```
+
+Output > Console:  
+
+```plaintext
+[2022-09-18 23:58:02]   # set_board file data/board4.txt
+[2022-09-18 23:58:02]   =
+
+[2022-09-18 23:58:51]   # find_all_rens
+[2022-09-18 23:58:51]   =
 ```
 
 # Step [O1o1o0g23o0] 打った石のアンドゥ - Undo
@@ -5800,7 +5945,10 @@ TODO アンドゥ
 
 ### コレクション
 
+#### ハッシュテーブル
+
 📖 [[Go言語] 初心者必見シリーズ: マップ（Map）](https://qiita.com/wifecooky/items/2ffe41d55c575b2ce5e2)  
+📖 [Go言語: マップのキーが存在するかチェックしたい](https://qiita.com/suin/items/4cb1da71237fc55a06ee)  
 
 ### 数学
 

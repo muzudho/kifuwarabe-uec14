@@ -85,9 +85,14 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 }
 
 // RegisterRen - 連を登録
+// * すでに Id が登録されているなら、上書きしない
 func (db *RenDb) RegisterRen(positionNumber int, ren *Ren) {
 	var renId = GetRenId(db.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
-	db.Rens[renId] = ren
+
+	var _, isExists = db.Rens[renId]
+	if !isExists {
+		db.Rens[renId] = ren
+	}
 }
 
 // Dump - ダンプ
