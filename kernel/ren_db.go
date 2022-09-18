@@ -64,4 +64,18 @@ func (db *RenDb) Dump() string {
 	return text
 }
 
+// RenDbDocHeader - ヘッダー
+type RenDbDocHeader struct {
+	// BoardWidth - 盤の横幅
+	BoardWidth int
+	// BoardHeight - 盤の縦幅
+	BoardHeight int
+}
+
+// GetBoardMemoryArea - 盤の面積
+func (h *RenDbDocHeader) GetBoardMemoryArea() int {
+	var wallWidth = 2
+	return (h.BoardWidth + wallWidth) * (h.BoardHeight + wallWidth)
+}
+
 // EOF [O1o1o0g12o__11o__10o2o0]
