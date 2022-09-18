@@ -1907,6 +1907,87 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-13T23:58:42.782+0900","caller":"kernel/kernel.go:128","msg":"output","rank":"19"}
 ```
 
+# Step [O1o1o0g12o__11o__10o0] 連データベース定義
+
+取った石の場所を記憶しておく構造を作成する  
+
+📖 [目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会☆（＾ｑ＾）＜その４＞](http://grayscale2.dou-jin.com/go/%E7%9B%AE%E6%8C%87%E3%81%9B%EF%BC%81%E7%AC%AC%EF%BC%91%EF%BC%94%E5%9B%9E%EF%BC%B5%EF%BC%A5%EF%BC%A3%E6%9D%AF%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E5%9B%B2%E7%A2%81%E5%A4%A7%E4%BC%9A%E2%98%86%EF%BC%88%EF%BC%BE_19)  
+
+## Step [O1o1o0g12o__11o__10o1o0] ファイル作成 - ren_db_item.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+👉	│	├── 📄 ren_db_item.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g12o__11o__10o1o0]
+
+package kernel
+
+// 連データベースの要素
+type RenDbItem struct {
+	// 何手目か （Position ordinals）
+	posOrd int
+
+	// 最小の番地
+	minimumLocation Point
+
+	// その連
+	ren Ren
+}
+
+// EOF [O1o1o0g12o__11o__10o1o0]
+```
+
+## Step [O1o1o0g12o__11o__10o2o0] ファイル作成 - ren_db.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+	│	├── 📄 ren_db_item.go
+👉	│	├── 📄 ren_db.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g12o__11o__10o2o0]
+
+package kernel
+
+type RenDb struct {
+	items map[int]*RenDbItem
+}
+
+// EOF [O1o1o0g12o__11o__10o2o0]
+```
+
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義
 
 ## Step [O1o1o0g12o__11o_2o_1o0] ファイル作成 - record_item.go ファイル
@@ -3309,8 +3390,8 @@ import "strings"
 // DoPlay - 打つ
 //
 // * `command` - Example: `play black A19`
-//                         ---- ----- ---
-//                         0    1     2
+// ........................---- ----- ---
+// ........................0    1     2
 func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 	var stoneName = tokens[1]
@@ -4754,7 +4835,7 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 				return
 			}
 		}
-		
+
 		if adjacentR.LibertyArea < 1 {
 			isExists = true
 			rensToRemove[dir] = adjacentR
@@ -5141,7 +5222,84 @@ play black D3
 [2022-09-17 22:39:55]   ? ko my_stone:x point:D3
 ```
 
-TODO 東、北、西、南に隣接する連の重複を省く
+## Step [O1o1o0g23o0] 打った石のアンドゥ - Undo
+
+### Step [O1o1o0g23o1o0] ファイル作成 - play_undo.go
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+ 	│	└── 📄 board3.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+👉 	│	├── 📄 play_undo.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 record_item.go
+ 	│	├── 📄 record.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g23o1o0]
+
+package kernel
+
+// DoUndoPlay - 石を打ったのを戻す
+//
+// * `command` - Example: `undo`
+// ........................----
+// ........................0
+func (k *Kernel) DoUndoPlay(command string, logg *Logger) {
+	k.UndoPlay()
+}
+
+// UndoPlay - 石を打ったのを戻す
+//
+// Returns
+// -------
+// isOk : bool
+//
+//	石を置けたら真、置けなかったら偽
+func (k *Kernel) UndoPlay() bool {
+
+	// 初期局面から前には戻せない
+	if k.Record.GetCurrent() < 1 {
+		return false
+	}
+
+	return false
+}
+
+// EOF [O1o1o0g23o1o0]
+```
+
+TODO 東、北、西、南に隣接する連を重複して数えないように常に注意すること
+TODO 棋譜に取った石を記録する
+TODO 取った石を戻す
 TODO アンドゥ
 
 # 参考にした記事
@@ -5180,5 +5338,13 @@ TODO アンドゥ
 ### ファイル入出力
 
 📖 [Read a file in Go](https://gosamples.dev/read-file/#:~:text=The%20simplest%20way%20of%20reading,by%20line%20or%20in%20chunks.)  
+
+### コレクション
+
+📖 [[Go言語] 初心者必見シリーズ: マップ（Map）](https://qiita.com/wifecooky/items/2ffe41d55c575b2ce5e2)  
+
+### 数学
+
+📖 [[math] 2つの値のうち小さい方を返す (Min)](http://www.openspc2.org/reibun/Go/1.1.1/pkg/math/1043/index.html)  
 
 .

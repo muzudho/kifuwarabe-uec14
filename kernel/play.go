@@ -9,9 +9,9 @@ import (
 
 // DoPlay - 打つ
 //
-//   - `command` - Example: `play black A19`
-//     ---- ----- ---
-//     0    1     2
+// * `command` - Example: `play black A19`
+// ........................---- ----- ---
+// ........................0    1     2
 func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var tokens = strings.Split(command, " ")
 	var stoneName = tokens[1]
