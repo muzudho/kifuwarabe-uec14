@@ -1969,66 +1969,14 @@ Output > Log > JSON:
 }
 ```
 
-# Step [O1o1o0g12o__11o__101o0] 連データベース出力ファイル定義 - ren_db_doc.go ファイル
+# ~~Step [O1o1o0g12o__11o__101o0]~~
 
-👇 以下のファイルを新規作成してほしい  
-
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 data
- 	│	└── 📄 ren_db1.json
-	├── 📂 kernel
-	│	├── 📄 go.mod
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
-👉 	│	├── 📄 ren_db_doc.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
- 	├── 📄 engine_config.go
-  	├── 📄 engine.toml
-    ├── 📄 go.mod
-  	├── 📄 go.work
-  	└── 📄 main.go
-```
-
-```go
-// BOF [O1o1o0g12o__11o__101o0]
-
-package kernel
-
-import (
-	"encoding/json"
-	"os"
-)
-
-// LoadRenDbDoc - 連データベースの外部ファイル読取
-func LoadRenDbDoc(path string, onError func(error) *RenDbDoc) *RenDbDoc {
-	// ファイル読込
-	var fileData, err = os.ReadFile(path)
-	if err != nil {
-		return onError(err)
-	}
-
-	var renDbDoc = new(RenDbDoc)
-	json.Unmarshal(fileData, renDbDoc)
-
-	return renDbDoc
-}
-
-// RenDbDoc - 連データベースの外部ファイル
-type RenDbDoc struct {
-	// Header - ヘッダー
-	Header RenDbDocHeader
-	// Rens - 連のハッシュテーブル
-	Rens map[string]*Ren
-}
-
-// EOF [O1o1o0g12o__11o__101o0]
-```
+Removed
 
 # Step [O1o1o0g12o__11o__10o0] 連データベース定義
 
-取った石の場所を記憶しておく構造を作成する  
+* 取った石の場所を記憶しておく構造を作成する
+* 入出力ファイルの構造でもある
 
 📖 [目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会☆（＾ｑ＾）＜その４＞](http://grayscale2.dou-jin.com/go/%E7%9B%AE%E6%8C%87%E3%81%9B%EF%BC%81%E7%AC%AC%EF%BC%91%EF%BC%94%E5%9B%9E%EF%BC%B5%EF%BC%A5%EF%BC%A3%E6%9D%AF%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E5%9B%B2%E7%A2%81%E5%A4%A7%E4%BC%9A%E2%98%86%EF%BC%88%EF%BC%BE_19)  
 
@@ -2064,7 +2012,9 @@ Removed
 package kernel
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -2082,6 +2032,20 @@ type RenDb struct {
 
 	// 要素
 	Rens map[RenId]*Ren
+}
+
+// LoadRenDb - 連データベースの外部ファイル読取
+func LoadRenDb(path string, onError func(error) *RenDb) *RenDb {
+	// ファイル読込
+	var fileData, err = os.ReadFile(path)
+	if err != nil {
+		return onError(err)
+	}
+
+	var renDb = new(RenDb)
+	json.Unmarshal(fileData, renDb)
+
+	return renDb
 }
 
 // NewRenDb - 連データベースを新規作成

@@ -3,7 +3,9 @@
 package kernel
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -21,6 +23,20 @@ type RenDb struct {
 
 	// 要素
 	Rens map[RenId]*Ren
+}
+
+// LoadRenDb - 連データベースの外部ファイル読取
+func LoadRenDb(path string, onError func(error) *RenDb) *RenDb {
+	// ファイル読込
+	var fileData, err = os.ReadFile(path)
+	if err != nil {
+		return onError(err)
+	}
+
+	var renDb = new(RenDb)
+	json.Unmarshal(fileData, renDb)
+
+	return renDb
 }
 
 // NewRenDb - 連データベースを新規作成
