@@ -1,1 +1,1 @@
-{"Header":{"BoardWidth":19,"BoardHeight":19},"Rens":{"1":{"Loc":"A1 B2 C3 D4","Color":0,"AdjacentColor":0,"LibertyArea":0}}}
+{"Header":{"BoardWidth":19,"BoardHeight":19},"Rens":{"1,A1":{"Loc":"A1 B2 C3 D4","Color":0,"AdjacentColor":0,"LibertyArea":0},"2,K10":{"Loc":"K10 L11 M12 N13","Color":0,"AdjacentColor":0,"LibertyArea":0}}}

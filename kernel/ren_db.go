@@ -9,12 +9,15 @@ import (
 	"strings"
 )
 
-// RenId - 連データベースの要素のId
-type RenId int
+// RenId - 連データベースに格納される連のId
+// * 外部ファイルの可読性を優先して数値型ではなく文字列
+type RenId string
 
 // GetRenId - 連のIdを取得
-func GetRenId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenId {
-	return RenId(positionNumber*boardMemoryArea + int(minimumLocation))
+func GetRenId(boardMemoryWidth int, positionNumber int, minimumLocation Point) RenId {
+	var posNth = positionNumber + geta
+	var coord = getCodeFromPointOnBoard(boardMemoryWidth, minimumLocation)
+	return RenId(fmt.Sprintf("%d,%s", posNth, coord))
 }
 
 type RenDb struct {
@@ -92,8 +95,8 @@ func (db *RenDb) Dump() string {
 	var sb strings.Builder
 
 	// 全ての要素
-	for i, item := range db.Rens {
-		sb.WriteString(fmt.Sprintf("[%d]%s ", i, item.Dump()))
+	for idStr, item := range db.Rens {
+		sb.WriteString(fmt.Sprintf("[%s]%s ", idStr, item.Dump()))
 	}
 
 	var text = sb.String()

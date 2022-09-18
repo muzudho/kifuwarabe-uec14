@@ -83,8 +83,12 @@ func (b *Board) GetPointFromXy(x int, y int) Point {
 
 // GetXyFromPoint - `GetPointFromXy` の逆関数
 func (b *Board) GetXyFromPoint(point Point) (int, int) {
+	return getXyFromPointOnBoard(b.memoryWidth, point)
+}
+
+func getXyFromPointOnBoard(memoryWidth int, point Point) (int, int) {
 	var p = int(point)
-	return p % b.memoryWidth, p / b.memoryWidth
+	return p % memoryWidth, p / memoryWidth
 }
 
 // サイズ変更

@@ -18,10 +18,14 @@ func (b *Board) GetPointFromCode(code string) Point {
 
 // GetCodeFromPoint - `GetPointFromCode` の逆関数
 func (b *Board) GetCodeFromPoint(point Point) string {
+	return getCodeFromPointOnBoard(b.memoryWidth, point)
+}
+
+func getCodeFromPointOnBoard(memoryWidth int, point Point) string {
 	// 枠の厚み
 	var left_wall = 1
 	var top_wall = 1
-	var x, y = b.GetXyFromPoint(point)
+	var x, y = getXyFromPointOnBoard(memoryWidth, point)
 	var file = GetFileFromX(x - left_wall)
 	var rank = GetRankFromY(y - top_wall)
 	return fmt.Sprintf("%s%s", file, rank)

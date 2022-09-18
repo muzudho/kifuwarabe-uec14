@@ -1960,10 +1960,14 @@ Output > Log > JSON:
         "boardWidth": 19,
         "boardHeight": 19
     },
-    "payload": {
+    "rens": {
         "1,A1": {
             "posNth": 1,
             "loc": "A1 B2 C3 D4"
+        },
+        "2,K10": {
+            "posNth": 2,
+            "loc": "K10 L11 M12 N13"
         }
     }
 }
@@ -2018,12 +2022,15 @@ import (
 	"strings"
 )
 
-// RenId - 連データベースの要素のId
-type RenId int
+// RenId - 連データベースに格納される連のId
+// * 外部ファイルの可読性を優先して数値型ではなく文字列
+type RenId string
 
 // GetRenId - 連のIdを取得
-func GetRenId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenId {
-	return RenId(positionNumber*boardMemoryArea + int(minimumLocation))
+func GetRenId(boardMemoryWidth int, positionNumber int, minimumLocation Point) RenId {
+	var posNth = positionNumber + geta
+	var coord = getCodeFromPointOnBoard(boardMemoryWidth, minimumLocation)
+	return RenId(fmt.Sprintf("%d,%s", posNth, coord))
 }
 
 type RenDb struct {
@@ -2100,8 +2107,8 @@ func (db *RenDb) Dump() string {
 	var sb strings.Builder
 
 	// 全ての要素
-	for i, item := range db.Rens {
-		sb.WriteString(fmt.Sprintf("[%d]%s ", i, item.Dump()))
+	for idStr, item := range db.Rens {
+		sb.WriteString(fmt.Sprintf("[%s]%s ", idStr, item.Dump()))
 	}
 
 	var text = sb.String()
@@ -2268,9 +2275,9 @@ rendb_dump
 Output > Console:  
 
 ```plaintext
-rendb_dump
-[2022-09-18 17:08:29]   # rendb_dump
-[2022-09-18 17:08:29]   = dump'''
+[2022-09-18 22:14:37]   # rendb_dump
+[2022-09-18 22:14:37]   = dump'''[2,K10] [1,A1]
+'''
 ```
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
@@ -2284,8 +2291,14 @@ rendb_save data/ren_db1_temp.json
 Output > Console:  
 
 ```plaintext
-[2022-09-18 21:02:40]   # rendb_save data/ren_db1_temp.json
-[2022-09-18 21:02:40]   =
+[2022-09-18 22:15:43]   # rendb_save data/ren_db1_temp.json
+[2022-09-18 22:15:43]   =
+```
+
+📄 ren_db1_temp.json:  
+
+```json
+{"Header":{"BoardWidth":19,"BoardHeight":19},"Rens":{"1,A1":{"Loc":"A1 B2 C3 D4","Color":0,"AdjacentColor":0,"LibertyArea":0},"2,K10":{"Loc":"K10 L11 M12 N13","Color":0,"AdjacentColor":0,"LibertyArea":0}}}
 ```
 
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義
@@ -2702,8 +2715,12 @@ func (b *Board) GetPointFromXy(x int, y int) Point {
 
 // GetXyFromPoint - `GetPointFromXy` の逆関数
 func (b *Board) GetXyFromPoint(point Point) (int, int) {
+	return getXyFromPointOnBoard(b.memoryWidth, point)
+}
+
+func getXyFromPointOnBoard(memoryWidth int, point Point) (int, int) {
 	var p = int(point)
-	return p % b.memoryWidth, p / b.memoryWidth
+	return p % memoryWidth, p / memoryWidth
 }
 
 // サイズ変更
@@ -3564,10 +3581,14 @@ func (b *Board) GetPointFromCode(code string) Point {
 
 // GetCodeFromPoint - `GetPointFromCode` の逆関数
 func (b *Board) GetCodeFromPoint(point Point) string {
+	return getCodeFromPointOnBoard(b.memoryWidth, point)
+}
+
+func getCodeFromPointOnBoard(memoryWidth int, point Point) string {
 	// 枠の厚み
 	var left_wall = 1
 	var top_wall = 1
-	var x, y = b.GetXyFromPoint(point)
+	var x, y = getXyFromPointOnBoard(memoryWidth, point)
 	var file = GetFileFromX(x - left_wall)
 	var rank = GetRankFromY(y - top_wall)
 	return fmt.Sprintf("%s%s", file, rank)
