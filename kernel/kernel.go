@@ -10,6 +10,7 @@ import (
 
 const geta = 1 // Japanese wooden clogs. Used to convert bases and ordinals.
 
+// Kernel - カーネル
 type Kernel struct {
 	// Board - 盤
 	Board *Board
@@ -25,6 +26,9 @@ type Kernel struct {
 
 	// Record - [O1o1o0g12o__11o_3o0] 棋譜
 	Record Record
+
+	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
+	RenDb *RenDb
 }
 
 // NewKernel - カーネルの新規作成
@@ -137,6 +141,9 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			logg.J.Infow("error", "method", method)
 			return true
 		}
+
+	case "dump_ren_db": // [O1o1o0g12o__11o__10o4o0]
+		return true
 
 	case "play": // [O1o1o0g20o0]
 		// Example: `play black A19`
