@@ -66,6 +66,7 @@ func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 	var r = new(RenDb)
 	r.Header.BoardWidth = boardWidth
 	r.Header.BoardHeight = boardHeight
+	r.Rens = make(map[RenId]*Ren)
 	return r
 }
 
