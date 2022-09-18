@@ -2084,12 +2084,12 @@ import (
 	"strings"
 )
 
-// RenDbItemId - 連データベースの要素のId
-type RenDbItemId int
+// RenId - 連データベースの要素のId
+type RenId int
 
 // GetId - 連のIdを取得
-func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenDbItemId {
-	return RenDbItemId(positionNumber*boardMemoryArea + int(minimumLocation))
+func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenId {
+	return RenId(positionNumber*boardMemoryArea + int(minimumLocation))
 }
 
 type RenDb struct {
@@ -2097,7 +2097,7 @@ type RenDb struct {
 	Header RenDbDocHeader
 
 	// 要素
-	Rens map[RenDbItemId]*Ren
+	Rens map[RenId]*Ren
 }
 
 // NewRenDb - 連データベースを新規作成
@@ -2109,8 +2109,8 @@ func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 }
 
 // FindRen - 連を取得
-func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
-	var ren, isOk = r.Rens[renDbItemId]
+func (r *RenDb) GetRen(renId RenId) (*Ren, bool) {
+	var ren, isOk = r.Rens[renId]
 
 	if isOk {
 		return ren, true
@@ -2121,8 +2121,8 @@ func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
 
 // RegisterRen - 連を登録
 func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renDbItemId = GetRenDbItemId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
-	r.Rens[renDbItemId] = ren
+	var renId = GetRenDbItemId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
+	r.Rens[renId] = ren
 }
 
 // Dump - ダンプ
