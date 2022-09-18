@@ -2,6 +2,9 @@
 
 package kernel
 
+// 枠の厚み。南北、または東西
+const wallThickness = 2
+
 // Board - 盤
 type Board struct {
 	// 枠付きの横幅
@@ -41,12 +44,12 @@ func (b *Board) GetMemoryHeight() int {
 
 // GetWidth - 枠の厚みを含まない横幅
 func (b *Board) GetWidth() int {
-	return b.memoryWidth - 2
+	return b.memoryWidth - wallThickness
 }
 
 // GetHeight - 枠の厚みを含まない縦幅
 func (b *Board) GetHeight() int {
-	return b.memoryHeight - 2
+	return b.memoryHeight - wallThickness
 }
 
 // GetStoneAt - 指定座標の石を取得
@@ -93,8 +96,8 @@ func getXyFromPointOnBoard(memoryWidth int, point Point) (int, int) {
 
 // サイズ変更
 func (b *Board) resize(width int, height int) {
-	b.memoryWidth = width + 2
-	b.memoryHeight = height + 2
+	b.memoryWidth = width + wallThickness
+	b.memoryHeight = height + wallThickness
 	b.cells = make([]Stone, b.getMemoryArea())
 
 	// ４方向（東、北、西、南）の番地への相対インデックス

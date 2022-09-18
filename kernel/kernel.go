@@ -146,6 +146,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		}
 
 	case "find_all_rens": // [O1o1o0g23o_2o2o0]
+		// Example: `find_all_rens`
 		k.FindAllRens()
 		logg.C.Infof("=\n")
 		logg.J.Infow("ok")

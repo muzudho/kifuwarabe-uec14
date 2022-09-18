@@ -2101,7 +2101,7 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 // RegisterRen - 連を登録
 // * すでに Id が登録されているなら、上書きしない
 func (db *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renId = GetRenId(db.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
+	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNumber, ren.minimumLocation)
 
 	var _, isExists = db.Rens[renId]
 	if !isExists {
@@ -2133,10 +2133,19 @@ type RenDbDocHeader struct {
 	BoardHeight int
 }
 
-// GetBoardMemoryArea - 盤の面積
+// GetBoardMemoryArea - 枠付き盤の面積
 func (h *RenDbDocHeader) GetBoardMemoryArea() int {
-	var wallWidth = 2
-	return (h.BoardWidth + wallWidth) * (h.BoardHeight + wallWidth)
+	return h.GetBoardMemoryWidth() * h.GetBoardMemoryHeight()
+}
+
+// GetBoardMemoryWidth - 枠付き盤の横幅
+func (h *RenDbDocHeader) GetBoardMemoryWidth() int {
+	return h.BoardWidth + wallThickness
+}
+
+// GetBoardMemoryHeight - 枠付き盤の縦幅
+func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
+	return h.BoardHeight + wallThickness
 }
 
 // EOF [O1o1o0g12o__11o__10o2o0]
@@ -2668,6 +2677,9 @@ Output > Console:
 
 package kernel
 
+// 枠の厚み。南北、または東西
+const wallThickness = 2
+
 // Board - 盤
 type Board struct {
 	// 枠付きの横幅
@@ -2704,12 +2716,12 @@ func (b *Board) GetMemoryHeight() int {
 
 // GetWidth - 枠の厚みを含まない横幅
 func (b *Board) GetWidth() int {
-	return b.memoryWidth - 2
+	return b.memoryWidth - wallThickness
 }
 
 // GetHeight - 枠の厚みを含まない縦幅
 func (b *Board) GetHeight() int {
-	return b.memoryHeight - 2
+	return b.memoryHeight - wallThickness
 }
 
 // GetStoneAt - 指定座標の石を取得
@@ -2756,8 +2768,8 @@ func getXyFromPointOnBoard(memoryWidth int, point Point) (int, int) {
 
 // サイズ変更
 func (b *Board) resize(width int, height int) {
-	b.memoryWidth = width + 2
-	b.memoryHeight = height + 2
+	b.memoryWidth = width + wallThickness
+	b.memoryHeight = height + wallThickness
 	b.cells = make([]Stone, b.getMemoryArea())
 }
 
@@ -5776,6 +5788,7 @@ func (k *Kernel) FindAllRens() {
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
 	case "find_all_rens": // [O1o1o0g23o_2o2o0]
+		// Example: `find_all_rens`
 		k.FindAllRens()
 		logg.C.Infof("=\n")
 		logg.J.Infow("ok")
@@ -5805,6 +5818,7 @@ Input:
 
 ```shell
 set_board file data/board4.txt
+rendb_dump
 find_all_rens
 rendb_dump
 rendb_save data/ren_db_board4_temp.json

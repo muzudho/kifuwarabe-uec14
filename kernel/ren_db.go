@@ -87,7 +87,7 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 // RegisterRen - 連を登録
 // * すでに Id が登録されているなら、上書きしない
 func (db *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renId = GetRenId(db.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
+	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNumber, ren.minimumLocation)
 
 	var _, isExists = db.Rens[renId]
 	if !isExists {
@@ -119,10 +119,19 @@ type RenDbDocHeader struct {
 	BoardHeight int
 }
 
-// GetBoardMemoryArea - 盤の面積
+// GetBoardMemoryArea - 枠付き盤の面積
 func (h *RenDbDocHeader) GetBoardMemoryArea() int {
-	var wallWidth = 2
-	return (h.BoardWidth + wallWidth) * (h.BoardHeight + wallWidth)
+	return h.GetBoardMemoryWidth() * h.GetBoardMemoryHeight()
+}
+
+// GetBoardMemoryWidth - 枠付き盤の横幅
+func (h *RenDbDocHeader) GetBoardMemoryWidth() int {
+	return h.BoardWidth + wallThickness
+}
+
+// GetBoardMemoryHeight - 枠付き盤の縦幅
+func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
+	return h.BoardHeight + wallThickness
 }
 
 // EOF [O1o1o0g12o__11o__10o2o0]
