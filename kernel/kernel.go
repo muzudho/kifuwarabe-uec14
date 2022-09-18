@@ -180,7 +180,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		return true
 
 	case "remove_ren": // [O1o1o0g22o5o2o0]
-		// Example: "remove_ren B2"
+		// Example: `remove_ren B2`
 		var point = k.Board.GetPointFromCode(tokens[1])
 		var ren = k.GetLiberty(point)
 		k.RemoveRen(ren)
@@ -195,12 +195,15 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		return true
 
 	case "rendb_save": // [O1o1o0g12o__11o__10o4o0]
+		// Example: `rendb_save data/ren_db_temp1.json`
+		// * ファイルパスにスペースがはいっていてはいけない
+		var path = tokens[1]
 		var onError = func(err error) bool {
 			logg.C.Infof("? error:%s\n", err)
 			logg.J.Infow("error", "err", err)
 			return false
 		}
-		var isOk = k.renDb.Save("data/ren_db_temp1.json", onError)
+		var isOk = k.renDb.Save(path, onError)
 		if isOk {
 			logg.C.Infof("=\n")
 			logg.J.Infow("ok")

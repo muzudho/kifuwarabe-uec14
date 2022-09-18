@@ -2263,15 +2263,14 @@ rendb_dump
 Input:  
 
 ```shell
-rendb_save
+rendb_save data/ren_db_temp1.json
 ```
 
 Output > Console:  
 
 ```plaintext
-rendb_save
-[2022-09-18 20:59:43]   # rendb_save
-[2022-09-18 20:59:43]   =
+[2022-09-18 21:02:40]   # rendb_save data/ren_db_temp1.json
+[2022-09-18 21:02:40]   =
 ```
 
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義
