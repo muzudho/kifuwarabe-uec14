@@ -2034,16 +2034,38 @@ type RenDb struct {
 	Rens map[RenId]*Ren
 }
 
+// SaveRenDb - 連データベースの外部ファイル書込
+func SaveRenDb(path string, renDb *RenDb, onError func(error)) {
+
+	// Marshal関数でjsonエンコード
+	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
+	jsonBinary, errA := json.Marshal(renDb)
+	if errA != nil {
+		fmt.Println(errA)
+		return
+	}
+
+	// ファイル読込
+	var errB = os.WriteFile(path, jsonBinary, 0664)
+	if errB != nil {
+		onError(errB)
+		return
+	}
+}
+
 // LoadRenDb - 連データベースの外部ファイル読取
 func LoadRenDb(path string, onError func(error) *RenDb) *RenDb {
 	// ファイル読込
-	var fileData, err = os.ReadFile(path)
+	var binary, err = os.ReadFile(path)
 	if err != nil {
 		return onError(err)
 	}
 
 	var renDb = new(RenDb)
-	json.Unmarshal(fileData, renDb)
+	var errB = json.Unmarshal(binary, renDb)
+	if errB != nil {
+		return onError(err)
+	}
 
 	return renDb
 }
