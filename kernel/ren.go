@@ -10,8 +10,6 @@ import (
 
 // Ren - 連，れん
 type Ren struct {
-	// PosNth - 何手目。序数。外部ファイルと入出力するときのみ使う
-	PosNth int
 	// Loc - 石の盤上の座標符号の空白区切りのリスト。ファイルの入出力時のみ使う
 	Loc string
 
@@ -32,11 +30,6 @@ func NewRen() *Ren {
 	var r = new(Ren)
 	r.minimumLocation = math.MaxInt
 	return r
-}
-
-// GetPositionNum - 何手目。基数。外部ファイルと入出力するときのみ使う
-func (r *Ren) GetPositionNum() int {
-	return r.PosNth - geta
 }
 
 // GetArea - 面積。アゲハマの数

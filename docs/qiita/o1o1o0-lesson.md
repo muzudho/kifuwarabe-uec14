@@ -1346,8 +1346,6 @@ import "math"
 
 // Ren - 連，れん
 type Ren struct {
-	// PosNth - 何手目。序数。外部ファイルと入出力するときのみ使う
-	PosNth int
 	// Loc - 石の盤上の座標符号の空白区切りのリスト。ファイルの入出力時のみ使う
 	Loc string
 
@@ -1368,11 +1366,6 @@ func NewRen() *Ren {
 	var r = new(Ren)
 	r.minimumLocation = math.MaxInt
 	return r
-}
-
-// GetPositionNum - 何手目。基数。外部ファイルと入出力するときのみ使う
-func (r *Ren) GetPositionNum() int {
-	return r.PosNth - geta
 }
 
 // GetArea - 面積。アゲハマの数
@@ -2055,68 +2048,9 @@ type RenDbDocRen struct {
 
 📖 [目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会☆（＾ｑ＾）＜その４＞](http://grayscale2.dou-jin.com/go/%E7%9B%AE%E6%8C%87%E3%81%9B%EF%BC%81%E7%AC%AC%EF%BC%91%EF%BC%94%E5%9B%9E%EF%BC%B5%EF%BC%A5%EF%BC%A3%E6%9D%AF%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E5%9B%B2%E7%A2%81%E5%A4%A7%E4%BC%9A%E2%98%86%EF%BC%88%EF%BC%BE_19)  
 
-## Step [O1o1o0g12o__11o__10o1o0] ファイル作成 - ren_db_item.go ファイル
+## ~~Step [O1o1o0g12o__11o__10o1o0]~~
 
-👇 以下のファイルを新規作成してほしい  
-
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 kernel
-	│	├── 📄 go.mod
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
-	│	├── 📄 point.go
-👉	│	├── 📄 ren_db_item.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
- 	├── 📄 engine_config.go
-  	├── 📄 engine.toml
-    ├── 📄 go.mod
-  	├── 📄 go.work
-  	└── 📄 main.go
-```
-
-```go
-// BOF [O1o1o0g12o__11o__10o1o0]
-
-package kernel
-
-import (
-	"fmt"
-)
-
-// RenDbItemId - 連データベースの要素のId
-type RenDbItemId int
-
-// GetId - 連のIdを取得
-func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenDbItemId {
-	return RenDbItemId(positionNumber*boardMemoryArea + int(minimumLocation))
-}
-
-// 連データベースの要素
-type RenDbItem struct {
-	// 何手目。序数
-	PosNth int
-
-	// その連
-	ren *Ren
-}
-
-// NewRenDbItem - 連Dbの要素を新規作成する
-func NewRenDbItem(positionNumber int, ren *Ren) *RenDbItem {
-	var i = new(RenDbItem)
-	i.PosNth = positionNumber + geta
-	i.ren = ren
-	return i
-}
-
-// Dump - ダンプ
-func (ri *RenDbItem) Dump() string {
-	return fmt.Sprintf("pos:%dth ren:%s", ri.PosNth, ri.ren.Dump())
-}
-
-// EOF [O1o1o0g12o__11o__10o1o0]
-```
+Removed  
 
 ## Step [O1o1o0g12o__11o__10o2o0] ファイル作成 - ren_db.go ファイル
 
@@ -2150,12 +2084,20 @@ import (
 	"strings"
 )
 
+// RenDbItemId - 連データベースの要素のId
+type RenDbItemId int
+
+// GetId - 連のIdを取得
+func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenDbItemId {
+	return RenDbItemId(positionNumber*boardMemoryArea + int(minimumLocation))
+}
+
 type RenDb struct {
 	// Header - ヘッダー
 	Header RenDbDocHeader
 
 	// 要素
-	items map[RenDbItemId]*RenDbItem
+	Rens map[RenDbItemId]*Ren
 }
 
 // NewRenDb - 連データベースを新規作成
@@ -2168,10 +2110,10 @@ func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 
 // FindRen - 連を取得
 func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
-	var item, isOk = r.items[renDbItemId]
+	var ren, isOk = r.Rens[renDbItemId]
 
 	if isOk {
-		return item.ren, true
+		return ren, true
 	}
 
 	return nil, false
@@ -2180,7 +2122,7 @@ func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
 // RegisterRen - 連を登録
 func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
 	var renDbItemId = GetRenDbItemId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
-	r.items[renDbItemId] = NewRenDbItem(positionNumber, ren)
+	r.Rens[renDbItemId] = ren
 }
 
 // Dump - ダンプ
@@ -2188,7 +2130,7 @@ func (r *RenDb) Dump() string {
 	var sb strings.Builder
 
 	// 全ての要素
-	for i, item := range r.items {
+	for i, item := range r.Rens {
 		sb.WriteString(fmt.Sprintf("[%d]%s ", i, item.Dump()))
 	}
 
