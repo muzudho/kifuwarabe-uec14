@@ -161,9 +161,9 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		var sb strings.Builder
 
 		var setPoint = func(positionNumber int, item *RecordItem) {
-			var positionOrdinals = positionNumber + geta // 基数を序数に変換
+			var positionNth = positionNumber + geta // 基数を序数に変換
 			var coord = k.Board.GetCodeFromPoint(item.placePlay)
-			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionOrdinals, coord))
+			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 
 			// [O1o1o0g22o7o4o0] コウを追加
 			var koStr string
@@ -172,7 +172,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			} else {
 				koStr = fmt.Sprintf("(%s)", k.Board.GetCodeFromPoint(item.ko))
 			}
-			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionOrdinals, coord, koStr))
+			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionNth, coord, koStr))
 		}
 
 		k.Record.ForeachItem(setPoint)

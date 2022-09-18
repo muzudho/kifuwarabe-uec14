@@ -2451,9 +2451,9 @@ func (r *Record) IsKo(placePlay Point) bool {
 		var sb strings.Builder
 
 		var setPoint = func(positionNumber int, item *RecordItem) {
-			var positionOrdinals = positionNumber + geta // 基数を序数に変換
+			var positionNth = positionNumber + geta // 基数を序数に変換
 			var coord = k.Board.GetCodeFromPoint(item.placePlay)
-			sb.WriteString(fmt.Sprintf("[%d]%s ", positionOrdinals, coord))
+			sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 		}
 
 		k.Record.ForeachItem(setPoint)
@@ -5366,11 +5366,11 @@ Output > Console:
 		// ...略...
 
 		// var setPoint = func(i int, item *RecordItem) {
-			// var positionOrdinals = i + 1 // 基数を序数に変換
+			// var positionNth = i + geta // 基数を序数に変換
 			// var coord = k.Board.GetCodeFromPoint(item.placePlay)
 
 			// * 以下を削除
-			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionOrdinals, coord))
+			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 
 			// * 以下を追加
 			// [O1o1o0g22o7o4o0] コウを追加
@@ -5380,7 +5380,7 @@ Output > Console:
 			} else {
 				koStr = fmt.Sprintf("(%s)", k.Board.GetCodeFromPoint(item.ko))
 			}
-			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionOrdinals, coord, koStr))
+			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionNth, coord, koStr))
 		// }
 		// ...略...
 
