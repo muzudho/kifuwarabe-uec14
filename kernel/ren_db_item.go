@@ -2,26 +2,29 @@
 
 package kernel
 
+// RenDbItemId - 連データベースの要素のId
+type RenDbItemId int
+
+// GetId - 連のIdを取得
+func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenDbItemId {
+	return RenDbItemId(positionNumber*boardMemoryArea + int(minimumLocation))
+}
+
 // 連データベースの要素
 type RenDbItem struct {
-	// 何手目か （Position ordinals）
-	posOrd int
+	// 何手目。基数（Position number）
+	posNum int
 
 	// その連
 	ren *Ren
 }
 
 // NewRenDbItem - 連Dbの要素を新規作成する
-func NewRenDbItem(positionOrdinal int, ren *Ren) *RenDbItem {
+func NewRenDbItem(positionNumber int, ren *Ren) *RenDbItem {
 	var i = new(RenDbItem)
-	i.posOrd = positionOrdinal
+	i.posNum = positionNumber
 	i.ren = ren
 	return i
-}
-
-// GetId - 連のIdを取得
-func GetRenDbItemId(boardMemoryArea int, positionOrdinal int, minimumLocation Point) int {
-	return positionOrdinal*boardMemoryArea + int(minimumLocation)
 }
 
 // EOF [O1o1o0g12o__11o__10o1o0]

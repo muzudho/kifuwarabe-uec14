@@ -1941,8 +1941,8 @@ package kernel
 
 // 連データベースの要素
 type RenDbItem struct {
-	// 何手目か （Position ordinals）
-	posOrd int
+	// 何手目。基数（Position number）
+	posNum int
 
 	// 最小の番地
 	minimumLocation Point
@@ -2069,8 +2069,8 @@ type Record struct {
 	// 先行
 	playFirst Stone
 
-	// 現在位置
-	current int
+	// 何手目。基数（Position number）
+	posNum int
 
 	// 手毎
 	items []*RecordItem
@@ -2090,29 +2090,29 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 	return r
 }
 
-// GetCurrent - 現在位置
-func (r *Record) GetCurrent() int {
-	return r.current
+// GetPositionNumber - 何手目。基数
+func (r *Record) GetPositionNumber() int {
+	return r.posNum
 }
 
 // Push - 末尾に追加
 func (r *Record) Push(placePlay Point) {
 
-	var item = r.items[r.current]
+	var item = r.items[r.posNum]
 	item.placePlay = placePlay
 
-	r.current++
+	r.posNum++
 }
 
 // RemoveTail - 末尾を削除
 func (r *Record) RemoveTail(placePlay Point) {
-	r.current--
-	r.items[r.current].Clear()
+	r.posNum--
+	r.items[r.posNum].Clear()
 }
 
 // ForeachItem - 各要素
 func (r *Record) ForeachItem(setItem func(int, *RecordItem)) {
-	for i := 0; i < r.current; i++ {
+	for i := 0; i < r.posNum; i++ {
 		setItem(i, r.items[i])
 	}
 }
@@ -2121,9 +2121,9 @@ func (r *Record) ForeachItem(setItem func(int, *RecordItem)) {
 func (r *Record) IsKo(placePlay Point) bool {
 	// [O1o1o0g22o7o1o0] コウの判定
 	// 2手前に着手して石をぴったり１つ打ち上げたとき、その着手点はコウだ
-	var i = r.GetCurrent()
-	if 2 <= i {
-		var item = r.items[i-2]
+	var posNum = r.GetPositionNumber()
+	if 2 <= posNum {
+		var item = r.items[posNum-2]
 		return item.ko == placePlay
 	}
 
@@ -2241,10 +2241,10 @@ func (r *Record) IsKo(placePlay Point) bool {
 		// Example: "record"
 		var sb strings.Builder
 
-		var setPoint = func(i int, item *RecordItem) {
-			var ordinals = i + 1 // 基数を序数に変換
+		var setPoint = func(positionNumber int, item *RecordItem) {
+			var positionOrdinals = positionNumber + 1 // 基数を序数に変換
 			var coord = k.Board.GetCodeFromPoint(item.placePlay)
-			sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, coord))
+			sb.WriteString(fmt.Sprintf("[%d]%s ", positionOrdinals, coord))
 		}
 
 		k.Record.ForeachItem(setPoint)
@@ -4971,13 +4971,13 @@ Output > Console:
 	// [O1o1o0g22o7o1o0] コウの位置
 	ko Point//) {
 
-	// var item = r.items[r.current]
+	// var item = r.items[r.posNum]
 	// item.placePlay = placePlay
 
 	// [O1o1o0g22o7o1o0] コウの位置
 	item.ko = ko
 
-	// r.current++
+	// r.posNum++
 // }
 ```
 
@@ -5155,11 +5155,11 @@ Output > Console:
 		// ...略...
 
 		// var setPoint = func(i int, item *RecordItem) {
-			// var ordinals = i + 1 // 基数を序数に変換
+			// var positionOrdinals = i + 1 // 基数を序数に変換
 			// var coord = k.Board.GetCodeFromPoint(item.placePlay)
 
 			// * 以下を削除
-			// sb.WriteString(fmt.Sprintf("[%d]%s ", ordinals, coord))
+			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionOrdinals, coord))
 
 			// * 以下を追加
 			// [O1o1o0g22o7o4o0] コウを追加
@@ -5169,7 +5169,7 @@ Output > Console:
 			} else {
 				koStr = fmt.Sprintf("(%s)", k.Board.GetCodeFromPoint(item.ko))
 			}
-			sb.WriteString(fmt.Sprintf("[%d]%s%s ", ordinals, coord, koStr))
+			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionOrdinals, coord, koStr))
 		// }
 		// ...略...
 
@@ -5287,7 +5287,7 @@ func (k *Kernel) DoUndoPlay(command string, logg *Logger) {
 func (k *Kernel) UndoPlay() bool {
 
 	// 初期局面から前には戻せない
-	if k.Record.GetCurrent() < 1 {
+	if k.Record.GetPositionNumber() < 1 {
 		return false
 	}
 

@@ -21,7 +21,7 @@ func (k *Kernel) DoUndoPlay(command string, logg *Logger) {
 func (k *Kernel) UndoPlay() bool {
 
 	// 初期局面から前には戻せない
-	if k.Record.GetCurrent() < 1 {
+	if k.Record.GetPositionNumber() < 1 {
 		return false
 	}
 
