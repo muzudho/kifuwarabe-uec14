@@ -26,7 +26,7 @@ type RenDbDoc struct {
 	// Header - ヘッダー
 	Header RenDbDocHeader
 	// Rens - 連のハッシュテーブル
-	Rens map[string]*RenDbDocRen
+	Rens map[string]*Ren
 }
 
 // RenDbDocHeader - ヘッダー
@@ -41,14 +41,6 @@ type RenDbDocHeader struct {
 func (h *RenDbDocHeader) GetBoardMemoryArea() int {
 	var wallWidth = 2
 	return (h.BoardWidth + wallWidth) * (h.BoardHeight + wallWidth)
-}
-
-// RenDbDocRen - 連の要素
-type RenDbDocRen struct {
-	// PosNth - 何手目。序数
-	PosNth int
-	// Loc - 座標符号の空白区切りリスト
-	Loc string
 }
 
 // EOF [O1o1o0g12o__11o__101o0]
