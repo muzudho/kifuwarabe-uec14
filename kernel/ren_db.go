@@ -2,6 +2,11 @@
 
 package kernel
 
+import (
+	"fmt"
+	"strings"
+)
+
 type RenDb struct {
 	// 盤サイズ
 	boardMemoryArea int
@@ -32,6 +37,22 @@ func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
 func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
 	var renDbItemId = GetRenDbItemId(r.boardMemoryArea, positionNumber, ren.minimumLocation)
 	r.items[renDbItemId] = NewRenDbItem(positionNumber, ren)
+}
+
+// Dump - ダンプ
+func (r *RenDb) Dump() string {
+	var sb strings.Builder
+
+	// 全ての要素
+	for i, item := range r.items {
+		sb.WriteString(fmt.Sprintf("[%d]%s ", i, item.Dump()))
+	}
+
+	var text = sb.String()
+	if 0 < len(text) {
+		text = text[:len(text)-1]
+	}
+	return text
 }
 
 // EOF [O1o1o0g12o__11o__10o2o0]

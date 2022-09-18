@@ -1388,6 +1388,22 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 	}
 }
 
+// Dump - ダンプ
+func (r *Ren) Dump() string {
+	var sb strings.Builder
+
+	// 全ての要素
+	for _, location := range r.locations {
+		sb.WriteString(fmt.Sprintf("%d ", location))
+	}
+
+	var text = sb.String()
+	if 0 < len(text) {
+		text = text[:len(text)-1]
+	}
+	return text
+}
+
 // EOF [O1o1o0g11o_4o2o1o0]
 ```
 
@@ -1942,16 +1958,34 @@ Output > Log > JSON:
 
 package kernel
 
+// RenDbItemId - 連データベースの要素のId
+type RenDbItemId int
+
+// GetId - 連のIdを取得
+func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenDbItemId {
+	return RenDbItemId(positionNumber*boardMemoryArea + int(minimumLocation))
+}
+
 // 連データベースの要素
 type RenDbItem struct {
 	// 何手目。基数（Position number）
 	posNum int
 
-	// 最小の番地
-	minimumLocation Point
-
 	// その連
-	ren Ren
+	ren *Ren
+}
+
+// NewRenDbItem - 連Dbの要素を新規作成する
+func NewRenDbItem(positionNumber int, ren *Ren) *RenDbItem {
+	var i = new(RenDbItem)
+	i.posNum = positionNumber
+	i.ren = ren
+	return i
+}
+
+// Dump - ダンプ
+func (ri *RenDbItem) Dump() string {
+	return fmt.Sprintf("n:%d ren:%s", ri.posNum, ri.ren.Dump())
 }
 
 // EOF [O1o1o0g12o__11o__10o1o0]
@@ -1985,7 +2019,51 @@ type RenDbItem struct {
 package kernel
 
 type RenDb struct {
-	items map[int]*RenDbItem
+	// 盤サイズ
+	boardMemoryArea int
+
+	// 要素
+	items map[RenDbItemId]*RenDbItem
+}
+
+// NewRenDb - 連データベースを新規作成
+func NewRenDb(boardMemoryArea int) *RenDb {
+	var r = new(RenDb)
+	r.boardMemoryArea = boardMemoryArea
+	return r
+}
+
+// FindRen - 連を取得
+func (r *RenDb) GetRen(renDbItemId RenDbItemId) (*Ren, bool) {
+	var item, isOk = r.items[renDbItemId]
+
+	if isOk {
+		return item.ren, true
+	}
+
+	return nil, false
+}
+
+// RegisterRen - 連を登録
+func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
+	var renDbItemId = GetRenDbItemId(r.boardMemoryArea, positionNumber, ren.minimumLocation)
+	r.items[renDbItemId] = NewRenDbItem(positionNumber, ren)
+}
+
+// Dump - ダンプ
+func (r *RenDb) Dump() string {
+	var sb strings.Builder
+
+	// 全ての要素
+	for i, item := range r.items {
+		sb.WriteString(fmt.Sprintf("[%d]%s ", i, item.Dump()))
+	}
+
+	var text = sb.String()
+	if 0 < len(text) {
+		text = text[:len(text)-1]
+	}
+	return text
 }
 
 // EOF [O1o1o0g12o__11o__10o2o0]
@@ -2068,14 +2146,55 @@ type RenDb struct {
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
 	case "dump_ren_db": // [O1o1o0g12o__11o__10o4o0]
-		logg.C.Info("=\n")
-		logg.J.Infow("ok")
+		var text = k.renDb.Dump()
+		logg.C.Info("= dump'''%s\n'''\n", text)
+		logg.J.Infow("ok", "dump", text)
 		return true
 
 	// ...略...
 	// この上にコマンドを挟んでいく
 	// -------------------------
 	// ...略...
+```
+
+## Step [O1o1o0g12o__11o__10o5o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:  
+
+```shell
+go run .
+```
+
+これで、思考エンジン内の入力待機ループに入った  
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+dump_ren_db
+```
+
+Output > Console:  
+
+```plaintext
+set_board file data/board3.txt
+[2022-09-17 22:39:55]   # set_board file data/board3.txt
+[2022-09-17 22:39:55]   =
+
+play black D3
+[2022-09-17 22:39:55]   # play black D3
+[2022-09-17 22:39:55]   =
+
+play white C3
+[2022-09-17 22:39:55]   # play white C3
+[2022-09-17 22:39:55]   =
+
+play black D3
+[2022-09-17 22:39:55]   # play black D3
+[2022-09-17 22:39:55]   ? ko my_stone:x point:D3
 ```
 
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義
@@ -2340,7 +2459,9 @@ func (r *Record) IsKo(placePlay Point) bool {
 		k.Record.ForeachItem(setPoint)
 
 		var text = sb.String()
-		text = text[:len(text)-1]
+		if 0 < len(text) {
+			text = text[:len(text)-1]
+		}
 		logg.C.Infof("= record:'%s'\n", text)
 		logg.J.Infow("ok", "record", text)
 		return true

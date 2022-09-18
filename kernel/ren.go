@@ -2,7 +2,11 @@
 
 package kernel
 
-import "math"
+import (
+	"fmt"
+	"math"
+	"strings"
+)
 
 // Ren - 連，れん
 type Ren struct {
@@ -48,6 +52,22 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 	for i, point := range r.locations {
 		setLocation(i, point)
 	}
+}
+
+// Dump - ダンプ
+func (r *Ren) Dump() string {
+	var sb strings.Builder
+
+	// 全ての要素
+	for _, location := range r.locations {
+		sb.WriteString(fmt.Sprintf("%d ", location))
+	}
+
+	var text = sb.String()
+	if 0 < len(text) {
+		text = text[:len(text)-1]
+	}
+	return text
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]

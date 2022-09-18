@@ -2,6 +2,10 @@
 
 package kernel
 
+import (
+	"fmt"
+)
+
 // RenDbItemId - 連データベースの要素のId
 type RenDbItemId int
 
@@ -25,6 +29,11 @@ func NewRenDbItem(positionNumber int, ren *Ren) *RenDbItem {
 	i.posNum = positionNumber
 	i.ren = ren
 	return i
+}
+
+// Dump - ダンプ
+func (ri *RenDbItem) Dump() string {
+	return fmt.Sprintf("n:%d ren:%s", ri.posNum, ri.ren.Dump())
 }
 
 // EOF [O1o1o0g12o__11o__10o1o0]

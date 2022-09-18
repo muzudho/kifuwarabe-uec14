@@ -146,8 +146,9 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		}
 
 	case "dump_ren_db": // [O1o1o0g12o__11o__10o4o0]
-		logg.C.Info("=\n")
-		logg.J.Infow("ok")
+		var text = k.renDb.Dump()
+		logg.C.Infof("= dump'''%s\n'''\n", text)
+		logg.J.Infow("ok", "dump", text)
 		return true
 
 	case "play": // [O1o1o0g20o0]
@@ -177,7 +178,9 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		k.Record.ForeachItem(setPoint)
 
 		var text = sb.String()
-		text = text[:len(text)-1]
+		if 0 < len(text) {
+			text = text[:len(text)-1]
+		}
 		logg.C.Infof("= record:'%s'\n", text)
 		logg.J.Infow("ok", "record", text)
 		return true
