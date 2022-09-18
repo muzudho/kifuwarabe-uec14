@@ -11,7 +11,7 @@ import (
 // LoadEngineConfig - 思考エンジン設定ファイルを読み込む
 func LoadEngineConfig(
 	path string,
-	onError func(error) Config) Config {
+	onError func(error) *Config) *Config {
 
 	// ファイル読込
 	var fileData, err = os.ReadFile(path)
@@ -21,9 +21,9 @@ func LoadEngineConfig(
 
 	// Toml解析
 	var binary = []byte(string(fileData))
-	var config = Config{}
+	var config = new(Config)
 	// Go言語の struct に合わせてデータを読み込む
-	toml.Unmarshal(binary, &config)
+	toml.Unmarshal(binary, config)
 
 	return config
 }

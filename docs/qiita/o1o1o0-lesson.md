@@ -478,7 +478,7 @@ import (
 // LoadEngineConfig - 思考エンジン設定ファイルを読み込む
 func LoadEngineConfig(
 	path string,
-	onError func(error) Config) Config {
+	onError func(error) *Config) *Config {
 
 	// ファイル読込
 	var fileData, err = os.ReadFile(path)
@@ -488,9 +488,9 @@ func LoadEngineConfig(
 
 	// Toml解析
 	var binary = []byte(string(fileData))
-	var config = Config{}
+	var config = new(Config)
 	// Go言語の struct に合わせてデータを読み込む
-	toml.Unmarshal(binary, &config)
+	toml.Unmarshal(binary, config)
 
 	return config
 }
@@ -596,8 +596,10 @@ type Paths struct {
 	// ---------------------------
 	// * この下に追加
 	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
-	var onError = func(err error) {
+	var onError = func(err error) *Config {
 		// ログファイルには出力できません。ログファイルはまだ読込んでいません
+
+		// 強制終了
 		panic(err)
 	}
 	var engineConfig = LoadEngineConfig(*pEngineFilePath, onError)

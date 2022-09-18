@@ -25,7 +25,7 @@ func main() {
 	// ---------------------------
 
 	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
-	var onError = func(err error) Config {
+	var onError = func(err error) *Config {
 		// ログファイルには出力できません。ログファイルはまだ読込んでいません
 
 		// 強制終了
