@@ -195,7 +195,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		return true
 
 	case "rendb_load": // [O1o1o0g12o__11o__10o4o0]
-		// Example: `rendb_load data/ren_db_temp1.json`
+		// Example: `rendb_load data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
 		var onError = func(err error) (*RenDb, bool) {
@@ -213,7 +213,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		return false
 
 	case "rendb_save": // [O1o1o0g12o__11o__10o4o0]
-		// Example: `rendb_save data/ren_db_temp1.json`
+		// Example: `rendb_save data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
 		var onError = func(err error) bool {

@@ -2216,7 +2216,7 @@ func (h *RenDbDocHeader) GetBoardMemoryArea() int {
 			logg.J.Infow("error", "err", err)
 			return false
 		}
-		var isOk = k.renDb.Save("data/ren_db_temp1.json", onError)
+		var isOk = k.renDb.Save("data/ren_db1_temp.json", onError)
 		if isOk {
 			logg.C.Infof("=\n")
 			logg.J.Infow("ok")
@@ -2253,6 +2253,8 @@ rendb_load data/ren_db1.json
 Output > Console:  
 
 ```plaintext
+[2022-09-18 21:21:15]   # rendb_load data/ren_db1.json
+[2022-09-18 21:21:15]   =
 ```
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
@@ -2276,13 +2278,13 @@ rendb_dump
 Input:  
 
 ```shell
-rendb_save data/ren_db_temp1.json
+rendb_save data/ren_db1_temp.json
 ```
 
 Output > Console:  
 
 ```plaintext
-[2022-09-18 21:02:40]   # rendb_save data/ren_db_temp1.json
+[2022-09-18 21:02:40]   # rendb_save data/ren_db1_temp.json
 [2022-09-18 21:02:40]   =
 ```
 
