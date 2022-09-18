@@ -25,8 +25,8 @@ type RenDb struct {
 	Rens map[RenId]*Ren
 }
 
-// SaveRenDb - 連データベースの外部ファイル書込
-func SaveRenDb(path string, renDb *RenDb, onError func(error)) {
+// Save - 連データベースの外部ファイル書込
+func Save(path string, renDb *RenDb, onError func(error)) {
 
 	// Marshal関数でjsonエンコード
 	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
@@ -44,8 +44,8 @@ func SaveRenDb(path string, renDb *RenDb, onError func(error)) {
 	}
 }
 
-// LoadRenDb - 連データベースの外部ファイル読取
-func LoadRenDb(path string, onError func(error) *RenDb) *RenDb {
+// Load - 連データベースの外部ファイル読取
+func Load(path string, onError func(error) *RenDb) *RenDb {
 	// ファイル読込
 	var binary, err = os.ReadFile(path)
 	if err != nil {
