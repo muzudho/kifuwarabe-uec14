@@ -28,22 +28,25 @@ type Kernel struct {
 	Record Record
 
 	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
-	RenDb *RenDb
+	renDb *RenDb
 }
 
 // NewKernel - カーネルの新規作成
-func NewKernel(
+func NewKernel(boardWidht int, boardHeight int,
 	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
 	maxMoves int, playFirst Stone) *Kernel {
 
 	var k = new(Kernel)
-	k.Board = NewBoard()
+	k.Board = NewBoard(boardWidht, boardHeight)
 
 	// [O1o1o0g22o2o3o0]
 	k.CheckBoard = NewCheckBoard()
 
 	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
 	k.Record = *NewRecord(maxMoves, playFirst)
+
+	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
+	k.renDb = NewRenDb(k.Board.getMemoryArea())
 
 	return k
 }
@@ -143,6 +146,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		}
 
 	case "dump_ren_db": // [O1o1o0g12o__11o__10o4o0]
+		logg.C.Info("=\n")
+		logg.J.Infow("ok")
 		return true
 
 	case "play": // [O1o1o0g20o0]

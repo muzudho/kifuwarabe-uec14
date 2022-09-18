@@ -20,11 +20,11 @@ type Board struct {
 }
 
 // NewBoard - 新規作成
-func NewBoard() *Board {
+func NewBoard(boardWidht int, boardHeight int) *Board {
 	var b = new(Board)
 
 	// 盤のサイズ指定と、盤面の初期化
-	b.resize(19, 19)
+	b.resize(boardWidht, boardHeight)
 
 	return b
 }

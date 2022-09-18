@@ -1086,9 +1086,9 @@ type Kernel struct {
 }
 
 // NewKernel - カーネルの新規作成
-func NewKernel() *Kernel {
+func NewKernel(boardWidht int, boardHeight int) *Kernel {
 	var k = new(Kernel)
-	k.Board = NewBoard()
+	k.Board = NewBoard(boardWidht, boardHeight)
 	return k
 }
 
@@ -1157,7 +1157,7 @@ import (
 		}
 
 		// [O1o1o0g11o_3o0]
-		var kernel1 = kernel.NewKernel()
+		var kernel1 = kernel.NewKernel(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 		// 設定ファイルの内容をカーネルへ反映
 		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 
@@ -2014,12 +2014,26 @@ type RenDb struct {
 ```
 
 ```go
+// ...略...
 // type Kernel struct {
 	// ...略...
 
+	// * 以下を追加
 	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
-	RenDb *RenDb
+	renDb *RenDb
 // }
+// ...略...
+
+// func NewKernel(boardWidht int, boardHeight int,
+	// ...略...
+
+	// * 以下を追加
+	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
+	k.renDb = NewRenDb(k.Board.getMemoryArea())
+
+//	return k
+// }
+// ...略...
 ```
 
 ## Step [O1o1o0g12o__11o__10o4o0] コマンド編集 - kernel.go ファイル
@@ -2054,6 +2068,8 @@ type RenDb struct {
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
 	case "dump_ren_db": // [O1o1o0g12o__11o__10o4o0]
+		logg.C.Info("=\n")
+		logg.J.Infow("ok")
 		return true
 
 	// ...略...
@@ -2238,8 +2254,8 @@ func (r *Record) IsKo(placePlay Point) bool {
 // }
 
 // NewKernel - カーネルの新規作成
-// func NewKernel(
-	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
+// func NewKernel(boardWidht int, boardHeight int,
+	// [O1o1o0g12o__11o_2o0] ,棋譜の初期化
 	maxMoves int, playFirst Stone//) *Kernel {
 	// ...略...
 
@@ -2275,7 +2291,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 ```go
 		// [O1o1o0g11o_3o0]
-		//var kernel1 = kernel.NewKernel(
+		//var kernel1 = kernel.NewKernel(engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
 			// [O1o1o0g12o__11o_4o0] 棋譜の初期化
 			engineConfig.GetMaxMovesNum(),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
@@ -2411,11 +2427,11 @@ type Board struct {
 }
 
 // NewBoard - 新規作成
-func NewBoard() *Board {
+func NewBoard(boardWidht int, boardHeight int) *Board {
 	var b = new(Board)
 
 	// 盤のサイズ指定と、盤面の初期化
-	b.resize(19, 19)
+	b.resize(boardWidht, boardHeight)
 
 	return b
 }
@@ -4083,9 +4099,9 @@ func (b *CheckBoard) getMemoryArea() int {
 	Ren *Ren
 //}
 
-// func NewKernel() *Kernel {
+// func NewKernel(boardWidht int, boardHeight int) *Kernel {
 //	var k = new(Kernel)
-//	k.Board = NewBoard()
+//	k.Board = NewBoard(boardWidht, boardHeight)
 
 	// * 以下を追加
 	// [O1o1o0g22o2o3o0]

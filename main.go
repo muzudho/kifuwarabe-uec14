@@ -72,7 +72,7 @@ func main() {
 		}
 
 		// [O1o1o0g11o_3o0]
-		var kernel1 = kernel.NewKernel(
+		var kernel1 = kernel.NewKernel(engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
 			// [O1o1o0g12o__11o_4o0] 棋譜の初期化
 			engineConfig.GetMaxMovesNum(),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn))
