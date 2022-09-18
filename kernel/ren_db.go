@@ -10,8 +10,8 @@ import (
 // RenId - 連データベースの要素のId
 type RenId int
 
-// GetId - 連のIdを取得
-func GetRenDbItemId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenId {
+// GetRenId - 連のIdを取得
+func GetRenId(boardMemoryArea int, positionNumber int, minimumLocation Point) RenId {
 	return RenId(positionNumber*boardMemoryArea + int(minimumLocation))
 }
 
@@ -44,7 +44,7 @@ func (r *RenDb) GetRen(renId RenId) (*Ren, bool) {
 
 // RegisterRen - 連を登録
 func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renId = GetRenDbItemId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
+	var renId = GetRenId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
 	r.Rens[renId] = ren
 }
 
