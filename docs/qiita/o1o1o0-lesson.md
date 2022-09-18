@@ -2101,8 +2101,8 @@ func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 }
 
 // FindRen - 連を取得
-func (r *RenDb) GetRen(renId RenId) (*Ren, bool) {
-	var ren, isOk = r.Rens[renId]
+func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
+	var ren, isOk = db.Rens[renId]
 
 	if isOk {
 		return ren, true
@@ -2112,17 +2112,17 @@ func (r *RenDb) GetRen(renId RenId) (*Ren, bool) {
 }
 
 // RegisterRen - 連を登録
-func (r *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renId = GetRenId(r.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
-	r.Rens[renId] = ren
+func (db *RenDb) RegisterRen(positionNumber int, ren *Ren) {
+	var renId = GetRenId(db.Header.GetBoardMemoryArea(), positionNumber, ren.minimumLocation)
+	db.Rens[renId] = ren
 }
 
 // Dump - ダンプ
-func (r *RenDb) Dump() string {
+func (db *RenDb) Dump() string {
 	var sb strings.Builder
 
 	// 全ての要素
-	for i, item := range r.Rens {
+	for i, item := range db.Rens {
 		sb.WriteString(fmt.Sprintf("[%d]%s ", i, item.Dump()))
 	}
 
