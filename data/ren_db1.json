@@ -5,12 +5,12 @@
     },
     "rens": {
         "1,A1": {
-            "posNth": 1,
-            "loc": "A1 B2 C3 D4"
+            "locate": "A1 B2 C3 D4",
+            "liberty": 1
         },
         "2,K10": {
-            "posNth": 2,
-            "loc": "K10 L11 M12 N13"
+            "locate": "K10 L11 M12 N13",
+            "liberty": 2
         }
     }
 }

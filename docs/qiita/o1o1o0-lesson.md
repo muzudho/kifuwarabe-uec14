@@ -1349,10 +1349,10 @@ import "math"
 // Ren - 連，れん
 type Ren struct {
 	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
-	Loc string
+	Loc string `json:"locate"`
 
 	// LibertyArea - 呼吸点の面積
-	LibertyArea int
+	LibertyArea int `json:"liberty"`
 
 	// Color - 色
 	color Color
@@ -2172,9 +2172,9 @@ func (db *RenDb) RefreshToExternalFile(convertLocation func(Point) string) {
 // RenDbDocHeader - ヘッダー
 type RenDbDocHeader struct {
 	// BoardWidth - 盤の横幅
-	BoardWidth int
+	BoardWidth int `json:"boardWidth"`
 	// BoardHeight - 盤の縦幅
-	BoardHeight int
+	BoardHeight int `json:"boardHeight"`
 }
 
 // GetBoardMemoryArea - 枠付き盤の面積

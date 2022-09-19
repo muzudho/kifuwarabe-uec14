@@ -11,10 +11,10 @@ import (
 // Ren - 連，れん
 type Ren struct {
 	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
-	Loc string
+	Loc string `json:"locate"`
 
 	// LibertyArea - 呼吸点の面積
-	LibertyArea int
+	LibertyArea int `json:"liberty"`
 
 	// 色
 	color Color
