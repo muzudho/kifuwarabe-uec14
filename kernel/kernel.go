@@ -4,6 +4,7 @@ package kernel
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -68,15 +69,25 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "board": // [O1o1o0g13o0]
 		// 人間向けの出力
 		{
+			// 25列まで対応
+			const fileSimbols = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
+			// 25行まで対応
+			const rankSimbols = "   1 2 3 4 5 6 7 8 910111213141516171819202122232425"
+
+			var filesMax = int(math.Min(25, float64(k.Board.GetWidth())))
+			var filesLabel = fileSimbols[:filesMax]
+
 			var sb strings.Builder
-			sb.WriteString(`= board:'''
-. `)
+			// 枠の上辺
+			sb.WriteString(fmt.Sprintf(`= board:'''
+.     %s
+.    `, filesLabel))
 
 			var setStone = func(s Stone) {
 				sb.WriteString(fmt.Sprintf("%v", s))
 			}
 			var doNewline = func() {
-				sb.WriteString("\n. ")
+				sb.WriteString("\n.    ")
 			}
 			k.Board.ForeachLikeText(setStone, doNewline)
 			sb.WriteString("\n. '''\n")
