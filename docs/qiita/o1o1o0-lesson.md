@@ -2069,12 +2069,13 @@ func GetRenId(boardMemoryWidth int, positionNumber int, minimumLocation Point) R
 	return RenId(fmt.Sprintf("%d,%s", posNth, coord))
 }
 
+// RenDb - 連データベース
 type RenDb struct {
 	// Header - ヘッダー
-	Header RenDbDocHeader
+	Header RenDbDocHeader `json:"header"`
 
 	// 要素
-	Rens map[RenId]*Ren
+	Rens map[RenId]*Ren `json:"rens"`
 }
 
 // Save - 連データベースの外部ファイル書込
