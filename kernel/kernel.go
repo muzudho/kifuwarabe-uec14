@@ -72,7 +72,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			// 25列まで対応
 			const fileSimbols = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
 			// 25行まで対応
-			const rankSimbols = "   1 2 3 4 5 6 7 8 910111213141516171819202122232425"
+			var rankSimbols = strings.Split("  , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25", ",")
 
 			var filesMax = int(math.Min(25, float64(k.Board.GetWidth())))
 			var filesLabel = fileSimbols[:filesMax]
@@ -83,11 +83,20 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 .     %s
 .    `, filesLabel))
 
+			var rowNumber = 1
 			var setStone = func(s Stone) {
 				sb.WriteString(fmt.Sprintf("%v", s))
 			}
 			var doNewline = func() {
-				sb.WriteString("\n.    ")
+				var rankLabel string
+				if rowNumber <= k.Board.GetHeight() {
+					rankLabel = rankSimbols[rowNumber]
+				} else {
+					rankLabel = ""
+				}
+
+				sb.WriteString(fmt.Sprintf("\n. %2s ", rankLabel))
+				rowNumber++
 			}
 			k.Board.ForeachLikeText(setStone, doNewline)
 			sb.WriteString("\n. '''\n")
