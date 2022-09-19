@@ -40,6 +40,11 @@ func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 		k.searchStoneRen(arbitraryPoint)
 	}
 
+	// チェックボードの呼吸点のチェックをクリアー
+	for _, p := range k.tempRen.libertyLocations {
+		k.CheckBoard.UncheckLiberty(p)
+	}
+
 	return k.tempRen, true
 }
 
@@ -58,8 +63,11 @@ func (k *Kernel) searchStoneRen(here Point) {
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		switch adjacentS {
 		case Space: // 空点
-			k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, adjacentP) // 呼吸点を追加
-			return                                                                     // スキップ
+			if !k.CheckBoard.IsLibertyChecked(adjacentP) { // まだチェックしていない呼吸点なら
+				k.CheckBoard.CheckLiberty(adjacentP)
+				k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, adjacentP) // 呼吸点を追加
+			}
+			return // スキップ
 		case Wall: // 壁
 			return
 		}
