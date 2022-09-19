@@ -107,8 +107,8 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	var isChecked4rensToRemove = false
 
 	// [O1o1o0g22o3o1o0]
-	var renC = k.GetLiberty(pointB)
-	if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
+	var renC, isFound = k.GetLiberty(pointB)
+	if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
@@ -172,7 +172,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	return true
 }
 
-// GetRenToCapture - 現在、着手後の盤面とします。打ち上げられる石の連を返します
+// GetRenToCapture - 現在、着手後の盤面とする。打ち上げられる石の連を返却
 //
 // Returns
 // -------
@@ -186,19 +186,21 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	var renIds = [4]Point{math.MaxInt, math.MaxInt, math.MaxInt, math.MaxInt}
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
-		var adjacentR = k.GetLiberty(adjacentP)
-
-		// 同じ連を数え上げるのを防止する
-		var renId = adjacentR.GetMinimumLocation()
-		for i := 0; i < dir; i++ {
-			if renIds[i] == renId { // Idが既存
-				return
+		var adjacentR, isFound = k.GetLiberty(adjacentP)
+		if isFound {
+			// 同じ連を数え上げるのを防止する
+			var renId = adjacentR.GetMinimumLocation()
+			for i := 0; i < dir; i++ {
+				if renIds[i] == renId { // Idが既存
+					return
+				}
 			}
-		}
 
-		if adjacentR.LibertyArea < 1 {
-			isExists = true
-			rensToRemove[dir] = adjacentR
+			// 取れる石を見つけた
+			if adjacentR.LibertyArea < 1 {
+				isExists = true
+				rensToRemove[dir] = adjacentR
+			}
 		}
 	}
 

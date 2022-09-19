@@ -188,12 +188,19 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	case "remove_ren": // [O1o1o0g22o5o2o0]
 		// Example: `remove_ren B2`
-		var point = k.Board.GetPointFromCode(tokens[1])
-		var ren = k.GetLiberty(point)
-		k.RemoveRen(ren)
-		logg.C.Infof("=\n")
-		logg.J.Infow("ok")
-		return true
+		var coord = tokens[1]
+		var point = k.Board.GetPointFromCode(coord)
+		var ren, isFound = k.GetLiberty(point)
+		if isFound {
+			k.RemoveRen(ren)
+			logg.C.Infof("=\n")
+			logg.J.Infow("ok")
+			return true
+		}
+
+		logg.C.Infof("? not found ren coord:%s%\n", coord)
+		logg.J.Infow("error not found ren", "coord", coord)
+		return false
 
 	case "rendb_dump": // [O1o1o0g12o__11o__10o4o0]
 		var text = k.renDb.Dump()
@@ -266,11 +273,18 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	case "test_get_liberty": // [O1o1o0g22o2o5o0]
 		// Example: "test_get_liberty B2"
-		var point = k.Board.GetPointFromCode(tokens[1])
-		var ren = k.GetLiberty(point)
-		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.color, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
-		logg.J.Infow("output ren", "color", ren.color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
-		return true
+		var coord = tokens[1]
+		var point = k.Board.GetPointFromCode(coord)
+		var ren, isFound = k.GetLiberty(point)
+		if isFound {
+			logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.color, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
+			logg.J.Infow("output ren", "color", ren.color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
+			return true
+		}
+
+		logg.C.Infof("? not found ren coord:%s%\n", coord)
+		logg.J.Infow("error not found ren", "coord", coord)
+		return false
 
 	case "test_get_point_from_code": // [O1o1o0g16o1o0]
 		// Example: "test_get_point_from_code A1"

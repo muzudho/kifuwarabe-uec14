@@ -20,8 +20,10 @@ func (k *Kernel) FindAllRens() {
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
 
 	var setLocation = func(location Point) {
-		var ren = k.getRen(location)
-		k.renDb.RegisterRen(k.Record.posNum, ren)
+		var ren, isFound = k.findRen(location)
+		if isFound {
+			k.renDb.RegisterRen(k.Record.posNum, ren)
+		}
 	}
 	// 盤上の枠の内側をスキャン
 	k.Board.ForeachPayloadLocation(setLocation)

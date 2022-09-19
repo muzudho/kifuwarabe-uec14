@@ -8,21 +8,34 @@ package kernel
 // Parameters
 // ----------
 // * `arbitraryPoint` - 連に含まれる任意の一点
-func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
+//
+// Returns
+// -------
+// - *Ren is ren or nil
+// - bool is found
+func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
-
-	return k.getRen(arbitraryPoint)
+	return k.findRen(arbitraryPoint)
 }
 
-// 連の取得
-func (k *Kernel) getRen(arbitraryPoint Point) *Ren {
+// 連の検索
+//
+// Returns
+// -------
+// - *Ren is ren or nil
+// - bool is found
+func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 	// 連の初期化
 	k.tempRen = NewRen(k.Board.GetColorAt(arbitraryPoint))
 
-	k.searchRen(arbitraryPoint)
+	// 探索済みならスキップ
+	if k.CheckBoard.IsChecked(arbitraryPoint) {
+		return nil, false
+	}
 
-	return k.tempRen
+	k.searchRen(arbitraryPoint)
+	return k.tempRen, true
 }
 
 // 再帰関数。連の探索

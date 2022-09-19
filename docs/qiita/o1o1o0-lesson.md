@@ -4523,21 +4523,34 @@ package kernel
 // Parameters
 // ----------
 // * `arbitraryPoint` - 連に含まれる任意の一点
-func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
+//
+// Returns
+// -------
+// - *Ren is ren or nil
+// - bool is found
+func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
-
-	return k.getRen(arbitraryPoint)
+	return k.findRen(arbitraryPoint)
 }
 
-// 連の取得
-func (k *Kernel) getRen(arbitraryPoint Point) *Ren {
+// 連の検索
+//
+// Returns
+// -------
+// - *Ren is ren or nil
+// - bool is found
+func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 	// 連の初期化
 	k.tempRen = NewRen(k.Board.GetColorAt(arbitraryPoint))
 
-	k.searchRen(arbitraryPoint)
+	// 探索済みならスキップ
+	if k.CheckBoard.IsChecked(arbitraryPoint) {
+		return nil, false
+	}
 
-	return k.tempRen
+	k.searchRen(arbitraryPoint)
+	return k.tempRen, true
 }
 
 // 再帰関数。連の探索
@@ -4620,11 +4633,18 @@ func (k *Kernel) searchRen(here Point) {
 	// * アルファベット順になる位置に、以下のケース文を挿入
 	case "test_get_liberty": // [O1o1o0g22o2o5o0]
 		// Example: "test_get_liberty B2"
-		var point = k.Board.GetPointFromCode(tokens[1])
-		var ren = k.GetLiberty(point)
-		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.color, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
-		logg.J.Infow("output ren", "color", ren.color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
-		return true
+		var coord = tokens[1]
+		var point = k.Board.GetPointFromCode(coord)
+		var ren, isFound = k.GetLiberty(point)
+		if isFound {
+			logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.color, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
+			logg.J.Infow("output ren", "color", ren.color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
+			return true
+		}
+
+		logg.C.Infof("? not found ren coord:%s%\n", coord)
+		logg.J.Infow("error not found ren", "coord", coord)
+		return false
 
 	// この上にコマンドを挟んでいく
 	// -------------------------
@@ -4764,8 +4784,8 @@ Output > Log > JSON:
 	// }
 
 	// [O1o1o0g22o3o1o0]
-	var renC = k.GetLiberty(pointB)
-	if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
+	var renC, isFound = k.GetLiberty(pointB)
+	if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
@@ -4890,8 +4910,8 @@ Output > Console:
 
 	// ...略...
 	// // [O1o1o0g22o3o1o0]
-	// var renC = k.GetLiberty(pointB)
-	// if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
+	// var renC, isFound = k.GetLiberty(pointB)
+	// if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 	// 	if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
@@ -5134,13 +5154,20 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
 	case "remove_ren": // [O1o1o0g22o5o2o0]
-		// Example: "remove_ren B2"
-		var point = k.Board.GetPointFromCode(tokens[1])
-		var ren = k.GetLiberty(point)
-		k.RemoveRen(ren)
-		logg.C.Infof("=\n")
-		logg.J.Infow("ok")
-		return true
+		// Example: `remove_ren B2`
+		var coord = tokens[1]
+		var point = k.Board.GetPointFromCode(coord)
+		var ren, isFound = k.GetLiberty(point)
+		if isFound {
+			k.RemoveRen(ren)
+			logg.C.Infof("=\n")
+			logg.J.Infow("ok")
+			return true
+		}
+
+		logg.C.Infof("? not found ren coord:%s%\n", coord)
+		logg.J.Infow("error not found ren", "coord", coord)
+		return false
 
 	// ...略...
 	// この上にコマンドを挟んでいく
@@ -5229,8 +5256,8 @@ Output > Console:
 
 	// ...略...
 	// [O1o1o0g22o3o1o0]
-	// var renC = k.GetLiberty(pointB)
-	// if renC.GetArea() == 1 {
+	// var renC, isFound = k.GetLiberty(pointB)
+	// if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		// if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 
 			// * 以下を追加
@@ -5276,7 +5303,7 @@ Output > Console:
 	// return true
 // }
 
-// GetRenToCapture - 現在、着手後の盤面とします。打ち上げられる石の連を返します
+// GetRenToCapture - 現在、着手後の盤面とする。打ち上げられる石の連を返却
 //
 // Returns
 // -------
@@ -5290,19 +5317,21 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	var renIds = [4]Point{math.MaxInt, math.MaxInt, math.MaxInt, math.MaxInt}
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
-		var adjacentR = k.GetLiberty(adjacentP)
-
-		// 同じ連を数え上げるのを防止する
-		var renId = adjacentR.GetMinimumLocation()
-		for i := 0; i < dir; i++ {
-			if renIds[i] == renId { // Idが既存
-				return
+		var adjacentR, isFound = k.GetLiberty(adjacentP)
+		if isFound {
+			// 同じ連を数え上げるのを防止する
+			var renId = adjacentR.GetMinimumLocation()
+			for i := 0; i < dir; i++ {
+				if renIds[i] == renId { // Idが既存
+					return
+				}
 			}
-		}
 
-		if adjacentR.LibertyArea < 1 {
-			isExists = true
-			rensToRemove[dir] = adjacentR
+			// 取れる石を見つけた
+			if adjacentR.LibertyArea < 1 {
+				isExists = true
+				rensToRemove[dir] = adjacentR
+			}
 		}
 	}
 
@@ -5809,8 +5838,10 @@ func (k *Kernel) FindAllRens() {
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
 
 	var setLocation = func(location Point) {
-		var ren = k.getRen(location)
-		k.renDb.RegisterRen(k.Record.posNum, ren)
+		var ren, isFound = k.findRen(location)
+		if isFound {
+			k.renDb.RegisterRen(k.Record.posNum, ren)
+		}
 	}
 	// 盤上の枠の内側をスキャン
 	k.Board.ForeachPayloadLocation(setLocation)
