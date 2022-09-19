@@ -30,7 +30,7 @@ func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 	k.tempRen = NewRen(k.Board.GetStoneAt(arbitraryPoint))
 
 	// 探索済みならスキップ
-	if k.CheckBoard.IsChecked(arbitraryPoint) {
+	if k.CheckBoard.IsStoneChecked(arbitraryPoint) {
 		return nil, false
 	}
 
@@ -46,20 +46,19 @@ func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 // 石の連の探索
 // - 再帰関数
 func (k *Kernel) searchStoneRen(here Point) {
-	k.CheckBoard.Check(here)
+	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
-		if k.CheckBoard.IsChecked(adjacentP) {
+		if k.CheckBoard.IsStoneChecked(adjacentP) {
 			return
 		}
 
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		switch adjacentS {
 		case Space: // 空点
-			// k.CheckBoard.Check(adjacentP)
-			k.tempRen.LibertyArea++ //呼吸点を数え上げる
+			k.tempRen.LibertyArea++ // 呼吸点を数え上げる
 			return                  // スキップ
 		case Wall: // 壁
 			return
@@ -81,12 +80,12 @@ func (k *Kernel) searchStoneRen(here Point) {
 // 空点の連の探索
 // - 再帰関数
 func (k *Kernel) searchSpaceRen(here Point) {
-	k.CheckBoard.Check(here)
+	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
-		if k.CheckBoard.IsChecked(adjacentP) {
+		if k.CheckBoard.IsStoneChecked(adjacentP) {
 			return
 		}
 

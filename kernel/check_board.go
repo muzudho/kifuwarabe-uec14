@@ -13,7 +13,7 @@ type CheckBoard struct {
 	// 交点
 	//
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
-	cells []bool
+	cells []uint8
 }
 
 // NewCheckBoard - 新規作成
@@ -34,7 +34,7 @@ func (b *CheckBoard) Init(width int, height int) {
 
 	// 盤面のクリアー
 	for i := 0; i < len(b.cells); i++ {
-		b.cells[i] = false
+		b.cells[i] = 0
 	}
 }
 
@@ -42,17 +42,17 @@ func (b *CheckBoard) Init(width int, height int) {
 func (b *CheckBoard) Resize(width int, height int) {
 	b.memoryWidth = width + 2
 	b.memoryHeight = height + 2
-	b.cells = make([]bool, b.getMemoryArea())
+	b.cells = make([]uint8, b.getMemoryArea())
 }
 
-// Check - チェックを付けます
-func (b *CheckBoard) Check(point Point) {
-	b.cells[point] = true
+// CheckStone - 石をチェックした
+func (b *CheckBoard) CheckStone(point Point) {
+	b.cells[point] |= 0b00000001
 }
 
-// IsChecked - チェックが付いているか？
-func (b *CheckBoard) IsChecked(point Point) bool {
-	return b.cells[point]
+// IsChecked - 石はチェックされているか？
+func (b *CheckBoard) IsStoneChecked(point Point) bool {
+	return b.cells[point]&0b00000001 == 0b00000001
 }
 
 // 枠付き盤の面積

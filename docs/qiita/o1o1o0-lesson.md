@@ -4380,7 +4380,7 @@ type CheckBoard struct {
 	// 交点
 	//
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
-	cells []bool
+	cells []uint8
 }
 
 // NewCheckBoard - 新規作成
@@ -4401,7 +4401,7 @@ func (b *CheckBoard) Init(width int, height int) {
 
 	// 盤面のクリアー
 	for i := 0; i < len(b.cells); i++ {
-		b.cells[i] = false
+		b.cells[i] = 0
 	}
 }
 
@@ -4409,17 +4409,17 @@ func (b *CheckBoard) Init(width int, height int) {
 func (b *CheckBoard) Resize(width int, height int) {
 	b.memoryWidth = width + 2
 	b.memoryHeight = height + 2
-	b.cells = make([]bool, b.getMemoryArea())
+	b.cells = make([]uint8, b.getMemoryArea())
 }
 
-// Check - チェックを付けます
-func (b *CheckBoard) Check(point Point) {
-	b.cells[point] = true
+// CheckStone - 石をチェックした
+func (b *CheckBoard) CheckStone(point Point) {
+	b.cells[point] |= 0b00000001
 }
 
-// IsChecked - チェックが付いているか？
-func (b *CheckBoard) IsChecked(point Point) bool {
-	return b.cells[point]
+// IsChecked - 石はチェックされているか？
+func (b *CheckBoard) IsStoneChecked(point Point) bool {
+	return b.cells[point]&0b00000001 == 0b00000001
 }
 
 // 枠付き盤の面積
@@ -4597,7 +4597,7 @@ func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 	k.tempRen = NewRen(k.Board.GetStoneAt(arbitraryPoint))
 
 	// 探索済みならスキップ
-	if k.CheckBoard.IsChecked(arbitraryPoint) {
+	if k.CheckBoard.IsStoneChecked(arbitraryPoint) {
 		return nil, false
 	}
 
@@ -4613,20 +4613,19 @@ func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 // 石の連の探索
 // - 再帰関数
 func (k *Kernel) searchStoneRen(here Point) {
-	k.CheckBoard.Check(here)
+	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
-		if k.CheckBoard.IsChecked(adjacentP) {
+		if k.CheckBoard.IsStoneChecked(adjacentP) {
 			return
 		}
 
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		switch adjacentS {
 		case Space: // 空点
-			// k.CheckBoard.Check(adjacentP)
-			k.tempRen.LibertyArea++ //呼吸点を数え上げる
+			k.tempRen.LibertyArea++ // 呼吸点を数え上げる
 			return                  // スキップ
 		case Wall: // 壁
 			return
@@ -4648,12 +4647,12 @@ func (k *Kernel) searchStoneRen(here Point) {
 // 空点の連の探索
 // - 再帰関数
 func (k *Kernel) searchSpaceRen(here Point) {
-	k.CheckBoard.Check(here)
+	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
 	var setAdjacentPoint = func(dir int, adjacentP Point) {
 		// 探索済みならスキップ
-		if k.CheckBoard.IsChecked(adjacentP) {
+		if k.CheckBoard.IsStoneChecked(adjacentP) {
 			return
 		}
 
@@ -6162,6 +6161,11 @@ TODO アンドゥ
 
 📖 [[Go言語] 初心者必見シリーズ: マップ（Map）](https://qiita.com/wifecooky/items/2ffe41d55c575b2ce5e2)  
 📖 [Go言語: マップのキーが存在するかチェックしたい](https://qiita.com/suin/items/4cb1da71237fc55a06ee)  
+
+### ビット演算
+
+📖 [Goのビット演算について](https://www.flyenginer.com/low/go/go%E3%81%AE%E3%83%93%E3%83%83%E3%83%88%E6%BC%94%E7%AE%97%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.html)  
+📖 [How to define bit literals in Go?](https://stackoverflow.com/questions/56605810/how-to-define-bit-literals-in-go)  
 
 ### 数学
 
