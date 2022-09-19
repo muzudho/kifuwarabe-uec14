@@ -30,10 +30,10 @@ type RenDb struct {
 }
 
 // Save - 連データベースの外部ファイル書込
-func (db *RenDb) Save(path string, onError func(error) bool) bool {
+func (db *RenDb) Save(path string, convertLocation func(Point) string, onError func(error) bool) bool {
 
 	// 外部ファイルに出力するための、内部状態の整形
-	db.RefreshToExternalFile()
+	db.RefreshToExternalFile(convertLocation)
 
 	// Marshal関数でjsonエンコード
 	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
@@ -116,9 +116,9 @@ func (db *RenDb) Dump() string {
 }
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
-func (db *RenDb) RefreshToExternalFile() {
+func (db *RenDb) RefreshToExternalFile(convertLocation func(Point) string) {
 	for _, ren := range db.Rens {
-		ren.RefreshToExternalFile()
+		ren.RefreshToExternalFile(convertLocation)
 	}
 }
 

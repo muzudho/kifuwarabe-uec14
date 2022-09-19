@@ -223,17 +223,24 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		// Example: `rendb_save data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
+
+		var convertLocation = func(location Point) string {
+			return fmt.Sprintf("%s ", k.Board.GetCodeFromPoint(location))
+		}
+
 		var onError = func(err error) bool {
 			logg.C.Infof("? error:%s\n", err)
 			logg.J.Infow("error", "err", err)
 			return false
 		}
-		var isOk = k.renDb.Save(path, onError)
+
+		var isOk = k.renDb.Save(path, convertLocation, onError)
 		if isOk {
 			logg.C.Infof("=\n")
 			logg.J.Infow("ok")
 			return true
 		}
+
 		return false
 
 	case "set_board": // [O1o1o0g15o__14o2o0]

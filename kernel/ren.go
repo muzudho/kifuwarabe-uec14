@@ -76,18 +76,22 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 
 // Dump - ダンプ
 //
-// Example: `A1 B2 C3 D4`
+// Example: `22 23 24 25`
 func (r *Ren) Dump() string {
-	return r.createCoordBelt()
+	var convertLocation = func(location Point) string {
+		return fmt.Sprintf("%d ", location)
+	}
+	return r.createCoordBelt(convertLocation)
 }
 
-// Example: `A1 B2 C3 D4`
-func (r *Ren) createCoordBelt() string {
+// Example: `22 23 24 25`
+func (r *Ren) createCoordBelt(convertLocation func(Point) string) string {
 	var sb strings.Builder
 
 	// 全ての要素
 	for _, location := range r.locations {
-		sb.WriteString(fmt.Sprintf("%d ", location))
+		sb.WriteString(convertLocation(location))
+		// sb.WriteString(fmt.Sprintf("%d ", location))
 	}
 
 	var text = sb.String()
@@ -98,8 +102,9 @@ func (r *Ren) createCoordBelt() string {
 }
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
-func (r *Ren) RefreshToExternalFile() {
-	r.Loc = r.createCoordBelt()
+func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
+	// Example: `A1 B2 C3 D4`
+	r.Loc = r.createCoordBelt(convertLocation)
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]

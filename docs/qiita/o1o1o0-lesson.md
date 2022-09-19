@@ -1414,18 +1414,22 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 
 // Dump - ダンプ
 //
-// Example: `A1 B2 C3 D4`
+// Example: `22 23 24 25`
 func (r *Ren) Dump() string {
-	return r.createCoordBelt()
+	var convertLocation = func(location Point) string {
+		return fmt.Sprintf("%d ", location)
+	}
+	return r.createCoordBelt(convertLocation)
 }
 
-// Example: `A1 B2 C3 D4`
-func (r *Ren) createCoordBelt() string {
+// Example: `22 23 24 25`
+func (r *Ren) createCoordBelt(convertLocation func(Point) string) string {
 	var sb strings.Builder
 
 	// 全ての要素
 	for _, location := range r.locations {
-		sb.WriteString(fmt.Sprintf("%d ", location))
+		sb.WriteString(convertLocation(location))
+		// sb.WriteString(fmt.Sprintf("%d ", location))
 	}
 
 	var text = sb.String()
@@ -1436,8 +1440,9 @@ func (r *Ren) createCoordBelt() string {
 }
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
-func (r *Ren) RefreshToExternalFile() {
-	r.Loc = r.createCoordBelt()
+func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
+	// Example: `A1 B2 C3 D4`
+	r.Loc = r.createCoordBelt(convertLocation)
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
@@ -2073,10 +2078,10 @@ type RenDb struct {
 }
 
 // Save - 連データベースの外部ファイル書込
-func (db *RenDb) Save(path string, onError func(error) bool) bool {
+func (db *RenDb) Save(path string, convertLocation func(Point) string, onError func(error) bool) bool {
 
 	// 外部ファイルに出力するための、内部状態の整形
-	db.RefreshToExternalFile()
+	db.RefreshToExternalFile(convertLocation)
 
 	// Marshal関数でjsonエンコード
 	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
@@ -2158,8 +2163,10 @@ func (db *RenDb) Dump() string {
 }
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
-func (db *RenDb) RefreshToExternalFile() {
-
+func (db *RenDb) RefreshToExternalFile(convertLocation func(Point) string) {
+	for _, ren := range db.Rens {
+		ren.RefreshToExternalFile(convertLocation)
+	}
 }
 
 // RenDbDocHeader - ヘッダー
@@ -2270,18 +2277,46 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 		logg.J.Infow("ok", "dump", text)
 		return true
 
+	case "rendb_load": // [O1o1o0g12o__11o__10o4o0]
+		// Example: `rendb_load data/ren_db1_temp.json`
+		// * ファイルパスにスペースがはいっていてはいけない
+		var path = tokens[1]
+		var onError = func(err error) (*RenDb, bool) {
+			logg.C.Infof("? error:%s\n", err)
+			logg.J.Infow("error", "err", err)
+			return nil, false
+		}
+		var renDb, isOk = LoadRenDb(path, onError)
+		if isOk {
+			k.renDb = renDb
+			logg.C.Infof("=\n")
+			logg.J.Infow("ok")
+			return true
+		}
+		return false
+
 	case "rendb_save": // [O1o1o0g12o__11o__10o4o0]
+		// Example: `rendb_save data/ren_db1_temp.json`
+		// * ファイルパスにスペースがはいっていてはいけない
+		var path = tokens[1]
+
+		var convertLocation = func(location Point) string {
+			return k.Board.GetCodeFromPoint(location)
+		}
+
 		var onError = func(err error) bool {
 			logg.C.Infof("? error:%s\n", err)
 			logg.J.Infow("error", "err", err)
 			return false
 		}
-		var isOk = k.renDb.Save("data/ren_db1_temp.json", onError)
+
+		var isOk = k.renDb.Save(path, convertLocation, onError)
 		if isOk {
 			logg.C.Infof("=\n")
 			logg.J.Infow("ok")
 			return true
 		}
+
 		return false
 
 	// ...略...
