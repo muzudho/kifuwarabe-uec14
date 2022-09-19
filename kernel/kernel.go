@@ -75,6 +75,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			var rankSimbols = strings.Split("  , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25", ",")
 
 			var filesMax = int(math.Min(25, float64(k.Board.GetWidth())))
+			var rowsMax = int(math.Min(25, float64(k.Board.GetHeight())))
 			var filesLabel = fileSimbols[:filesMax]
 
 			var sb strings.Builder
@@ -89,7 +90,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			}
 			var doNewline = func() {
 				var rankLabel string
-				if rowNumber <= k.Board.GetHeight() {
+				if rowNumber <= rowsMax {
 					rankLabel = rankSimbols[rowNumber]
 				} else {
 					rankLabel = ""
