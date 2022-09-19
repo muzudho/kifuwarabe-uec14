@@ -4566,18 +4566,25 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 	// 連の初期化
 	k.tempRen = NewRen(k.Board.GetColorAt(arbitraryPoint))
+	var stone = k.Board.GetStoneAt(arbitraryPoint)
 
 	// 探索済みならスキップ
 	if k.CheckBoard.IsChecked(arbitraryPoint) {
 		return nil, false
 	}
 
-	k.searchRen(arbitraryPoint)
+	if stone == Space {
+		k.searchSpaceRen(arbitraryPoint)
+	} else {
+		k.searchStoneRen(arbitraryPoint)
+	}
+
 	return k.tempRen, true
 }
 
-// 再帰関数。連の探索
-func (k *Kernel) searchRen(here Point) {
+// 石の連の探索
+// - 再帰関数
+func (k *Kernel) searchStoneRen(here Point) {
 	k.CheckBoard.Check(here)
 	k.tempRen.AddLocation(here)
 
@@ -4588,11 +4595,12 @@ func (k *Kernel) searchRen(here Point) {
 		}
 
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
-		if adjacentS == Space { // 空点
-			k.CheckBoard.Check(adjacentP)
-			k.tempRen.LibertyArea++
-			return
-		} else if adjacentS == Wall { // 壁
+		switch adjacentS {
+		case Space: // 空点
+			// k.CheckBoard.Check(adjacentP)
+			k.tempRen.LibertyArea++ //呼吸点を数え上げる
+			return                  // スキップ
+		case Wall: // 壁
 			return
 		}
 
@@ -4601,8 +4609,35 @@ func (k *Kernel) searchRen(here Point) {
 		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
 
 		if adjacentC == k.tempRen.color { // 同色の石
-			k.searchRen(adjacentP) // 再帰
+			k.searchStoneRen(adjacentP) // 再帰
 		}
+	}
+
+	// 隣接する４方向
+	k.Board.ForeachNeumannNeighborhood(here, setAdjacentPoint)
+}
+
+// 空点の連の探索
+// - 再帰関数
+func (k *Kernel) searchSpaceRen(here Point) {
+	k.CheckBoard.Check(here)
+	k.tempRen.AddLocation(here)
+
+	var setAdjacentPoint = func(dir int, adjacentP Point) {
+		// 探索済みならスキップ
+		if k.CheckBoard.IsChecked(adjacentP) {
+			return
+		}
+
+		var adjacentS = k.Board.GetStoneAt(adjacentP)
+		if adjacentS != Space { // 空点でなければスキップ
+			return
+		}
+
+		var adjacentC = adjacentS.GetColor()
+		// 隣接する色、追加
+		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
+		k.searchSpaceRen(adjacentP) // 再帰
 	}
 
 	// 隣接する４方向
