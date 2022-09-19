@@ -298,8 +298,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		var point = k.Board.GetPointFromCode(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
-			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
-			logg.J.Infow("output ren", "color", ren.stone, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
+			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.GetLibertyArea(), ren.adjacentColor)
+			logg.J.Infow("output ren", "color", ren.stone, "area", ren.GetArea(), "libertyArea", ren.GetLibertyArea(), "adjacentColor", ren.adjacentColor)
 			return true
 		}
 

@@ -58,8 +58,8 @@ func (k *Kernel) searchStoneRen(here Point) {
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		switch adjacentS {
 		case Space: // 空点
-			k.tempRen.LibertyArea++ // 呼吸点を数え上げる
-			return                  // スキップ
+			k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, adjacentP) // 呼吸点を追加
+			return                                                                     // スキップ
 		case Wall: // 壁
 			return
 		}

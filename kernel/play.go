@@ -197,7 +197,7 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 			}
 
 			// 取れる石を見つけた
-			if adjacentR.LibertyArea < 1 {
+			if adjacentR.GetLibertyArea() < 1 {
 				isExists = true
 				rensToRemove[dir] = adjacentR
 			}

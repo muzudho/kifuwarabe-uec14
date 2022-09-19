@@ -1353,15 +1353,14 @@ type Ren struct {
 	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
 	Loc string `json:"locate"`
 
-	// LibertyArea - 呼吸点の面積
-	LibertyArea int `json:"liberty"`
-
 	// 石
 	stone Stone
-	// AdjacentColor - 隣接する石の色
+	// 隣接する石の色
 	adjacentColor Color
 	// 要素の石の位置
 	locations []Point
+	// 呼吸点の位置
+	libertyLocations []Point
 	// 最小の場所。Idとして利用することを想定
 	minimumLocation Point
 }
@@ -1382,6 +1381,11 @@ func NewRen(stone Stone) *Ren {
 // GetArea - 面積。アゲハマの数
 func (r *Ren) GetArea() int {
 	return len(r.locations)
+}
+
+// GetLibertyArea - 呼吸点の面積
+func (r *Ren) GetLibertyArea() int {
+	return len(r.libertyLocations)
 }
 
 // GetStone - 石
@@ -4422,6 +4426,21 @@ func (b *CheckBoard) IsStoneChecked(point Point) bool {
 	return b.cells[point]&0b00000001 == 0b00000001
 }
 
+// CheckLiberty - 呼吸点をチェックした
+func (b *CheckBoard) CheckLiberty(point Point) {
+	b.cells[point] |= 0b00000010
+}
+
+// UncheckLiberty - 呼吸点のチェックを外した
+func (b *CheckBoard) UncheckLiberty(point Point) {
+	b.cells[point] &= 0b11111101
+}
+
+// IsLibertyChecked - 呼吸点はチェックされているか？
+func (b *CheckBoard) IsLibertyChecked(point Point) bool {
+	return b.cells[point]&0b00000010 == 0b00000010
+}
+
 // 枠付き盤の面積
 func (b *CheckBoard) getMemoryArea() int {
 	return b.memoryWidth * b.memoryHeight
@@ -4625,8 +4644,8 @@ func (k *Kernel) searchStoneRen(here Point) {
 		var adjacentS = k.Board.GetStoneAt(adjacentP)
 		switch adjacentS {
 		case Space: // 空点
-			k.tempRen.LibertyArea++ // 呼吸点を数え上げる
-			return                  // スキップ
+			k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, adjacentP) // 呼吸点を追加
+			return                                                                     // スキップ
 		case Wall: // 壁
 			return
 		}
@@ -4722,8 +4741,8 @@ func (k *Kernel) searchSpaceRen(here Point) {
 		var point = k.Board.GetPointFromCode(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
-			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
-			logg.J.Infow("output ren", "color", ren.stone, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
+			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.GetLibertyArea(), ren.adjacentColor)
+			logg.J.Infow("output ren", "color", ren.stone, "area", ren.GetArea(), "libertyArea", ren.GetLibertyArea(), "adjacentColor", ren.adjacentColor)
 			return true
 		}
 
@@ -5413,7 +5432,7 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 			}
 
 			// 取れる石を見つけた
-			if adjacentR.LibertyArea < 1 {
+			if adjacentR.GetLibertyArea() < 1 {
 				isExists = true
 				rensToRemove[dir] = adjacentR
 			}

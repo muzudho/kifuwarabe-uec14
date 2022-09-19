@@ -55,6 +55,21 @@ func (b *CheckBoard) IsStoneChecked(point Point) bool {
 	return b.cells[point]&0b00000001 == 0b00000001
 }
 
+// CheckLiberty - 呼吸点をチェックした
+func (b *CheckBoard) CheckLiberty(point Point) {
+	b.cells[point] |= 0b00000010
+}
+
+// UncheckLiberty - 呼吸点のチェックを外した
+func (b *CheckBoard) UncheckLiberty(point Point) {
+	b.cells[point] &= 0b11111101
+}
+
+// IsLibertyChecked - 呼吸点はチェックされているか？
+func (b *CheckBoard) IsLibertyChecked(point Point) bool {
+	return b.cells[point]&0b00000010 == 0b00000010
+}
+
 // 枠付き盤の面積
 func (b *CheckBoard) getMemoryArea() int {
 	return b.memoryWidth * b.memoryHeight

@@ -15,15 +15,14 @@ type Ren struct {
 	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
 	Loc string `json:"locate"`
 
-	// LibertyArea - 呼吸点の面積
-	LibertyArea int `json:"liberty"`
-
 	// 石
 	stone Stone
 	// 隣接する石の色
 	adjacentColor Color
 	// 要素の石の位置
 	locations []Point
+	// 呼吸点の位置
+	libertyLocations []Point
 	// 最小の場所。Idとして利用することを想定
 	minimumLocation Point
 }
@@ -44,6 +43,11 @@ func NewRen(stone Stone) *Ren {
 // GetArea - 面積。アゲハマの数
 func (r *Ren) GetArea() int {
 	return len(r.locations)
+}
+
+// GetLibertyArea - 呼吸点の面積
+func (r *Ren) GetLibertyArea() int {
+	return len(r.libertyLocations)
 }
 
 // GetStone - 石
