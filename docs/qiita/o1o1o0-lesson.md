@@ -1354,8 +1354,8 @@ type Ren struct {
 	// LibertyArea - 呼吸点の面積
 	LibertyArea int `json:"liberty"`
 
-	// Color - 色
-	color Color
+	// 石
+	stone Stone
 	// AdjacentColor - 隣接する石の色
 	adjacentColor Color
 	// 要素の石の位置
@@ -1369,9 +1369,9 @@ type Ren struct {
 // Parameters
 // ----------
 // color - 色
-func NewRen(color Color) *Ren {
+func NewRen(stone Stone) *Ren {
 	var r = new(Ren)
-	r.color = color
+	r.stone = stone
 	r.adjacentColor = Color_None
 	r.minimumLocation = math.MaxInt
 	return r
@@ -1382,9 +1382,9 @@ func (r *Ren) GetArea() int {
 	return len(r.locations)
 }
 
-// GetColor - 色
-func (r *Ren) GetColor() Color {
-	return r.color
+// GetStone - 石
+func (r *Ren) GetStone() Stone {
+	return r.stone
 }
 
 // GetAdjacentColor - 隣接する石の色
@@ -4565,15 +4565,14 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 // - bool is found
 func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 	// 連の初期化
-	k.tempRen = NewRen(k.Board.GetColorAt(arbitraryPoint))
-	var stone = k.Board.GetStoneAt(arbitraryPoint)
+	k.tempRen = NewRen(k.Board.GetStoneAt(arbitraryPoint))
 
 	// 探索済みならスキップ
 	if k.CheckBoard.IsChecked(arbitraryPoint) {
 		return nil, false
 	}
 
-	if stone == Space {
+	if k.tempRen.stone == Space {
 		k.searchSpaceRen(arbitraryPoint)
 	} else {
 		k.searchStoneRen(arbitraryPoint)
@@ -4608,7 +4607,7 @@ func (k *Kernel) searchStoneRen(here Point) {
 		// 隣接する色、追加
 		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
 
-		if adjacentC == k.tempRen.color { // 同色の石
+		if adjacentS == k.tempRen.stone { // 同じ石
 			k.searchStoneRen(adjacentP) // 再帰
 		}
 	}
@@ -4695,8 +4694,8 @@ func (k *Kernel) searchSpaceRen(here Point) {
 		var point = k.Board.GetPointFromCode(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
-			logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.color, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
-			logg.J.Infow("output ren", "color", ren.color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
+			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
+			logg.J.Infow("output ren", "color", ren.stone, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
 			return true
 		}
 

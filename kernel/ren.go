@@ -16,8 +16,8 @@ type Ren struct {
 	// LibertyArea - 呼吸点の面積
 	LibertyArea int `json:"liberty"`
 
-	// 色
-	color Color
+	// 石
+	stone Stone
 	// 隣接する石の色
 	adjacentColor Color
 	// 要素の石の位置
@@ -31,9 +31,9 @@ type Ren struct {
 // Parameters
 // ----------
 // color - 色
-func NewRen(color Color) *Ren {
+func NewRen(stone Stone) *Ren {
 	var r = new(Ren)
-	r.color = color
+	r.stone = stone
 	r.adjacentColor = Color_None
 	r.minimumLocation = math.MaxInt
 	return r
@@ -44,9 +44,9 @@ func (r *Ren) GetArea() int {
 	return len(r.locations)
 }
 
-// GetColor - 色
-func (r *Ren) GetColor() Color {
-	return r.color
+// GetStone - 石
+func (r *Ren) GetStone() Stone {
+	return r.stone
 }
 
 // GetAdjacentColor - 隣接する石の色
