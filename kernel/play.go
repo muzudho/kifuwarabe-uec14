@@ -109,7 +109,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// [O1o1o0g22o3o1o0]
 	var renC = k.GetLiberty(pointB)
 	if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
-		if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+		if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
 
@@ -124,7 +124,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 				return onOpponentEye()
 			}
 
-		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.AdjacentColor {
+		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
 			// [O1o1o0g22o4o1o0]
 			// かつ、連Cに隣接する連の色が、石Aの色であったなら、
 			// 自分の眼に石を置こうとしたとみなす

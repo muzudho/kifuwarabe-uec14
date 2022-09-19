@@ -32,6 +32,9 @@ type RenDb struct {
 // Save - 連データベースの外部ファイル書込
 func (db *RenDb) Save(path string, onError func(error) bool) bool {
 
+	// 外部ファイルに出力するための、内部状態の整形
+	db.RefreshToExternalFile()
+
 	// Marshal関数でjsonエンコード
 	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
 	jsonBinary, errA := json.Marshal(db)
@@ -110,6 +113,13 @@ func (db *RenDb) Dump() string {
 		text = text[:len(text)-1]
 	}
 	return text
+}
+
+// RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
+func (db *RenDb) RefreshToExternalFile() {
+	for _, ren := range db.Rens {
+		ren.RefreshToExternalFile()
+	}
 }
 
 // RenDbDocHeader - ヘッダー

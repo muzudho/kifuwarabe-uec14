@@ -18,11 +18,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 // 連の取得
 func (k *Kernel) getRen(arbitraryPoint Point) *Ren {
 	// 連の初期化
-	k.tempRen = NewRen()
-	// 連の色
-	k.tempRen.Color = k.Board.GetColorAt(arbitraryPoint)
-	// 隣接する連の色
-	k.tempRen.AdjacentColor = Color_None
+	k.tempRen = NewRen(k.Board.GetColorAt(arbitraryPoint))
 
 	k.searchRen(arbitraryPoint)
 
@@ -51,9 +47,9 @@ func (k *Kernel) searchRen(here Point) {
 
 		var adjacentC = adjacentS.GetColor()
 		// 隣接する色、追加
-		k.tempRen.AdjacentColor = k.tempRen.AdjacentColor.GetAdded(adjacentC)
+		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
 
-		if adjacentC == k.tempRen.Color { // 同色の石
+		if adjacentC == k.tempRen.color { // 同色の石
 			k.searchRen(adjacentP) // 再帰
 		}
 	}

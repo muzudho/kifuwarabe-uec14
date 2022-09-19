@@ -1348,15 +1348,16 @@ import "math"
 
 // Ren - 連，れん
 type Ren struct {
-	// Loc - 石の盤上の座標符号の空白区切りのリスト。ファイルの入出力時のみ使う
+	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
 	Loc string
 
-	// Color - 色
-	Color Color
-	// AdjacentColor - 隣接する石の色
-	AdjacentColor Color
 	// LibertyArea - 呼吸点の面積
 	LibertyArea int
+
+	// Color - 色
+	color Color
+	// AdjacentColor - 隣接する石の色
+	adjacentColor Color
 	// 要素の石の位置
 	locations []Point
 	// 最小の場所。Idとして利用することを想定
@@ -1364,8 +1365,14 @@ type Ren struct {
 }
 
 // NewRen - 連を新規作成
-func NewRen() *Ren {
+//
+// Parameters
+// ----------
+// color - 色
+func NewRen(color Color) *Ren {
 	var r = new(Ren)
+	r.color = color
+	r.adjacentColor = Color_None
 	r.minimumLocation = math.MaxInt
 	return r
 }
@@ -1373,6 +1380,16 @@ func NewRen() *Ren {
 // GetArea - 面積。アゲハマの数
 func (r *Ren) GetArea() int {
 	return len(r.locations)
+}
+
+// GetColor - 色
+func (r *Ren) GetColor() Color {
+	return r.color
+}
+
+// GetAdjacentColor - 隣接する石の色
+func (r *Ren) GetAdjacentColor() Color {
+	return r.adjacentColor
 }
 
 // GetMinimumLocation - 最小の場所。Idとして利用することを想定
@@ -1396,7 +1413,14 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 }
 
 // Dump - ダンプ
+//
+// Example: `A1 B2 C3 D4`
 func (r *Ren) Dump() string {
+	return r.createCoordBelt()
+}
+
+// Example: `A1 B2 C3 D4`
+func (r *Ren) createCoordBelt() string {
 	var sb strings.Builder
 
 	// 全ての要素
@@ -1409,6 +1433,11 @@ func (r *Ren) Dump() string {
 		text = text[:len(text)-1]
 	}
 	return text
+}
+
+// RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
+func (r *Ren) RefreshToExternalFile() {
+	r.Loc = r.createCoordBelt()
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
@@ -2046,6 +2075,9 @@ type RenDb struct {
 // Save - 連データベースの外部ファイル書込
 func (db *RenDb) Save(path string, onError func(error) bool) bool {
 
+	// 外部ファイルに出力するための、内部状態の整形
+	db.RefreshToExternalFile()
+
 	// Marshal関数でjsonエンコード
 	// ->返り値jsonDataにはエンコード結果が[]byteの形で格納される
 	jsonBinary, errA := json.Marshal(db)
@@ -2123,6 +2155,11 @@ func (db *RenDb) Dump() string {
 		text = text[:len(text)-1]
 	}
 	return text
+}
+
+// RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
+func (db *RenDb) RefreshToExternalFile() {
+
 }
 
 // RenDbDocHeader - ヘッダー
@@ -4461,11 +4498,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) *Ren {
 // 連の取得
 func (k *Kernel) getRen(arbitraryPoint Point) *Ren {
 	// 連の初期化
-	k.tempRen = NewRen()
-	// 連の色
-	k.tempRen.Color = k.Board.GetColorAt(arbitraryPoint)
-	// 隣接する連の色
-	k.tempRen.AdjacentColor = Color_None
+	k.tempRen = NewRen(k.Board.GetColorAt(arbitraryPoint))
 
 	k.searchRen(arbitraryPoint)
 
@@ -4494,9 +4527,9 @@ func (k *Kernel) searchRen(here Point) {
 
 		var adjacentC = adjacentS.GetColor()
 		// 隣接する色、追加
-		k.tempRen.AdjacentColor = k.tempRen.AdjacentColor.GetAdded(adjacentC)
+		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
 
-		if adjacentC == k.tempRen.Color { // 同色の石
+		if adjacentC == k.tempRen.color { // 同色の石
 			k.searchRen(adjacentP) // 再帰
 		}
 	}
@@ -4554,8 +4587,8 @@ func (k *Kernel) searchRen(here Point) {
 		// Example: "test_get_liberty B2"
 		var point = k.Board.GetPointFromCode(tokens[1])
 		var ren = k.GetLiberty(point)
-		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.Color, ren.GetArea(), ren.LibertyArea, ren.AdjacentColor)
-		logg.J.Infow("output ren", "color", ren.Color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.AdjacentColor)
+		logg.C.Infof("= ren color:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.color, ren.GetArea(), ren.LibertyArea, ren.adjacentColor)
+		logg.J.Infow("output ren", "color", ren.color, "area", ren.GetArea(), "libertyArea", ren.LibertyArea, "adjacentColor", ren.adjacentColor)
 		return true
 
 	// この上にコマンドを挟んでいく
@@ -4698,7 +4731,7 @@ Output > Log > JSON:
 	// [O1o1o0g22o3o1o0]
 	var renC = k.GetLiberty(pointB)
 	if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
-		if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+		if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
 			return onOpponentEye()
@@ -4824,12 +4857,12 @@ Output > Console:
 	// // [O1o1o0g22o3o1o0]
 	// var renC = k.GetLiberty(pointB)
 	// if renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
-	// 	if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+	// 	if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
 	// 		return onOpponentEye()
 
-		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.AdjacentColor {
+		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
 			// [O1o1o0g22o4o1o0]
 			// かつ、連Cに隣接する連の色が、石Aの色であったなら、
 			// 自分の眼に石を置こうとしたとみなす
@@ -5163,7 +5196,7 @@ Output > Console:
 	// [O1o1o0g22o3o1o0]
 	// var renC = k.GetLiberty(pointB)
 	// if renC.GetArea() == 1 {
-		// if stoneA.GetColor() == renC.AdjacentColor.GetOpponent() {
+		// if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 
 			// * 以下を追加
 			// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
@@ -5180,7 +5213,7 @@ Output > Console:
 			// * 以下を削除
 			// onOpponentEye()
 
-		// } else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.AdjacentColor {
+		// } else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
 			// ...略...
 		// }
 	// }
