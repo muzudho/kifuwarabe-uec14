@@ -253,7 +253,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		var path = tokens[1]
 
 		var convertLocation = func(location Point) string {
-			return fmt.Sprintf("%s ", k.Board.GetCodeFromPoint(location))
+			return k.Board.GetCodeFromPoint(location)
 		}
 
 		var onError = func(err error) bool {

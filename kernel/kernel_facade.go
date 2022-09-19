@@ -25,8 +25,8 @@ func (k *Kernel) FindAllRens() {
 			k.renDb.RegisterRen(k.Record.posNum, ren)
 		}
 	}
-	// 盤上の枠の内側をスキャン
-	k.Board.ForeachPayloadLocation(setLocation)
+	// 盤上の枠の内側をスキャン。筋、段の順
+	k.Board.ForeachPayloadLocationOrderByYx(setLocation)
 }
 
 // EOF [O1o1o0g22o5o1o0]

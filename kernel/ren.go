@@ -81,34 +81,33 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 // Example: `22 23 24 25`
 func (r *Ren) Dump() string {
 	var convertLocation = func(location Point) string {
-		return fmt.Sprintf("%d ", location)
+		return fmt.Sprintf("%d", location)
 	}
-	return r.createCoordBelt(convertLocation)
+	var tokens = r.createCoordBelt(convertLocation)
+	return strings.Join(tokens, " ")
 }
 
-// Example: `22 23 24 25`
-func (r *Ren) createCoordBelt(convertLocation func(Point) string) string {
-	var sb strings.Builder
+// Example: {`22`, `23` `24`, `25`}
+func (r *Ren) createCoordBelt(convertLocation func(Point) string) []string {
+	var tokens []string
 
 	// 全ての要素
 	for _, location := range r.locations {
-		sb.WriteString(convertLocation(location))
-		// sb.WriteString(fmt.Sprintf("%d ", location))
+		var token = convertLocation(location)
+		tokens = append(tokens, token)
 	}
 
-	var text = sb.String()
-	if 0 < len(text) {
-		text = text[:len(text)-1]
-	}
-	return text
+	return tokens
 }
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
 func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 	// Examples: `.`, `x`, `o`, `+`
 	r.Sto = r.stone.String()
+
 	// Example: `A1 B2 C3 D4`
-	r.Loc = r.createCoordBelt(convertLocation)
+	var tokens = r.createCoordBelt(convertLocation)
+	r.Loc = strings.Join(tokens, " ")
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]

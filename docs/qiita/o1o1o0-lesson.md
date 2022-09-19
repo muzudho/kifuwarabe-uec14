@@ -1419,32 +1419,33 @@ func (r *Ren) ForeachLocation(setLocation func(int, Point)) {
 // Example: `22 23 24 25`
 func (r *Ren) Dump() string {
 	var convertLocation = func(location Point) string {
-		return fmt.Sprintf("%d ", location)
+		return fmt.Sprintf("%d", location)
 	}
-	return r.createCoordBelt(convertLocation)
+	var tokens = r.createCoordBelt(convertLocation)
+	return strings.Join(tokens, " ")
 }
 
-// Example: `22 23 24 25`
-func (r *Ren) createCoordBelt(convertLocation func(Point) string) string {
-	var sb strings.Builder
+// Example: {`22`, `23` `24`, `25`}
+func (r *Ren) createCoordBelt(convertLocation func(Point) string) []string {
+	var tokens []string
 
 	// 全ての要素
 	for _, location := range r.locations {
-		sb.WriteString(convertLocation(location))
-		// sb.WriteString(fmt.Sprintf("%d ", location))
+		var token = convertLocation(location)
+		tokens = append(tokens, token)
 	}
 
-	var text = sb.String()
-	if 0 < len(text) {
-		text = text[:len(text)-1]
-	}
-	return text
+	return tokens
 }
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
 func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
+	// Examples: `.`, `x`, `o`, `+`
+	r.Sto = r.stone.String()
+
 	// Example: `A1 B2 C3 D4`
-	r.Loc = r.createCoordBelt(convertLocation)
+	var tokens = r.createCoordBelt(convertLocation)
+	r.Loc = strings.Join(tokens, " ")
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
@@ -3049,6 +3050,18 @@ func (b *Board) ForeachPayloadLocation(setLocation func(Point)) {
 	var width = b.memoryWidth - 1
 	for y := 1; y < height; y++ {
 		for x := 1; x < width; x++ {
+			var i = b.GetPointFromXy(x, y)
+			setLocation(i)
+		}
+	}
+}
+
+// ForeachPayloadLocation - 枠や改行を含めない各セルの番地。筋、段の順
+func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
+	var height = b.memoryHeight - 1
+	var width = b.memoryWidth - 1
+	for x := 1; x < width; x++ {
+		for y := 1; y < height; y++ {
 			var i = b.GetPointFromXy(x, y)
 			setLocation(i)
 		}
@@ -5902,8 +5915,8 @@ func (k *Kernel) FindAllRens() {
 			k.renDb.RegisterRen(k.Record.posNum, ren)
 		}
 	}
-	// 盤上の枠の内側をスキャン
-	k.Board.ForeachPayloadLocation(setLocation)
+	// 盤上の枠の内側をスキャン。筋、段の順
+	k.Board.ForeachPayloadLocationOrderByYx(setLocation)
 }
 // ...略...
 ```
