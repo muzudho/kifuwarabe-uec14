@@ -19,10 +19,12 @@ func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
 
+	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
+
 	var setLocation = func(location Point) {
 		var ren, isFound = k.findRen(location)
 		if isFound {
-			k.renDb.RegisterRen(k.Record.posNum, ren)
+			k.renDb.RegisterRen(maxPosNthFigure, k.Record.posNum, ren)
 		}
 	}
 	// 盤上の枠の内側をスキャン。筋、段の順

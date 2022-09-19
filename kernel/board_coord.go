@@ -24,10 +24,10 @@ func getCodeFromPointOnBoard(memoryWidth int, point Point) string {
 	return fmt.Sprintf("%s%d", file, rank)
 }
 
-// 例えば "A01" のように、行番号を一律２桁のゼロ埋めにします
-func getCodeZeroPaddingFromPointOnBoard(memoryWidth int, point Point) string {
+// 例えば "01A" のように、符号を行、列の順とし、かつ、行番号を一律２桁のゼロ埋めにします
+func getRenIdFromPointOnBoard(memoryWidth int, point Point) string {
 	var file, rank = getFileRankFromPointOnBoard(memoryWidth, point)
-	return fmt.Sprintf("%s%02d", file, rank)
+	return fmt.Sprintf("%02d%s", rank, file)
 }
 
 func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {

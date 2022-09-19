@@ -15,10 +15,11 @@ import (
 type RenId string
 
 // GetRenId - 連のIdを取得
-func GetRenId(boardMemoryWidth int, positionNumber int, minimumLocation Point) RenId {
+func GetRenId(boardMemoryWidth int, positionNthFigure int, positionNumber int, minimumLocation Point) RenId {
 	var posNth = positionNumber + geta
-	var coord = getCodeZeroPaddingFromPointOnBoard(boardMemoryWidth, minimumLocation)
-	return RenId(fmt.Sprintf("%d,%s", posNth, coord))
+	var coord = getRenIdFromPointOnBoard(boardMemoryWidth, minimumLocation)
+
+	return RenId(fmt.Sprintf("%0*d,%s", positionNthFigure, posNth, coord))
 }
 
 // RenDb - 連データベース
@@ -91,8 +92,8 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 
 // RegisterRen - 連を登録
 // * すでに Id が登録されているなら、上書きしない
-func (db *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNumber, ren.minimumLocation)
+func (db *RenDb) RegisterRen(positionNthFigure int, positionNumber int, ren *Ren) {
+	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNthFigure, positionNumber, ren.minimumLocation)
 
 	var _, isExists = db.Rens[renId]
 	if !isExists {

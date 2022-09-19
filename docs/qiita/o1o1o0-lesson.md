@@ -2067,10 +2067,11 @@ import (
 type RenId string
 
 // GetRenId - 連のIdを取得
-func GetRenId(boardMemoryWidth int, positionNumber int, minimumLocation Point) RenId {
+func GetRenId(boardMemoryWidth int, positionNthFigure int, positionNumber int, minimumLocation Point) RenId {
 	var posNth = positionNumber + geta
-	var coord = getCodeZeroPaddingFromPointOnBoard(boardMemoryWidth, minimumLocation)
-	return RenId(fmt.Sprintf("%d,%s", posNth, coord))
+	var coord = getRenIdFromPointOnBoard(boardMemoryWidth, minimumLocation)
+
+	return RenId(fmt.Sprintf("%0*d,%s", positionNthFigure, posNth, coord))
 }
 
 // RenDb - 連データベース
@@ -2142,8 +2143,8 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 
 // RegisterRen - 連を登録
 // * すでに Id が登録されているなら、上書きしない
-func (db *RenDb) RegisterRen(positionNumber int, ren *Ren) {
-	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNumber, ren.minimumLocation)
+func (db *RenDb) RegisterRen(positionNthFigure int, positionNumber int, ren *Ren) {
+	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNthFigure, positionNumber, ren.minimumLocation)
 
 	var _, isExists = db.Rens[renId]
 	if !isExists {
@@ -2518,6 +2519,18 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 	}
 
 	return r
+}
+
+// GetMaxPosNthFigure - 手数（序数）の最大値の桁数
+func (r *Record) GetMaxPosNthFigure() int {
+	var nth = r.GetMaxPosNth()
+	var nthText = strconv.Itoa(nth)
+	return len(nthText)
+}
+
+// GetMaxPosNth - 手数（序数）の最大値
+func (r *Record) GetMaxPosNth() int {
+	return len(r.items) + geta
 }
 
 // GetPositionNumber - 何手目。基数
@@ -3758,10 +3771,10 @@ func getCodeFromPointOnBoard(memoryWidth int, point Point) string {
 	return fmt.Sprintf("%s%d", file, rank)
 }
 
-// 例えば "A01" のように、行番号を一律２桁のゼロ埋めにします
-func getCodeZeroPaddingFromPointOnBoard(memoryWidth int, point Point) string {
+// 例えば "01A" のように、符号を行、列の順とし、かつ、行番号を一律２桁のゼロ埋めにします
+func getRenIdFromPointOnBoard(memoryWidth int, point Point) string {
 	var file, rank = getFileRankFromPointOnBoard(memoryWidth, point)
-	return fmt.Sprintf("%s%02d", file, rank)
+	return fmt.Sprintf("%02d%s", rank, file)
 }
 
 func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
@@ -5910,10 +5923,12 @@ func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
 	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
 
+	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
+
 	var setLocation = func(location Point) {
 		var ren, isFound = k.findRen(location)
 		if isFound {
-			k.renDb.RegisterRen(k.Record.posNum, ren)
+			k.renDb.RegisterRen(maxPosNthFigure, k.Record.posNum, ren)
 		}
 	}
 	// 盤上の枠の内側をスキャン。筋、段の順
@@ -6127,6 +6142,7 @@ TODO アンドゥ
 ### 文字列
 
 📖 [Go: 1文字ずつアクセスする](https://blog.sarabande.jp/post/61104920128)  
+📖 [Golang String Padding Example](https://golang.cafe/blog/golang-string-padding-example.html)  
 
 ### 配列
 

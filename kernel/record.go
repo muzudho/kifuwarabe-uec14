@@ -2,6 +2,8 @@
 
 package kernel
 
+import "strconv"
+
 // Record - 棋譜
 type Record struct {
 	// 先行
@@ -26,6 +28,18 @@ func NewRecord(maxMoves int, playFirst Stone) *Record {
 	}
 
 	return r
+}
+
+// GetMaxPosNthFigure - 手数（序数）の最大値の桁数
+func (r *Record) GetMaxPosNthFigure() int {
+	var nth = r.GetMaxPosNth()
+	var nthText = strconv.Itoa(nth)
+	return len(nthText)
+}
+
+// GetMaxPosNth - 手数（序数）の最大値
+func (r *Record) GetMaxPosNth() int {
+	return len(r.items) + geta
 }
 
 // GetPositionNumber - 何手目。基数
