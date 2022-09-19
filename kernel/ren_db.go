@@ -10,13 +10,14 @@ import (
 )
 
 // RenId - 連データベースに格納される連のId
-// * 外部ファイルの可読性を優先して数値型ではなく文字列
+// - 外部ファイルの可読性を優先して数値型ではなく文字列
+// - 昇順に並ぶように前ゼロを付ける
 type RenId string
 
 // GetRenId - 連のIdを取得
 func GetRenId(boardMemoryWidth int, positionNumber int, minimumLocation Point) RenId {
 	var posNth = positionNumber + geta
-	var coord = getCodeFromPointOnBoard(boardMemoryWidth, minimumLocation)
+	var coord = getCodeZeroPaddingFromPointOnBoard(boardMemoryWidth, minimumLocation)
 	return RenId(fmt.Sprintf("%d,%s", posNth, coord))
 }
 
@@ -126,12 +127,12 @@ func (h *RenDbDocHeader) GetBoardMemoryArea() int {
 
 // GetBoardMemoryWidth - 枠付き盤の横幅
 func (h *RenDbDocHeader) GetBoardMemoryWidth() int {
-	return h.BoardWidth + wallThickness
+	return h.BoardWidth + bothSidesWallThickness
 }
 
 // GetBoardMemoryHeight - 枠付き盤の縦幅
 func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
-	return h.BoardHeight + wallThickness
+	return h.BoardHeight + bothSidesWallThickness
 }
 
 // EOF [O1o1o0g12o__11o__10o2o0]

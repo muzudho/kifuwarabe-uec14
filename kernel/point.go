@@ -57,7 +57,11 @@ func GetYFromRank(rank string) int {
 //
 //	"1" .. "99"
 func GetRankFromY(y int) string {
-	return strconv.Itoa(y + 1)
+	return strconv.Itoa(getRankFromY(y))
+}
+
+func getRankFromY(y int) int {
+	return y + 1
 }
 
 // GetFileFromCode - 座標の符号の筋の部分を抜き出します

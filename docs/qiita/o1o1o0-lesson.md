@@ -2031,7 +2031,7 @@ type RenId string
 // GetRenId - 連のIdを取得
 func GetRenId(boardMemoryWidth int, positionNumber int, minimumLocation Point) RenId {
 	var posNth = positionNumber + geta
-	var coord = getCodeFromPointOnBoard(boardMemoryWidth, minimumLocation)
+	var coord = getCodeZeroPaddingFromPointOnBoard(boardMemoryWidth, minimumLocation)
 	return RenId(fmt.Sprintf("%d,%s", posNth, coord))
 }
 
@@ -2140,12 +2140,12 @@ func (h *RenDbDocHeader) GetBoardMemoryArea() int {
 
 // GetBoardMemoryWidth - 枠付き盤の横幅
 func (h *RenDbDocHeader) GetBoardMemoryWidth() int {
-	return h.BoardWidth + wallThickness
+	return h.BoardWidth + bothSidesWallThickness
 }
 
 // GetBoardMemoryHeight - 枠付き盤の縦幅
 func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
-	return h.BoardHeight + wallThickness
+	return h.BoardHeight + bothSidesWallThickness
 }
 
 // EOF [O1o1o0g12o__11o__10o2o0]
@@ -2677,8 +2677,11 @@ Output > Console:
 
 package kernel
 
-// 枠の厚み。南北、または東西
-const wallThickness = 2
+// 片方の枠の厚み。東、北、西、南
+const oneSideWallThickness = 1
+
+// 両側の枠の厚み。南北、または東西
+const bothSidesWallThickness = 2
 
 // Board - 盤
 type Board struct {
@@ -2716,12 +2719,12 @@ func (b *Board) GetMemoryHeight() int {
 
 // GetWidth - 枠の厚みを含まない横幅
 func (b *Board) GetWidth() int {
-	return b.memoryWidth - wallThickness
+	return b.memoryWidth - bothSidesWallThickness
 }
 
 // GetHeight - 枠の厚みを含まない縦幅
 func (b *Board) GetHeight() int {
-	return b.memoryHeight - wallThickness
+	return b.memoryHeight - bothSidesWallThickness
 }
 
 // GetStoneAt - 指定座標の石を取得
@@ -2768,8 +2771,8 @@ func getXyFromPointOnBoard(memoryWidth int, point Point) (int, int) {
 
 // サイズ変更
 func (b *Board) resize(width int, height int) {
-	b.memoryWidth = width + wallThickness
-	b.memoryHeight = height + wallThickness
+	b.memoryWidth = width + bothSidesWallThickness
+	b.memoryHeight = height + bothSidesWallThickness
 	b.cells = make([]Stone, b.getMemoryArea())
 }
 
@@ -3622,16 +3625,15 @@ Moved to `[O1o1o0g12o__10o1o0]`
 
 package kernel
 
+import "fmt"
+
 // GetPointFromCode - "A7" や "J13" といった符号を Point へ変換します
 //
 // * `code` - 座標の符号。 Example: "A7" や "J13"
 func (b *Board) GetPointFromCode(code string) Point {
-	// 枠の厚み
-	var left_wall = 1
-	var top_wall = 1
 	return b.GetPointFromXy(
-		GetXFromFile(GetFileFromCode(code))+left_wall,
-		GetYFromRank(GetRankFromCode(code))+top_wall)
+		GetXFromFile(GetFileFromCode(code))+oneSideWallThickness,
+		GetYFromRank(GetRankFromCode(code))+oneSideWallThickness)
 }
 
 // GetCodeFromPoint - `GetPointFromCode` の逆関数
@@ -3639,14 +3641,23 @@ func (b *Board) GetCodeFromPoint(point Point) string {
 	return getCodeFromPointOnBoard(b.memoryWidth, point)
 }
 
+// 例えば "A1" のように、行番号をゼロサプレスして返す
 func getCodeFromPointOnBoard(memoryWidth int, point Point) string {
-	// 枠の厚み
-	var left_wall = 1
-	var top_wall = 1
+	var file, rank = getFileRankFromPointOnBoard(memoryWidth, point)
+	return fmt.Sprintf("%s%d", file, rank)
+}
+
+// 例えば "A01" のように、行番号を一律２桁のゼロ埋めにします
+func getCodeZeroPaddingFromPointOnBoard(memoryWidth int, point Point) string {
+	var file, rank = getFileRankFromPointOnBoard(memoryWidth, point)
+	return fmt.Sprintf("%s%02d", file, rank)
+}
+
+func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
 	var x, y = getXyFromPointOnBoard(memoryWidth, point)
-	var file = GetFileFromX(x - left_wall)
-	var rank = GetRankFromY(y - top_wall)
-	return fmt.Sprintf("%s%s", file, rank)
+	var file = GetFileFromX(x - oneSideWallThickness)
+	var rank = getRankFromY(y) - oneSideWallThickness
+	return file, rank
 }
 
 // EOF [O1o1o0g16o0]
