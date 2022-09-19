@@ -10,6 +10,8 @@ import (
 
 // Ren - 連，れん
 type Ren struct {
+	// Sto - （外部ファイル向け）石
+	Sto string `json:"stone"`
 	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
 	Loc string `json:"locate"`
 
@@ -103,6 +105,8 @@ func (r *Ren) createCoordBelt(convertLocation func(Point) string) string {
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
 func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
+	// Examples: `.`, `x`, `o`, `+`
+	r.Sto = r.stone.String()
 	// Example: `A1 B2 C3 D4`
 	r.Loc = r.createCoordBelt(convertLocation)
 }

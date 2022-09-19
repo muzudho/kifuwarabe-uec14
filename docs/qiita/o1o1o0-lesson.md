@@ -1348,6 +1348,8 @@ import "math"
 
 // Ren - 連，れん
 type Ren struct {
+	// Sto - （外部ファイル向け）石
+	Sto string `json:"stone"`
 	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
 	Loc string `json:"locate"`
 
