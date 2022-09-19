@@ -1445,6 +1445,7 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 
 	// Example: `A1 B2 C3 D4`
 	var tokens = r.createCoordBelt(convertLocation)
+	sort.Strings(tokens) // 辞書順ソート
 	r.Loc = strings.Join(tokens, " ")
 }
 
