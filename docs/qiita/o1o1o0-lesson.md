@@ -2096,6 +2096,41 @@ type RenDb struct {
 	Rens map[RenId]*Ren `json:"rens"`
 }
 
+// NewRenDb - 連データベースを新規作成
+func NewRenDb(boardWidth int, boardHeight int) *RenDb {
+	var db = new(RenDb)
+	db.Header.Init(boardWidth, boardHeight)
+	db.Rens = make(map[RenId]*Ren)
+	return db
+}
+
+// LoadRenDb - 連データベースの外部ファイル読取
+func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
+	// ファイル読込
+	var binary, errA = os.ReadFile(path)
+	if errA != nil {
+		return onError(errA)
+	}
+
+	var db = new(RenDb)
+	var errB = json.Unmarshal(binary, db)
+	if errB != nil {
+		return onError(errB)
+	}
+
+	return db, true
+}
+
+// Init - 初期化
+func (db *RenDb) Init(boardWidth int, boardHeight int) {
+	db.Header.Init(boardWidth, boardHeight)
+
+	// Clear
+	for ri := range db.Rens {
+		delete(db.Rens, ri)
+	}
+}
+
 // Save - 連データベースの外部ファイル書込
 func (db *RenDb) Save(path string, convertLocation func(Point) string, onError func(error) bool) bool {
 
@@ -2116,31 +2151,6 @@ func (db *RenDb) Save(path string, convertLocation func(Point) string, onError f
 	}
 
 	return true
-}
-
-// LoadRenDb - 連データベースの外部ファイル読取
-func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
-	// ファイル読込
-	var binary, errA = os.ReadFile(path)
-	if errA != nil {
-		return onError(errA)
-	}
-
-	var renDb = new(RenDb)
-	var errB = json.Unmarshal(binary, renDb)
-	if errB != nil {
-		return onError(errB)
-	}
-
-	return renDb, true
-}
-
-// NewRenDb - 連データベースを新規作成
-func NewRenDb(boardWidth int, boardHeight int) *RenDb {
-	var r = new(RenDb)
-	r.Header.BoardWidth = boardWidth
-	r.Header.BoardHeight = boardHeight
-	return r
 }
 
 // FindRen - 連を取得
@@ -2194,6 +2204,12 @@ type RenDbDocHeader struct {
 	BoardWidth int `json:"boardWidth"`
 	// BoardHeight - 盤の縦幅
 	BoardHeight int `json:"boardHeight"`
+}
+
+// Init - 初期化
+func (h *RenDbDocHeader) Init(boardWidth int, boardHeight int) {
+	h.BoardWidth = boardWidth
+	h.BoardHeight = boardHeight
 }
 
 // GetBoardMemoryArea - 枠付き盤の面積
@@ -3530,12 +3546,12 @@ Moved to `[O1o1o0g11o__10o_6o0]`
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
+ 	│	├── 📄 board_set.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
- 	│	├── 📄 set_board.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -3570,9 +3586,9 @@ Moved to `[O1o1o0g11o__10o_6o0]`
    +++++++++++++++++++++
 ```
 
-# Step [O1o1o0g15o__14o0] 初期盤面を設定する - set_board コマンド
+# Step [O1o1o0g15o__14o0] 初期盤面を設定する - board_set コマンド
 
-## Step [O1o1o0g15o__14o1o0] ファイル作成 - set_board.go ファイル
+## Step [O1o1o0g15o__14o1o0] ファイル作成 - board_set.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -3581,12 +3597,12 @@ Moved to `[O1o1o0g11o__10o_6o0]`
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
+👉 	│	├── 📄 board_set.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-👉 	│	├── 📄 set_board.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -3609,7 +3625,7 @@ import (
 // DoSetBoard - 盤面を設定する
 //
 // コマンドラインの複数行入力は難しいので、ファイルから取ることにする
-// * `command` - Example: `set_board file data/board1.txt`
+// * `command` - Example: `board_set file data/board1.txt`
 // ........................--------- ---- ---------------
 // ........................0         1    2
 func (k *Kernel) DoSetBoard(command string, logg *Logger) {
@@ -3670,12 +3686,12 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
+ 	│	├── 📄 board_set.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
- 	│	├── 📄 set_board.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -3693,8 +3709,8 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	// -------------------------
 	// ...略...
 
-	case "set_board": // [O1o1o0g15o__14o2o0]
-		// Example: `set_board file data/board1.txt`
+	case "board_set": // [O1o1o0g15o__14o2o0]
+		// Example: `board_set file data/board1.txt`
 		k.DoSetBoard(command, logg)
 		logg.C.Infof("=\n")
 		logg.J.Infow("ok")
@@ -3723,7 +3739,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board1.txt
+board_set file data/board1.txt
 board
 ```
 
@@ -4111,12 +4127,12 @@ Output > Console:
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
+ 	│	├── 📄 board_set.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
- 	│	├── 📄 set_board.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -4166,12 +4182,12 @@ Output > Console:
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
+ 	│	├── 📄 board_set.go
   	│	├── 📄 board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
- 	│	├── 📄 set_board.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -4939,7 +4955,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board1.txt
+board_set file data/board1.txt
 play white C3
 ```
 
@@ -5151,7 +5167,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board1.txt
+board_set file data/board1.txt
 play black C3
 ```
 
@@ -5167,7 +5183,7 @@ Output > Console:
 Input:  
 
 ```shell
-set_board file data/board1.txt
+board_set file data/board1.txt
 can_not_put_on_my_eye set true
 play black C3
 ```
@@ -5316,7 +5332,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board1.txt
+board_set file data/board1.txt
 remove_ren B2
 ```
 
@@ -5483,7 +5499,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board2.txt
+board_set file data/board2.txt
 play black D4
 ```
 
@@ -5813,7 +5829,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board3.txt
+board_set file data/board3.txt
 play black D3
 play white C3
 play black D3
@@ -5822,19 +5838,15 @@ play black D3
 Output > Console:  
 
 ```plaintext
-set_board file data/board3.txt
-[2022-09-17 22:39:55]   # set_board file data/board3.txt
+[2022-09-17 22:39:55]   # board_set file data/board3.txt
 [2022-09-17 22:39:55]   =
 
-play black D3
 [2022-09-17 22:39:55]   # play black D3
 [2022-09-17 22:39:55]   =
 
-play white C3
 [2022-09-17 22:39:55]   # play white C3
 [2022-09-17 22:39:55]   =
 
-play black D3
 [2022-09-17 22:39:55]   # play black D3
 [2022-09-17 22:39:55]   ? ko my_stone:x point:D3
 ```
@@ -6036,7 +6048,69 @@ func (k *Kernel) FindAllRens() {
 	// ...略...
 ```
 
-## Step [O1o1o0g23o_2o2o0] 動作確認
+## Step [O1o1o0g23o_2o3o_1o0] ファイル編集 - board_set.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 data
+ 	│	├── 📄 board1.txt
+ 	│	├── 📄 board2.txt
+ 	│	├── 📄 board3.txt
+ 	│	└── 📄 board4.txt
+	├── 📂 kernel
+	│	├── 📂 play_rule
+	│	├── 📄 board_area.go
+  	│	├── 📄 board_coord.go
+👉 	│	├── 📄 board_set.go
+  	│	├── 📄 board.go
+ 	│	├── 📄 check_board.go
+ 	│	├── 📄 color.go
+	│	├── 📄 go.mod
+	│	├── 📄 go.sum
+ 	│	├── 📄 kernel_facade.go
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 liberty.go
+ 	│	├── 📄 logger.go
+ 	│	├── 📄 masonry.go
+ 	│	├── 📄 play.go
+ 	│	├── 📄 point.go
+ 	│	├── 📄 record_item.go
+ 	│	├── 📄 record.go
+ 	│	├── 📄 ren.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+	└── 📄 main.go
+```
+
+👇 がんばって以下を追加してほしい  
+
+```go
+// ...略...
+// func (k *Kernel) DoSetBoard(command string, logg *Logger) {
+	// if tokens[1] == "file" {
+		// ...略...
+		// if int(i) != size {
+		// 	logg.C.Infof("? not enough size i:%d size:%d\n", i, size)
+		// 	logg.J.Infow("error not enough size", "i", i, "size", size)
+		// 	return
+		// }
+
+		// * 以下を追加
+		// [O1o1o0g23o_2o3o_1o0] 連データベース初期化
+		k.renDb.Init(k.Board.GetWidth(), k.Board.GetHeight())
+		k.FindAllRens()
+	// }
+// }
+// ...略...
+```
+
+## Step [O1o1o0g23o_2o3o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -6053,7 +6127,7 @@ go run .
 Input:  
 
 ```shell
-set_board file data/board4.txt
+board_set file data/board4.txt
 rendb_dump
 find_all_rens
 rendb_dump
@@ -6063,7 +6137,7 @@ rendb_save data/ren_db_board4_temp.json
 Output > Console:  
 
 ```plaintext
-[2022-09-18 23:58:02]   # set_board file data/board4.txt
+[2022-09-18 23:58:02]   # board_set file data/board4.txt
 [2022-09-18 23:58:02]   =
 
 [2022-09-18 23:58:51]   # find_all_rens

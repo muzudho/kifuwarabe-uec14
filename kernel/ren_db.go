@@ -31,6 +31,41 @@ type RenDb struct {
 	Rens map[RenId]*Ren `json:"rens"`
 }
 
+// NewRenDb - 連データベースを新規作成
+func NewRenDb(boardWidth int, boardHeight int) *RenDb {
+	var db = new(RenDb)
+	db.Header.Init(boardWidth, boardHeight)
+	db.Rens = make(map[RenId]*Ren)
+	return db
+}
+
+// LoadRenDb - 連データベースの外部ファイル読取
+func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
+	// ファイル読込
+	var binary, errA = os.ReadFile(path)
+	if errA != nil {
+		return onError(errA)
+	}
+
+	var db = new(RenDb)
+	var errB = json.Unmarshal(binary, db)
+	if errB != nil {
+		return onError(errB)
+	}
+
+	return db, true
+}
+
+// Init - 初期化
+func (db *RenDb) Init(boardWidth int, boardHeight int) {
+	db.Header.Init(boardWidth, boardHeight)
+
+	// Clear
+	for ri := range db.Rens {
+		delete(db.Rens, ri)
+	}
+}
+
 // Save - 連データベースの外部ファイル書込
 func (db *RenDb) Save(path string, convertLocation func(Point) string, onError func(error) bool) bool {
 
@@ -51,32 +86,6 @@ func (db *RenDb) Save(path string, convertLocation func(Point) string, onError f
 	}
 
 	return true
-}
-
-// LoadRenDb - 連データベースの外部ファイル読取
-func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
-	// ファイル読込
-	var binary, errA = os.ReadFile(path)
-	if errA != nil {
-		return onError(errA)
-	}
-
-	var renDb = new(RenDb)
-	var errB = json.Unmarshal(binary, renDb)
-	if errB != nil {
-		return onError(errB)
-	}
-
-	return renDb, true
-}
-
-// NewRenDb - 連データベースを新規作成
-func NewRenDb(boardWidth int, boardHeight int) *RenDb {
-	var r = new(RenDb)
-	r.Header.BoardWidth = boardWidth
-	r.Header.BoardHeight = boardHeight
-	r.Rens = make(map[RenId]*Ren)
-	return r
 }
 
 // FindRen - 連を取得
@@ -130,6 +139,12 @@ type RenDbDocHeader struct {
 	BoardWidth int `json:"boardWidth"`
 	// BoardHeight - 盤の縦幅
 	BoardHeight int `json:"boardHeight"`
+}
+
+// Init - 初期化
+func (h *RenDbDocHeader) Init(boardWidth int, boardHeight int) {
+	h.BoardWidth = boardWidth
+	h.BoardHeight = boardHeight
 }
 
 // GetBoardMemoryArea - 枠付き盤の面積

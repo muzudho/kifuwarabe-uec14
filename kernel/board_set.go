@@ -10,7 +10,7 @@ import (
 // DoSetBoard - 盤面を設定する
 //
 // コマンドラインの複数行入力は難しいので、ファイルから取ることにする
-// * `command` - Example: `set_board file data/board1.txt`
+// * `command` - Example: `board_set file data/board1.txt`
 // ........................--------- ---- ---------------
 // ........................0         1    2
 func (k *Kernel) DoSetBoard(command string, logg *Logger) {
@@ -55,6 +55,10 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			logg.J.Infow("error not enough size", "i", i, "size", size)
 			return
 		}
+
+		// [O1o1o0g23o_2o3o_1o0] 連データベース初期化
+		k.renDb.Init(k.Board.GetWidth(), k.Board.GetHeight())
+		k.FindAllRens()
 	}
 }
 

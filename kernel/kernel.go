@@ -66,6 +66,13 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	// この下にコマンドを挟んでいく
 	// -------------------------
 
+	case "board_set": // [O1o1o0g15o__14o2o0]
+		// Example: `board_set file data/board1.txt`
+		k.DoSetBoard(command, logg)
+		logg.C.Infof("=\n")
+		logg.J.Infow("ok")
+		return true
+
 	case "board": // [O1o1o0g13o0]
 		// 人間向けの出力
 		{
@@ -270,13 +277,6 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		}
 
 		return false
-
-	case "set_board": // [O1o1o0g15o__14o2o0]
-		// Example: `set_board file data/board1.txt`
-		k.DoSetBoard(command, logg)
-		logg.C.Infof("=\n")
-		logg.J.Infow("ok")
-		return true
 
 	case "test_coord": // [O1o1o0g12o__10o2o0]
 		// Example: "test_coord A13"
