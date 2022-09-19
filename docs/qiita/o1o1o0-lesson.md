@@ -1352,6 +1352,8 @@ type Ren struct {
 	Sto string `json:"stone"`
 	// Loc - （外部ファイル向け）石の盤上の座標符号の空白区切りのリスト
 	Loc string `json:"locate"`
+	// LibLoc - （外部ファイル向け）呼吸点の盤上の座標符号の空白区切りのリスト
+	LibLoc string `json:"liberty"`
 
 	// 石
 	stone Stone
@@ -1425,16 +1427,17 @@ func (r *Ren) Dump() string {
 	var convertLocation = func(location Point) string {
 		return fmt.Sprintf("%d", location)
 	}
-	var tokens = r.createCoordBelt(convertLocation)
+	var tokens = r.createCoordBelt(r.locations, convertLocation)
 	return strings.Join(tokens, " ")
 }
 
+// 文字列の配列を作成
 // Example: {`22`, `23` `24`, `25`}
-func (r *Ren) createCoordBelt(convertLocation func(Point) string) []string {
+func (r *Ren) createCoordBelt(locations []Point, convertLocation func(Point) string) []string {
 	var tokens []string
 
 	// 全ての要素
-	for _, location := range r.locations {
+	for _, location := range locations {
 		var token = convertLocation(location)
 		tokens = append(tokens, token)
 	}
@@ -1447,10 +1450,16 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 	// Examples: `.`, `x`, `o`, `+`
 	r.Sto = r.stone.String()
 
-	// Example: `A1 B2 C3 D4`
-	var tokens = r.createCoordBelt(convertLocation)
-	// sort.Strings(tokens) // 辞書順ソート - 走査方向が変わってしまうので止めた
-	r.Loc = strings.Join(tokens, " ")
+	{
+		// Example: `A1 B2 C3 D4`
+		var tokens = r.createCoordBelt(r.locations, convertLocation)
+		// sort.Strings(tokens) // 辞書順ソート - 走査方向が変わってしまうので止めた
+		r.Loc = strings.Join(tokens, " ")
+	}
+	{
+		var tokens = r.createCoordBelt(r.libertyLocations, convertLocation)
+		r.LibLoc = strings.Join(tokens, " ")
+	}
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
