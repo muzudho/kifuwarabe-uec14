@@ -55,11 +55,7 @@ func (k *Kernel) searchStoneRen(here Point) {
 	k.tempRen.AddLocation(here)
 
 	var setAdjacent = func(dir int, p Point) {
-		// 探索済みの石ならスキップ
-		if k.CheckBoard.IsStoneChecked(p) {
-			return
-		}
-
+		// 呼吸点と壁のチェック
 		var stone = k.Board.GetStoneAt(p)
 		switch stone {
 		case Space: // 空点
@@ -67,8 +63,15 @@ func (k *Kernel) searchStoneRen(here Point) {
 				k.CheckBoard.CheckLiberty(p)
 				k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, p) // 呼吸点を追加
 			}
-			return // スキップ
+
+			return // あとの処理をスキップ
+
 		case Wall: // 壁
+			return // あとの処理をスキップ
+		}
+
+		// 探索済みの石ならスキップ
+		if k.CheckBoard.IsStoneChecked(p) {
 			return
 		}
 
