@@ -3096,22 +3096,22 @@ func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
 }
 
 // ForeachNeumannNeighborhood - [O1o1o0g13o__10o0] 隣接する４方向の定義
-func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacentPoint func(int, Point)) {
+func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Point)) {
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
-		var adjacentP = here + Point(b.Direction[dir]) // 隣接する交点
+		var p = here + Point(b.Direction[dir]) // 隣接する交点
 
 		// 範囲外チェック
-		if adjacentP < 1 || b.getMemoryArea() <= int(adjacentP) {
+		if p < 1 || b.getMemoryArea() <= int(p) {
 			continue
 		}
 
 		// 壁チェック
-		if b.GetStoneAt(adjacentP) == Wall {
+		if b.GetStoneAt(p) == Wall {
 			continue
 		}
 
-		setAdjacentPoint(dir, adjacentP)
+		setAdjacent(dir, p)
 	}
 }
 
@@ -4426,28 +4426,28 @@ func (b *CheckBoard) Resize(width int, height int) {
 }
 
 // CheckStone - 石をチェックした
-func (b *CheckBoard) CheckStone(point Point) {
-	b.cells[point] |= 0b00000001
+func (b *CheckBoard) CheckStone(p Point) {
+	b.cells[p] |= 0b00000001
 }
 
 // IsChecked - 石はチェックされているか？
-func (b *CheckBoard) IsStoneChecked(point Point) bool {
-	return b.cells[point]&0b00000001 == 0b00000001
+func (b *CheckBoard) IsStoneChecked(p Point) bool {
+	return b.cells[p]&0b00000001 == 0b00000001
 }
 
 // CheckLiberty - 呼吸点をチェックした
-func (b *CheckBoard) CheckLiberty(point Point) {
-	b.cells[point] |= 0b00000010
+func (b *CheckBoard) CheckLiberty(p Point) {
+	b.cells[p] |= 0b00000010
 }
 
 // UncheckLiberty - 呼吸点のチェックを外した
-func (b *CheckBoard) UncheckLiberty(point Point) {
-	b.cells[point] &= 0b11111101
+func (b *CheckBoard) UncheckLiberty(p Point) {
+	b.cells[p] &= 0b11111101
 }
 
 // IsLibertyChecked - 呼吸点はチェックされているか？
-func (b *CheckBoard) IsLibertyChecked(point Point) bool {
-	return b.cells[point]&0b00000010 == 0b00000010
+func (b *CheckBoard) IsLibertyChecked(p Point) bool {
+	return b.cells[p]&0b00000010 == 0b00000010
 }
 
 // 枠付き盤の面積
@@ -4621,18 +4621,23 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 // - *Ren is ren or nil
 // - bool is found
 func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
-	// 連の初期化
-	k.tempRen = NewRen(k.Board.GetStoneAt(arbitraryPoint))
-
 	// 探索済みならスキップ
 	if k.CheckBoard.IsStoneChecked(arbitraryPoint) {
 		return nil, false
 	}
 
+	// 連の初期化
+	k.tempRen = NewRen(k.Board.GetStoneAt(arbitraryPoint))
+
 	if k.tempRen.stone == Space {
 		k.searchSpaceRen(arbitraryPoint)
 	} else {
 		k.searchStoneRen(arbitraryPoint)
+
+		// チェックボードの呼吸点のチェックをクリアー
+		for _, p := range k.tempRen.libertyLocations {
+			k.CheckBoard.UncheckLiberty(p)
+		}
 	}
 
 	return k.tempRen, true
@@ -4644,32 +4649,35 @@ func (k *Kernel) searchStoneRen(here Point) {
 	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
-	var setAdjacentPoint = func(dir int, adjacentP Point) {
-		// 探索済みならスキップ
-		if k.CheckBoard.IsStoneChecked(adjacentP) {
+	var setAdjacent = func(dir int, p Point) {
+		// 探索済みの石ならスキップ
+		if k.CheckBoard.IsStoneChecked(p) {
 			return
 		}
 
-		var adjacentS = k.Board.GetStoneAt(adjacentP)
-		switch adjacentS {
+		var stone = k.Board.GetStoneAt(p)
+		switch stone {
 		case Space: // 空点
-			k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, adjacentP) // 呼吸点を追加
-			return                                                                     // スキップ
+			if !k.CheckBoard.IsLibertyChecked(p) { // まだチェックしていない呼吸点なら
+				k.CheckBoard.CheckLiberty(p)
+				k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, p) // 呼吸点を追加
+			}
+			return // スキップ
 		case Wall: // 壁
 			return
 		}
 
-		var adjacentC = adjacentS.GetColor()
+		var color = stone.GetColor()
 		// 隣接する色、追加
-		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
+		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(color)
 
-		if adjacentS == k.tempRen.stone { // 同じ石
-			k.searchStoneRen(adjacentP) // 再帰
+		if stone == k.tempRen.stone { // 同じ石
+			k.searchStoneRen(p) // 再帰
 		}
 	}
 
 	// 隣接する４方向
-	k.Board.ForeachNeumannNeighborhood(here, setAdjacentPoint)
+	k.Board.ForeachNeumannNeighborhood(here, setAdjacent)
 }
 
 // 空点の連の探索
@@ -4678,25 +4686,25 @@ func (k *Kernel) searchSpaceRen(here Point) {
 	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
-	var setAdjacentPoint = func(dir int, adjacentP Point) {
+	var setAdjacent = func(dir int, p Point) {
 		// 探索済みならスキップ
-		if k.CheckBoard.IsStoneChecked(adjacentP) {
+		if k.CheckBoard.IsStoneChecked(p) {
 			return
 		}
 
-		var adjacentS = k.Board.GetStoneAt(adjacentP)
-		if adjacentS != Space { // 空点でなければスキップ
+		var stone = k.Board.GetStoneAt(p)
+		if stone != Space { // 空点でなければスキップ
 			return
 		}
 
-		var adjacentC = adjacentS.GetColor()
+		var color = stone.GetColor()
 		// 隣接する色、追加
-		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
-		k.searchSpaceRen(adjacentP) // 再帰
+		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(color)
+		k.searchSpaceRen(p) // 再帰
 	}
 
 	// 隣接する４方向
-	k.Board.ForeachNeumannNeighborhood(here, setAdjacentPoint)
+	k.Board.ForeachNeumannNeighborhood(here, setAdjacent)
 }
 
 // EOF [O1o1o0g22o2o4o0]

@@ -86,22 +86,22 @@ func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
 }
 
 // ForeachNeumannNeighborhood - [O1o1o0g13o__10o0] 隣接する４方向の定義
-func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacentPoint func(int, Point)) {
+func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Point)) {
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
-		var adjacentP = here + Point(b.Direction[dir]) // 隣接する交点
+		var p = here + Point(b.Direction[dir]) // 隣接する交点
 
 		// 範囲外チェック
-		if adjacentP < 1 || b.getMemoryArea() <= int(adjacentP) {
+		if p < 0 || b.getMemoryArea() <= int(p) {
 			continue
 		}
 
 		// 壁チェック
-		if b.GetStoneAt(adjacentP) == Wall {
+		if b.GetStoneAt(p) == Wall {
 			continue
 		}
 
-		setAdjacentPoint(dir, adjacentP)
+		setAdjacent(dir, p)
 	}
 }
 

@@ -26,23 +26,23 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 // - *Ren is ren or nil
 // - bool is found
 func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
-	// 連の初期化
-	k.tempRen = NewRen(k.Board.GetStoneAt(arbitraryPoint))
-
 	// 探索済みならスキップ
 	if k.CheckBoard.IsStoneChecked(arbitraryPoint) {
 		return nil, false
 	}
 
+	// 連の初期化
+	k.tempRen = NewRen(k.Board.GetStoneAt(arbitraryPoint))
+
 	if k.tempRen.stone == Space {
 		k.searchSpaceRen(arbitraryPoint)
 	} else {
 		k.searchStoneRen(arbitraryPoint)
-	}
 
-	// チェックボードの呼吸点のチェックをクリアー
-	for _, p := range k.tempRen.libertyLocations {
-		k.CheckBoard.UncheckLiberty(p)
+		// チェックボードの呼吸点のチェックをクリアー
+		for _, p := range k.tempRen.libertyLocations {
+			k.CheckBoard.UncheckLiberty(p)
+		}
 	}
 
 	return k.tempRen, true
@@ -54,35 +54,35 @@ func (k *Kernel) searchStoneRen(here Point) {
 	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
-	var setAdjacentPoint = func(dir int, adjacentP Point) {
-		// 探索済みならスキップ
-		if k.CheckBoard.IsStoneChecked(adjacentP) {
+	var setAdjacent = func(dir int, p Point) {
+		// 探索済みの石ならスキップ
+		if k.CheckBoard.IsStoneChecked(p) {
 			return
 		}
 
-		var adjacentS = k.Board.GetStoneAt(adjacentP)
-		switch adjacentS {
+		var stone = k.Board.GetStoneAt(p)
+		switch stone {
 		case Space: // 空点
-			if !k.CheckBoard.IsLibertyChecked(adjacentP) { // まだチェックしていない呼吸点なら
-				k.CheckBoard.CheckLiberty(adjacentP)
-				k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, adjacentP) // 呼吸点を追加
+			if !k.CheckBoard.IsLibertyChecked(p) { // まだチェックしていない呼吸点なら
+				k.CheckBoard.CheckLiberty(p)
+				k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, p) // 呼吸点を追加
 			}
 			return // スキップ
 		case Wall: // 壁
 			return
 		}
 
-		var adjacentC = adjacentS.GetColor()
+		var color = stone.GetColor()
 		// 隣接する色、追加
-		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
+		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(color)
 
-		if adjacentS == k.tempRen.stone { // 同じ石
-			k.searchStoneRen(adjacentP) // 再帰
+		if stone == k.tempRen.stone { // 同じ石
+			k.searchStoneRen(p) // 再帰
 		}
 	}
 
 	// 隣接する４方向
-	k.Board.ForeachNeumannNeighborhood(here, setAdjacentPoint)
+	k.Board.ForeachNeumannNeighborhood(here, setAdjacent)
 }
 
 // 空点の連の探索
@@ -91,25 +91,25 @@ func (k *Kernel) searchSpaceRen(here Point) {
 	k.CheckBoard.CheckStone(here)
 	k.tempRen.AddLocation(here)
 
-	var setAdjacentPoint = func(dir int, adjacentP Point) {
+	var setAdjacent = func(dir int, p Point) {
 		// 探索済みならスキップ
-		if k.CheckBoard.IsStoneChecked(adjacentP) {
+		if k.CheckBoard.IsStoneChecked(p) {
 			return
 		}
 
-		var adjacentS = k.Board.GetStoneAt(adjacentP)
-		if adjacentS != Space { // 空点でなければスキップ
+		var stone = k.Board.GetStoneAt(p)
+		if stone != Space { // 空点でなければスキップ
 			return
 		}
 
-		var adjacentC = adjacentS.GetColor()
+		var color = stone.GetColor()
 		// 隣接する色、追加
-		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(adjacentC)
-		k.searchSpaceRen(adjacentP) // 再帰
+		k.tempRen.adjacentColor = k.tempRen.adjacentColor.GetAdded(color)
+		k.searchSpaceRen(p) // 再帰
 	}
 
 	// 隣接する４方向
-	k.Board.ForeachNeumannNeighborhood(here, setAdjacentPoint)
+	k.Board.ForeachNeumannNeighborhood(here, setAdjacent)
 }
 
 // EOF [O1o1o0g22o2o4o0]
