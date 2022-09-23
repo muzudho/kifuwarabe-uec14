@@ -1,1 +1,8 @@
-{"header":{"boardWidth":19,"boardHeight":19},"rens":{"001,01A":{"stone":".","locate":"","liberty":""},"001,06N":{"stone":".","locate":"","liberty":""},"001,13E":{"stone":".","locate":"","liberty":""}}}
+{
+    "header": { "boardWidth": 19, "boardHeight": 19 },
+    "rens": {
+        "001,01A": { "stone": ".", "locate": "", "liberty": "" },
+        "001,06N": { "stone": ".", "locate": "", "liberty": "" },
+        "001,13E": { "stone": ".", "locate": "", "liberty": "" }
+    }
+}
