@@ -28,14 +28,15 @@ type RenDb struct {
 	Header RenDbDocHeader `json:"header"`
 
 	// 要素
-	Rens map[RenId]*Ren `json:"rens"`
+	// - キーは RenId 型
+	Rens map[string]*Ren `json:"rens"`
 }
 
 // NewRenDb - 連データベースを新規作成
 func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 	var db = new(RenDb)
 	db.Header.Init(boardWidth, boardHeight)
-	db.Rens = make(map[RenId]*Ren)
+	db.Rens = make(map[string]*Ren)
 	return db
 }
 
@@ -90,7 +91,7 @@ func (db *RenDb) Save(path string, convertLocation func(Point) string, onError f
 
 // FindRen - 連を取得
 func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
-	var ren, isOk = db.Rens[renId]
+	var ren, isOk = db.Rens[string(renId)]
 
 	if isOk {
 		return ren, true
@@ -104,9 +105,9 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 func (db *RenDb) RegisterRen(positionNthFigure int, positionNumber int, ren *Ren) {
 	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNthFigure, positionNumber, ren.minimumLocation)
 
-	var _, isExists = db.Rens[renId]
+	var _, isExists = db.Rens[string(renId)]
 	if !isExists {
-		db.Rens[renId] = ren
+		db.Rens[string(renId)] = ren
 	}
 }
 
@@ -116,7 +117,7 @@ func (db *RenDb) Dump() string {
 
 	// 全ての要素
 	for idStr, item := range db.Rens {
-		sb.WriteString(fmt.Sprintf("[%s]%s ", idStr, item.Dump()))
+		sb.WriteString(fmt.Sprintf("[%s]%s \n", idStr, item.Dump()))
 	}
 
 	var text = sb.String()

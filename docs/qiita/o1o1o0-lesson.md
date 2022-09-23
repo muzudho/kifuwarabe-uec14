@@ -2014,13 +2014,20 @@ Output > Log > JSON:
         "boardHeight": 19
     },
     "rens": {
-        "1,A1": {
-            "posNth": 1,
-            "loc": "A1 B2 C3 D4"
+        "001,01A": {
+            "stone": "x",
+            "locate": "A1",
+            "liberty": "B1 A2"
         },
-        "2,K10": {
-            "posNth": 2,
-            "loc": "K10 L11 M12 N13"
+        "001,06N": {
+            "stone": ".",
+            "locate": "N6",
+            "liberty": ""
+        },
+        "001,13E": {
+            "stone": "o",
+            "locate": "E13",
+            "liberty": "E12 D13"
         }
     }
 }
@@ -2093,14 +2100,15 @@ type RenDb struct {
 	Header RenDbDocHeader `json:"header"`
 
 	// 要素
-	Rens map[RenId]*Ren `json:"rens"`
+	// - キーは RenId 型
+	Rens map[string]*Ren `json:"rens"`
 }
 
 // NewRenDb - 連データベースを新規作成
 func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 	var db = new(RenDb)
 	db.Header.Init(boardWidth, boardHeight)
-	db.Rens = make(map[RenId]*Ren)
+	db.Rens = make(map[string]*Ren)
 	return db
 }
 
@@ -2155,7 +2163,7 @@ func (db *RenDb) Save(path string, convertLocation func(Point) string, onError f
 
 // FindRen - 連を取得
 func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
-	var ren, isOk = db.Rens[renId]
+	var ren, isOk = db.Rens[string(renId)]
 
 	if isOk {
 		return ren, true
@@ -2169,9 +2177,9 @@ func (db *RenDb) GetRen(renId RenId) (*Ren, bool) {
 func (db *RenDb) RegisterRen(positionNthFigure int, positionNumber int, ren *Ren) {
 	var renId = GetRenId(db.Header.GetBoardMemoryWidth(), positionNthFigure, positionNumber, ren.minimumLocation)
 
-	var _, isExists = db.Rens[renId]
+	var _, isExists = db.Rens[string(renId)]
 	if !isExists {
-		db.Rens[renId] = ren
+		db.Rens[string(renId)] = ren
 	}
 }
 
@@ -2422,8 +2430,10 @@ rendb_dump
 Output > Console:  
 
 ```plaintext
-[2022-09-18 22:14:37]   # rendb_dump
-[2022-09-18 22:14:37]   = dump'''[2,K10] [1,A1]
+[2022-09-23 19:28:23]   # rendb_dump
+[2022-09-23 19:28:23]   = dump'''[001,01A]
+[001,06N]
+[001,13E]
 '''
 ```
 
@@ -2445,7 +2455,7 @@ Output > Console:
 📄 ren_db1_temp.json:  
 
 ```json
-{"Header":{"BoardWidth":19,"BoardHeight":19},"Rens":{"1,A1":{"Loc":"A1 B2 C3 D4","Color":0,"AdjacentColor":0,"LibertyArea":0},"2,K10":{"Loc":"K10 L11 M12 N13","Color":0,"AdjacentColor":0,"LibertyArea":0}}}
+{"header":{"boardWidth":19,"boardHeight":19},"rens":{"001,01A":{"stone":".","locate":"","liberty":""},"001,06N":{"stone":".","locate":"","liberty":""},"001,13E":{"stone":".","locate":"","liberty":""}}}
 ```
 
 # Step [O1o1o0g12o__11o_1o0] 棋譜定義
@@ -6143,6 +6153,10 @@ Output > Console:
 [2022-09-18 23:58:51]   # find_all_rens
 [2022-09-18 23:58:51]   =
 ```
+
+## Step [O1o1o0g23o_2o4o0] 出力ファイルの内容の盤表示
+
+
 
 # Step [O1o1o0g23o_3o0] 石を打った後の連の再スキャン
 
