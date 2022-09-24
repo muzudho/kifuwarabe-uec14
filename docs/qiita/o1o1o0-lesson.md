@@ -1349,6 +1349,85 @@ go mod tidy
 cd ..
 ```
 
+# Step [O1o1o0g11o__11o6o_1o0] TODO デバッグ用コマンドライン引数作成
+
+# Step [O1o1o0g11o__11o6o_2o0] データ作成 - debug.input.txt
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📂 debugger
+  	│   ├── 📄 go.mod
+  	│   ├── 📄 main_test.go
+  	│   ├── 📄 main.go
+  	│   ├── 📄 test.input.txt
+ 	│   ├── 📄 virtual_io_fmt.go
+  	│   └── 📄 virtual_io.go
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+    ├── 📄 .gitignore
+👉	├── 📄 debug.input.txt
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```plaintext
+```
+
+# Step [O1o1o0g11o__11o6o0] ファイル編集 - main.go
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📂 debugger
+  	│   ├── 📄 go.mod
+  	│   ├── 📄 main_test.go
+  	│   ├── 📄 main.go
+  	│   ├── 📄 test.input.txt
+ 	│   ├── 📄 virtual_io_fmt.go
+  	│   └── 📄 virtual_io.go
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉 	└── 📄 main.go
+```
+
+```go
+// func main() {
+	// // [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
+	// var (
+	// 	pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
+		// [O1o1o0g11o__11o6o0] デバッグ用
+		pIsDebug = flag.Bool("-d", false, "for debug")
+	// )
+	// ...略...
+
+	// この下に初期設定を追加していく
+	// ---------------------------
+	// ...略...
+
+	// [O1o1o0g11o__11o6o0] デバッグ用
+	if *pIsDebug {
+		virtualIo.ReplaceInputToFileLines("./debug.input.txt")
+	}
+	// ...略...
+
+	// この上に初期設定を追加していく
+	// ---------------------------
+	// ...略...
+```
+
 # Step [O1o1o0g11o__12o0] インタープリター 作成
 
 ## Step [O1o1o0g11o_1o0] コマンド実装 - ファイル編集 - main.go
@@ -1357,6 +1436,13 @@ cd ..
 
 ```plaintext
   	📂 kifuwarabe-uec14
+    ├── 📂 debugger
+  	│   ├── 📄 go.mod
+  	│   ├── 📄 main_test.go
+  	│   ├── 📄 main.go
+  	│   ├── 📄 test.input.txt
+ 	│   ├── 📄 virtual_io_fmt.go
+  	│   └── 📄 virtual_io.go
 	├── 📂 kernel
 	│	├── 📄 go.mod
  	│	└── 📄 logger.go

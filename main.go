@@ -20,6 +20,8 @@ func main() {
 	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
 	var (
 		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
+		// [O1o1o0g11o__11o6o0] デバッグ用
+		pIsDebug = flag.Bool("-d", false, "for debug")
 	)
 	flag.Parse()
 	// プログラム名
@@ -45,6 +47,11 @@ func main() {
 	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// カスタマイズしたロガーを使うなら
 	var logg = kernel.NewSugaredLoggerForGame(plainTextLogFile, jsonLogFile) // customized LOGGer
+
+	// [O1o1o0g11o__11o6o0] デバッグ用
+	if *pIsDebug {
+		virtualIo.ReplaceInputToFileLines("./debug.input.txt")
+	}
 
 	// この上に初期設定を追加していく
 	// ---------------------------
