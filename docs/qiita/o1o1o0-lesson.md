@@ -975,6 +975,29 @@ Output:
 # ...略...
 ```
 
+## Step [O1o1o0g11o__11o2o_1o0] データファイル作成 - debugger/test.input.txt ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📂 debugger
+👉  │   └── 📄 test.input.txt
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+  	├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```plaintext
+10
+```
+
 ## Step [O1o1o0g11o__11o2o0] ファイル作成 - debugger/main.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
@@ -982,7 +1005,8 @@ Output:
 ```plaintext
   	📂 kifuwarabe-uec14
     ├── 📂 debugger
-👉  │   └── 📄 main.go
+👉  │   ├── 📄 main.go
+  	│   └── 📄 test.input.txt
 	├── 📂 kernel
 	│	├── 📄 go.mod
  	│	└── 📄 logger.go
