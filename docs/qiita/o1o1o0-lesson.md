@@ -1200,7 +1200,9 @@ func (vio *VirtualIO) Printf(format string, a ...interface{}) {
   	📂 kifuwarabe-uec14
     ├── 📂 debugger
 👉  │   ├── 📄 main.go
-  	│   └── 📄 test.input.txt
+  	│   ├── 📄 test.input.txt
+ 	│   ├── 📄 virtual_io_fmt.go
+  	│   └── 📄 virtual_io.go
 	├── 📂 kernel
 	│	├── 📄 go.mod
  	│	└── 📄 logger.go
@@ -1242,6 +1244,92 @@ func main() {
 }
 
 // EOF [O1o1o0g11o__11o2o0]
+```
+
+## Step [O1o1o0g11o__11o3o0] ファイル作成 - debugger/main_test.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📂 debugger
+👉  │   ├── 📄 main_test.go
+  	│   ├── 📄 main.go
+  	│   ├── 📄 test.input.txt
+ 	│   ├── 📄 virtual_io_fmt.go
+  	│   └── 📄 virtual_io.go
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+  	├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```go
+// BOF [O1o1o0g11o__11o3o0]
+
+package main
+
+import (
+	"testing"
+)
+
+func TestMain(t *testing.T) {
+	virtualIo.ReplaceInputToFileLines("./test.input.txt")
+	main()
+}
+
+// EOF [O1o1o0g11o__11o3o0]
+```
+
+## Step [O1o1o0g11o__11o4o0] モジュール作成 - デバッガー
+
+👇 📂 debugger をカレントディレクトリーとする  
+
+```shell
+cd debugger
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go mod init github.com/muzudho/kifuwarabe-uec14/debugger
+#           --------------------------------------------
+#           1
+# 1. モジュール名。この部分はあなたのレポジトリに合わせて変えてほしい
+```
+
+👇 以下のファイルが自動生成される  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📂 debugger
+👉  │   ├── 📄 go.mod
+  	│   ├── 📄 main_test.go
+  	│   ├── 📄 main.go
+  	│   ├── 📄 test.input.txt
+ 	│   ├── 📄 virtual_io_fmt.go
+  	│   └── 📄 virtual_io.go
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+  	├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```plaintext
+module github.com/muzudho/kifuwarabe-uec14/debugger
+go 1.19
 ```
 
 # Step [O1o1o0g11o__12o0] インタープリター 作成
