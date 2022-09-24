@@ -77,4 +77,204 @@ VSCode の上の方にフォルダー名か出てくるので、とりあえず 
 
 ブレークポイントを置く  
 
+エントリーポイント（main関数）が書いている `*.go` ファイルを開く  
+
 `F5` キーを押すとデバッグが開始される  
+
+## Step [O3o0] 標準入力の差し替え
+
+dlv では、以下のコードを実行できない  
+
+```go
+		var scanner = bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+            // ...略...
+        }
+```
+
+👇 以下参照。 `delveは標準入力を受け付けられない` という致命的な不便がある  
+
+📖 [golangのAtCoder向けデバック方法(VSCode)](https://qiita.com/tasmas/items/d2d5a8c95fa48e415702)  
+
+解決方法としては、標準入力 `os.Stdin` の中身を、テキストファイルから向けられているストリームに差し替えると  
+いうもののようだ  
+
+## Step [O3o1o_1o0] ワークスペースズ モード使用
+
+Go 1.18 からある ワークスペースズモードを使う。
+説明は以前書いたから省略  
+
+📖 [Go [O1o1o0] 目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会＜練習編＞](https://qiita.com/muzudho1/items/cea62be01f7418bbf150)  
+
+## Step [O3o1o0] ファイル作成 - debugger/main.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+    📂
+    └── 📂 debugger
+👉      └── 📄 main.go
+```
+
+```go
+package debugger
+
+```
+
+## Step [O3o1o_2o0] モジュール作成
+
+📂 debugger をカレントディレクトリーとする  
+
+```shell
+cd debugger
+```
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:
+
+```shell
+go mod init github.com/muzudho/kifuwarabe-uec14/debugger
+#           --------------------------------------------
+#           1
+# 1. モジュール名。この部分はあなたのレポジトリに合わせて変えてほしい
+```
+
+👇 以下のファイルが自動生成される  
+
+```plaintext
+    📂
+    └── 📂 debugger
+👉      ├── 📄 go.mod
+        └── 📄 main.go
+```
+
+```plaintext
+module github.com/muzudho/kifuwarabe-uec14/debugger
+
+go 1.19
+```
+
+## Step [O3o1o_2o0] ワークスペースズモードに登録
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:
+
+```shell
+go mod tidy
+go work use .
+```
+
+👇 カレントディレクトリーは元に戻してほしい  
+
+```shell
+cd ..
+```
+
+## Step [O3o1o_3o0] 入力データ作成 - debugger/test.txt ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+    📂
+    └── 📂 debugger
+        ├── 📄 go.mod
+        ├── 📄 main_test.mod
+        ├── 📄 main.go
+👉      └── 📄 test.txt
+```
+
+```go
+10
+```
+
+## Step [O3o1o0] プログラム作成 - debugger/main_test.go ファイル
+
+👇 以下のファイルを新規作成してほしい  
+
+```plaintext
+    📂
+    └── 📂 debugger
+        ├── 📄 go.mod
+👉      ├── 📄 main_test.mod
+        ├── 📄 main.go
+        └── 📄 test.txt
+```
+
+```go
+package debugger
+
+import (
+	"bufio"
+	"os"
+	"testing"
+)
+
+func TestAnswer(t *testing.T) {
+	inbuf := readFile("./test.txt")
+	stubStdin(inbuf, func() {
+		main()
+	})
+}
+
+func readFile(fileName string) string {
+	bytes, err := os.ReadFile(fileName)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(bytes)
+}
+
+// Stubs Stdin in 'fn'
+// See also: 📖 [golangのAtCoder向けデバック方法(VSCode)](https://qiita.com/tasmas/items/d2d5a8c95fa48e415702)
+//
+// Examples
+// --------
+// inbuf := "入力されたつもりの文字列。テキストファイルから読み込んでくる"
+//
+//	stubStdin(inbuf, func() {
+//	    main()
+//	})
+//
+// Parameters
+// ----------
+// textToWrite - 書き込みたい文字列
+func stubStdin(textToWrite string, fn func()) {
+	// これより、ラムダ計算の専門用語で η（イータ）簡約 と呼ばれることと同じ考え方を利用する。
+	// Input ストリームと使い勝手が同等になるよう、 Read モードと Write モードのファイル（メモリ上に存在する）を取得
+	inr, inw, err := os.Pipe()
+	if err != nil {
+		panic(err)
+	}
+
+	// Input ストリームに書き込んでいるつもりで、 Write モードのファイルに書き込む
+	_, _ = inw.Write([]byte(textToWrite))
+	// 書込みをフラッシュして終わる
+	inw.Close()
+
+	// Input ストリームから読込んでいるつもりで、 Read モードのファイルを `os.Stdin` と差し替える
+	os.Stdin = inr
+	// このスキャナーは、標準入力をスキャンしているように見えて、メモリ上に存在するファイルをスキャンしている
+	virtualIo.scanner = bufio.NewScanner(os.Stdin)
+
+	// あとは ふつうに処理を行う
+	fn()
+
+	// TODO `os.Stdin` を元に戻さなくていいのか？ fn() が main() プログラムと同等で、あとは終了するるだけなら 良いとはいえるが
+}
+```
+
+# 参考にした記事
+
+## デバッグ環境
+
+📖 [Goのデバッグ環境 on VSCode](https://future-architect.github.io/articles/20201117/)  
+
+## デバッグと標準入力
+
+📖 [scanner.Scan() hangs in GoLand debugger](https://stackoverflow.com/questions/53461228/scanner-scan-hangs-in-goland-debugger)  
+📖 [golangのAtCoder向けデバック方法(VSCode)](https://qiita.com/tasmas/items/d2d5a8c95fa48e415702)  
+
+EOF
