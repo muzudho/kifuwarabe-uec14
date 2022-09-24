@@ -1,3 +1,5 @@
+// BOF [O1o1o0g11o__11o2o0]
+
 package main
 
 import (
@@ -23,3 +25,5 @@ func main() {
 		virtualIo.Printf("%d is ok\n", i) // 出力
 	}
 }
+
+// EOF [O1o1o0g11o__11o2o0]
