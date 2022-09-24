@@ -21,7 +21,7 @@ func main() {
 	var (
 		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
 		// [O1o1o0g11o__11o6o0] デバッグ用
-		pIsDebug = flag.Bool("-d", false, "for debug")
+		pIsDebug = flag.Bool("d", false, "for debug")
 	)
 	flag.Parse()
 	// プログラム名

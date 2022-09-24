@@ -1351,7 +1351,7 @@ cd ..
 
 # Step [O1o1o0g11o__11o6o_1o0] TODO デバッグ用コマンドライン引数作成
 
-# Step [O1o1o0g11o__11o6o_2o0] データ作成 - debug.input.txt
+## Step [O1o1o0g11o__11o6o_2o0] データ作成 - debug.input.txt
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1379,7 +1379,7 @@ cd ..
 ```plaintext
 ```
 
-# Step [O1o1o0g11o__11o6o0] ファイル編集 - main.go
+## Step [O1o1o0g11o__11o6o0] ファイル編集 - main.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1409,7 +1409,7 @@ cd ..
 	// var (
 	// 	pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
 		// [O1o1o0g11o__11o6o0] デバッグ用
-		pIsDebug = flag.Bool("-d", false, "for debug")
+		pIsDebug = flag.Bool("d", false, "for debug")
 	// )
 	// ...略...
 
@@ -1426,6 +1426,43 @@ cd ..
 	// この上に初期設定を追加していく
 	// ---------------------------
 	// ...略...
+```
+
+## Step [O1o1o0g11o__11o6o1o0] 入力データ編集 - debug.input.txt ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+    ├── 📂 debugger
+  	│   ├── 📄 go.mod
+  	│   ├── 📄 main_test.go
+  	│   ├── 📄 main.go
+  	│   ├── 📄 test.input.txt
+ 	│   ├── 📄 virtual_io_fmt.go
+  	│   └── 📄 virtual_io.go
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+    ├── 📄 .gitignore
+👉	├── 📄 debug.input.txt
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	└── 📄 main.go
+```
+
+```plaintext
+quit
+```
+
+## Step [O1o1o0g11o__11o6o2o0] 動作確認
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+```shell
+go run . -d=true
 ```
 
 # Step [O1o1o0g11o__12o0] インタープリター 作成
