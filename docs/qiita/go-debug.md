@@ -117,8 +117,62 @@ Go 1.18 からある ワークスペースズモードを使う。
 ```
 
 ```go
-package debugger
+package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+// VirtualIO - 入出力を模擬したもの
+type VirtualIO struct {
+	scanner *bufio.Scanner
+	writer  *bufio.Writer
+}
+
+// 新規作成
+func newVirtualIO() *VirtualIO {
+	// 実体をメモリ上に占有させ、そのアドレスを返す
+	return &VirtualIO{
+		scanner: bufio.NewScanner(os.Stdin),
+		writer:  bufio.NewWriter(os.Stdout),
+	}
+}
+
+// 次の文字列入力を読取る
+func (io *VirtualIO) nextLine() string {
+	io.scanner.Scan()
+	return io.scanner.Text()
+}
+
+// 次の整数入力を読取る
+func (io *VirtualIO) nextInt() int {
+	i, e := strconv.Atoi(io.nextLine())
+	if e != nil {
+		panic(e)
+	}
+	return i
+}
+
+// 文字列出力
+func (io *VirtualIO) printLn(a ...interface{}) {
+	fmt.Fprintln(io.writer, a...)
+}
+
+// 新規作成
+var virtualIo = newVirtualIO()
+
+func main() {
+	virtualIo.scanner.Split(bufio.ScanWords)      // switch to separating by space
+	virtualIo.scanner.Buffer([]byte{}, 100000007) // switch to read large size input
+	defer virtualIo.writer.Flush()
+
+	N := virtualIo.nextInt()
+	hoge := fmt.Sprintf("%d is ok", N) // なんらかの処理
+	virtualIo.printLn(hoge)            // 出力
+}
 ```
 
 ## Step [O3o1o_2o0] モジュール作成
@@ -166,12 +220,6 @@ go mod tidy
 go work use .
 ```
 
-👇 カレントディレクトリーは元に戻してほしい  
-
-```shell
-cd ..
-```
-
 ## Step [O3o1o_3o0] 入力データ作成 - debugger/test.txt ファイル
 
 👇 以下のファイルを新規作成してほしい  
@@ -203,7 +251,7 @@ cd ..
 ```
 
 ```go
-package debugger
+package main
 
 import (
 	"bufio"
@@ -264,6 +312,47 @@ func stubStdin(textToWrite string, fn func()) {
 
 	// TODO `os.Stdin` を元に戻さなくていいのか？ fn() が main() プログラムと同等で、あとは終了するるだけなら 良いとはいえるが
 }
+```
+
+## Step [O3o2o_1o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:
+
+```shell
+go run .
+11
+```
+
+Output:  
+
+```plaintext
+11 is ok
+```
+
+## Step [O3o2o0] テスト実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
+
+Input:
+
+```shell
+go test
+```
+
+Output:  
+
+```plaintext
+10 is ok
+PASS
+ok      github.com/muzudho/kifuwarabe-uec14/debugger    0.206s
+```
+
+👇 カレントディレクトリーは元に戻してほしい  
+
+```shell
+cd ..
 ```
 
 # 参考にした記事
