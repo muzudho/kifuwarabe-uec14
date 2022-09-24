@@ -3,14 +3,18 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
 	"os"
 	"strings"
 
+	dbg "github.com/muzudho/kifuwarabe-uec14/debugger"
 	"github.com/muzudho/kifuwarabe-uec14/kernel"
 )
+
+// [O1o1o0g11o_1o0] グローバル変数として、バーチャルIOを１つ新規作成
+// アプリケーションの中では 標準入出力は これを使うようにする
+var virtualIo = dbg.NewVirtualIO()
 
 func main() {
 	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
@@ -80,9 +84,8 @@ func main() {
 		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
-		var scanner = bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			var command = scanner.Text()
+		for virtualIo.ScannerScan() {
+			var command = virtualIo.ScannerText()
 			logg.C.Infof("# %s", command)             // 人間向けの出力
 			logg.J.Infow("input", "command", command) // コンピューター向けの出力
 

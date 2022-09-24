@@ -1021,7 +1021,7 @@ Output:
 ```go
 // BOF [O1o1o0g11o__11o2o_1o0]
 
-package main
+package debugger
 
 import (
 	"bufio"
@@ -1180,7 +1180,7 @@ func (vio *VirtualIO) WriterFlush() {
 ```go
 // BOF [O1o1o0g11o__11o2o_2o0]
 
-package main
+package debugger
 
 import "fmt"
 
@@ -1217,7 +1217,7 @@ func (vio *VirtualIO) Printf(format string, a ...interface{}) {
 ```go
 // BOF [O1o1o0g11o__11o2o0]
 
-package main
+package debugger
 
 import (
 	"strconv"
@@ -1272,7 +1272,7 @@ func main() {
 ```go
 // BOF [O1o1o0g11o__11o3o0]
 
-package main
+package debugger
 
 import (
 	"testing"
@@ -1332,6 +1332,17 @@ module github.com/muzudho/kifuwarabe-uec14/debugger
 go 1.19
 ```
 
+## Step [O1o1o0g11o__11o5o0] ワークスペースズモードへ登録
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go work use .
+go mod tidy
+```
+
 👇 カレントディレクトリーは戻しておいてほしい  
 
 ```shell
@@ -1368,8 +1379,14 @@ import (
 	"strings"	// * 自動で追加される
 )
 
+// [O1o1o0g11o_1o0] グローバル変数として、バーチャルIOを１つ新規作成
+// アプリケーションの中では 標準入出力は これを使うようにする
+var virtualIo = dbg.NewVirtualIO()
+
 // ...略...
 
+// func main() {
+	// ...略...
 
 	if name == "hello" { // [O1o1o0g9o0]
 		// ...略...
@@ -1380,9 +1397,8 @@ import (
 
 		// * 追加
 		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
-		var scanner = bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			var command = scanner.Text()
+		for virtualIo.ScannerScan() {
+			var command = virtualIo.ScannerText()
 			logg.C.Infof("# %s", command)             // 人間向けの出力
 			logg.J.Infow("input", "command", command) // コンピューター向けの出力
 
@@ -1409,6 +1425,7 @@ import (
 
 
 // ...略...
+// }
 ```
 
 ## Step [O1o1o0g11o_2o0] 動作確認
@@ -6548,7 +6565,7 @@ Output > Console:
 [2022-09-18 23:58:51]   =
 ```
 
-## Step [O1o1o0g23o_2o4o0] 出力ファイルの内容の盤表示
+## Step [O1o1o0g23o_2o4o0] TODO 出力ファイルの内容の盤表示
 
 
 

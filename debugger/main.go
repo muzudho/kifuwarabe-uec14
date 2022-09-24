@@ -1,6 +1,6 @@
 // BOF [O1o1o0g11o__11o2o0]
 
-package main
+package debugger
 
 import (
 	"strconv"
