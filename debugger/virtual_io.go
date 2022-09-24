@@ -1,3 +1,5 @@
+// BOF [O1o1o0g11o__11o2o_1o0]
+
 package main
 
 import (
@@ -129,3 +131,5 @@ func (vio *VirtualIO) ScannerText() string {
 func (vio *VirtualIO) WriterFlush() {
 	virtualIo.writer.Flush()
 }
+
+// EOF [O1o1o0g11o__11o2o_1o0]
