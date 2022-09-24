@@ -1031,6 +1031,8 @@ import (
 )
 
 // VirtualIO - 入出力を模擬したもの
+//
+// デバッガーの dlv が標準入力を読めないので、ファイル入力に置き換えるための仕組みです
 type VirtualIO struct {
 	scanner *bufio.Scanner
 	writer  *bufio.Writer
