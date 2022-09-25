@@ -236,7 +236,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		logg.J.Infow("ok", "dump", text)
 		return true
 
-	case "rendb_load": // [O1o1o0g12o__11o__10o4o0]
+	case "rendb_load": // [O1o1o0g12o__11o__10o5o__10o1o0]
 		// Example: `rendb_load data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
