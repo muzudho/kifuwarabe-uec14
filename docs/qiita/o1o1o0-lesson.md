@@ -2889,19 +2889,20 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 連データベースをロードするには、盤のサイズも、連も既知でないといけない  
 盤のサイズ、連の定義を終えた段階で、連データベースのロードを実装する  
 
-## Step [O1o1o0g12o__11o__10o5o__10o_10o0] ファイル作成 - ren_db.go ファイル
+## Step [O1o1o0g12o__11o__10o5o__10o_10o0] ファイル作成 - kernel/kernel_facade.go ファイル
 
-👇 以下の既存ファイルを編集してほしい  
+👇 以下のファイルを新規作成してほしい  
 
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📄 go.mod
+👉 	│	├── 📄 kernel_facade.go
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
 	│	├── 📄 point.go
 	│	├── 📄 ren_db_item.go
-👉	│	├── 📄 ren_db.go
+	│	├── 📄 ren_db.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -2912,6 +2913,15 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 ```
 
 ```go
+// BOF [O1o1o0g12o__11o__10o5o__10o0]
+
+package kernel
+
+import (
+	"encoding/json"
+	"os"
+)
+
 // LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
 func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 	// ファイル読込
@@ -2931,6 +2941,8 @@ func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 
 	return db, true
 }
+
+// EOF [O1o1o0g12o__11o__10o5o__10o0]
 ```
 
 ## Step [O1o1o0g12o__11o__10o5o__10o1o0] コマンド編集 - kernel.go ファイル
@@ -5827,9 +5839,9 @@ Output > Console:
 
 ## Step [O1o1o0g22o5o0] 任意の連の打ち上げ - RemoveRen 関数作成
 
-### Step [O1o1o0g22o5o1o0] ファイル作成 - kernel_facade.go
+### Step [O1o1o0g22o5o1o0] ファイル編集 - kernel_facade.go
 
-👇 以下のファイルを新規作成してほしい  
+👇 以下の既存ファイルを編集してほしい  
 
 ```plaintext
   	📂 kifuwarabe-uec14
@@ -5862,10 +5874,6 @@ Output > Console:
 ```
 
 ```go
-// BOF [O1o1o0g22o5o1o0]
-
-package kernel
-
 // RemoveRen - 石の連を打ち上げます
 func (k *Kernel) RemoveRen(ren *Ren) {
 	// 空点をセット
@@ -5876,8 +5884,6 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	// 場所毎に
 	ren.ForeachLocation(setLocation)
 }
-
-// EOF [O1o1o0g22o5o1o0]
 ```
 
 ### Step [O1o1o0g22o5o2o0] コマンド実装 - kernel.go ファイル

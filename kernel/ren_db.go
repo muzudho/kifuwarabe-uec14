@@ -152,24 +152,4 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	return h.BoardHeight + bothSidesWallThickness
 }
 
-// LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
-func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
-	// ファイル読込
-	var binary, errA = os.ReadFile(path)
-	if errA != nil {
-		return onError(errA)
-	}
-
-	var db = new(RenDb)
-	var errB = json.Unmarshal(binary, db)
-	if errB != nil {
-		return onError(errB)
-	}
-
-	// 外部ファイルからの入力を、内部状態へ適用
-	RefreshRenDbToInternal(db)
-
-	return db, true
-}
-
 // EOF [O1o1o0g12o__11o__10o2o0]

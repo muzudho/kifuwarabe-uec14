@@ -1,6 +1,31 @@
-// BOF [O1o1o0g22o5o1o0]
+// BOF [O1o1o0g12o__11o__10o5o__10o0]
 
 package kernel
+
+import (
+	"encoding/json"
+	"os"
+)
+
+// LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
+func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
+	// ファイル読込
+	var binary, errA = os.ReadFile(path)
+	if errA != nil {
+		return onError(errA)
+	}
+
+	var db = new(RenDb)
+	var errB = json.Unmarshal(binary, db)
+	if errB != nil {
+		return onError(errB)
+	}
+
+	// 外部ファイルからの入力を、内部状態へ適用
+	RefreshRenDbToInternal(db)
+
+	return db, true
+}
 
 // RemoveRen - 石の連を打ち上げます
 func (k *Kernel) RemoveRen(ren *Ren) {
@@ -31,4 +56,4 @@ func (k *Kernel) FindAllRens() {
 	k.Board.ForeachPayloadLocationOrderByYx(setLocation)
 }
 
-// EOF [O1o1o0g22o5o1o0]
+// EOF [O1o1o0g12o__11o__10o5o__10o0]
