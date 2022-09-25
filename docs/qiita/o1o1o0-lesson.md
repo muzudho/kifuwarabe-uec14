@@ -2655,26 +2655,6 @@ func NewRenDb(boardWidth int, boardHeight int) *RenDb {
 	return db
 }
 
-// LoadRenDb - 連データベースの外部ファイル読取
-func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
-	// ファイル読込
-	var binary, errA = os.ReadFile(path)
-	if errA != nil {
-		return onError(errA)
-	}
-
-	var db = new(RenDb)
-	var errB = json.Unmarshal(binary, db)
-	if errB != nil {
-		return onError(errB)
-	}
-
-	// 外部ファイルからの入力を、内部状態へ適用
-	RefreshRenDbToInternal(db)
-
-	return db, true
-}
-
 // Init - 初期化
 func (db *RenDb) Init(boardWidth int, boardHeight int) {
 	db.Header.Init(boardWidth, boardHeight)
@@ -2909,6 +2889,50 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 連データベースをロードするには、盤のサイズも、連も既知でないといけない  
 盤のサイズ、連の定義を終えた段階で、連データベースのロードを実装する  
 
+## Step [O1o1o0g12o__11o__10o5o__10o_10o0] ファイル作成 - ren_db.go ファイル
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	├── 📄 kernel.go
+ 	│	├── 📄 logger.go
+	│	├── 📄 point.go
+	│	├── 📄 ren_db_item.go
+👉	│	├── 📄 ren_db.go
+ 	│	└── 📄 stone.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+  	└── 📄 main.go
+```
+
+```go
+// LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
+func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
+	// ファイル読込
+	var binary, errA = os.ReadFile(path)
+	if errA != nil {
+		return onError(errA)
+	}
+
+	var db = new(RenDb)
+	var errB = json.Unmarshal(binary, db)
+	if errB != nil {
+		return onError(errB)
+	}
+
+	// 外部ファイルからの入力を、内部状態へ適用
+	RefreshRenDbToInternal(db)
+
+	return db, true
+}
+```
+
 ## Step [O1o1o0g12o__11o__10o5o__10o1o0] コマンド編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
@@ -2947,7 +2971,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 			logg.J.Infow("error", "err", err)
 			return nil, false
 		}
-		
+
 		var renDb, isOk = LoadRenDb(path, onError)
 		if isOk {
 			k.renDb = renDb
