@@ -245,6 +245,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			logg.J.Infow("error", "err", err)
 			return nil, false
 		}
+
 		var renDb, isOk = LoadRenDb(path, onError)
 		if isOk {
 			k.renDb = renDb

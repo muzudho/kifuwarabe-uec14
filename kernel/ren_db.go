@@ -54,7 +54,7 @@ func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 	}
 
 	// 外部ファイルからの入力を、内部状態へ適用
-	db.RefreshRenDbToInternal()
+	RefreshRenDbToInternal(db)
 
 	return db, true
 }
@@ -137,9 +137,9 @@ func (db *RenDb) RefreshToExternalFile(convertLocation func(Point) string) {
 }
 
 // RefreshRenDbToInternal - 外部ファイルから入力された内容を内部状態に適用します
-func (db *RenDb) RefreshRenDbToInternal() {
+func RefreshRenDbToInternal(db *RenDb) {
 	for _, ren := range db.Rens {
-		ren.RefreshRenToInternal()
+		RefreshRenToInternal(ren)
 	}
 }
 

@@ -130,7 +130,7 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 }
 
 // RefreshRenToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
-func (r *Ren) RefreshRenToInternal() {
+func RefreshRenToInternal(r *Ren) {
 	{
 		var getDefaultStone = func() (bool, Stone) {
 			panic(fmt.Sprintf("unexpected stone:%s", r.Sto))
