@@ -998,6 +998,8 @@ Output:
 10
 ```
 
+`*.input.txt` というファイル名は、内容が読み取られるとともに空っぽに消される目印にしている。消えて困る内容を書かないように注意してほしい  
+
 ## Step [O1o1o0g11o__11o2o_1o0] バーチャルIO作成 - debugger/virtual_io.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
@@ -1331,6 +1333,7 @@ go mod init github.com/muzudho/kifuwarabe-uec14/debugger
 
 ```plaintext
 module github.com/muzudho/kifuwarabe-uec14/debugger
+
 go 1.19
 ```
 
@@ -6692,7 +6695,41 @@ Output > Console:
 
 ## Step [O1o1o0g23o_2o4o0] TODO 出力ファイルの内容の盤表示
 
+TODO FIXME rendb_dump の結果が全部空っぽ？
 
+📄 .vscode/launch.json:  
+
+```json
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}",
+            "args" : ["-d=true"]
+        }
+    ]
+}
+```
+
+📄 debug.input.txt:  
+
+```plaintext
+rendb_load data/ren_db_board4.json
+rendb_dump
+```
+
+```plaintext
+rendb_load data/ren_db_board4.json
+find_all_rens
+rendb_dump
+```
 
 # Step [O1o1o0g23o_3o0] 石を打った後の連の再スキャン
 

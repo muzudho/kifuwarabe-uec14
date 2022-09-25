@@ -81,7 +81,7 @@ VSCode の上の方にフォルダー名か出てくるので、とりあえず 
 
 `F5` キーを押すとデバッグが開始される  
 
-## Step [O3o0] 標準入力の差し替え
+# Step [O3o0] 標準入力の差し替え
 
 dlv では、以下のコードを実行できない  
 
@@ -101,7 +101,29 @@ dlv では、以下のコードを実行できない
 
 👇 以下を参照  
 
-📖 [muzudho / go-virtual-io](https://github.com/muzudho/go-virtual-io)  
+📖 [muzudho / go-virtual-io / docs / how_to_make.md](https://github.com/muzudho/go-virtual-io/blob/main/docs/how_to_make.md)  
+
+# Step [O4o0] デバッグ実行でコマンドライン引数を渡すには
+
+C++の記事だが参考にする  
+
+👇 以下を参照  
+
+📖 [https://code.visualstudio.com/docs/cpp/launch-json-reference](https://code.visualstudio.com/docs/cpp/launch-json-reference)  
+
+```json
+{
+  "name": "C++ Launch",
+  "type": "cppdbg",
+  "request": "launch",
+  "program": "${workspaceFolder}/a.out",
+  "args": ["arg1", "arg2"],
+  "environment": [{ "name": "config", "value": "Debug" }],
+  "cwd": "${workspaceFolder}"
+}
+```
+
+`args` という項目を追加できそうだ  
 
 # 参考にした記事
 

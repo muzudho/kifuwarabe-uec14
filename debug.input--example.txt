@@ -1,1 +1,3 @@
-hello
+rendb_load data/ren_db_board4.json
+find_all_rens
+rendb_dump
