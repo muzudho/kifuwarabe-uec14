@@ -240,15 +240,14 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		// Example: `rendb_load data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
-		var onError = func(err error) (*RenDb, bool) {
+		var onError = func(err error) bool {
 			logg.C.Infof("? error:%s\n", err)
 			logg.J.Infow("error", "err", err)
-			return nil, false
+			return false
 		}
 
-		var renDb, isOk = k.LoadRenDb(path, onError)
+		var isOk = k.LoadRenDb(path, onError)
 		if isOk {
-			k.renDb = renDb
 			logg.C.Infof("=\n")
 			logg.J.Infow("ok")
 			return true

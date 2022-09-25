@@ -2923,7 +2923,7 @@ import (
 )
 
 // LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
-func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
+func (k *Kernel) LoadRenDb(path string, onError func(error) bool) bool {
 	// ファイル読込
 	var binary, errA = os.ReadFile(path)
 	if errA != nil {
@@ -2939,7 +2939,9 @@ func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 	// 外部ファイルからの入力を、内部状態へ適用
 	RefreshRenDbToInternal(db)
 
-	return db, true
+	// 差し替え
+	k.renDb = db
+	return true
 }
 
 // EOF [O1o1o0g12o__11o__10o5o__10o0]
@@ -2978,15 +2980,14 @@ func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 		// Example: `rendb_load data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
-		var onError = func(err error) (*RenDb, bool) {
+		var onError = func(err error) bool {
 			logg.C.Infof("? error:%s\n", err)
 			logg.J.Infow("error", "err", err)
-			return nil, false
+			return false
 		}
 
-		var renDb, isOk = k.LoadRenDb(path, onError)
+		var isOk = k.LoadRenDb(path, onError)
 		if isOk {
-			k.renDb = renDb
 			logg.C.Infof("=\n")
 			logg.J.Infow("ok")
 			return true
