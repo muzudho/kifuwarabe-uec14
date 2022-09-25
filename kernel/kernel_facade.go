@@ -8,7 +8,7 @@ import (
 )
 
 // LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
-func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
+func (k *Kernel) LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 	// ファイル読込
 	var binary, errA = os.ReadFile(path)
 	if errA != nil {

@@ -246,7 +246,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			return nil, false
 		}
 
-		var renDb, isOk = LoadRenDb(path, onError)
+		var renDb, isOk = k.LoadRenDb(path, onError)
 		if isOk {
 			k.renDb = renDb
 			logg.C.Infof("=\n")
