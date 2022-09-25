@@ -5,6 +5,7 @@ package kernel
 import (
 	"fmt"
 	"math"
+	"strconv"
 	"strings"
 )
 
@@ -109,28 +110,62 @@ func (r *Ren) createCoordBelt(locations []Point, convertLocation func(Point) str
 
 // RefreshToExternalFile - 外部ファイルに出力されてもいいように内部状態を整形します
 func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
-	// Examples: `.`, `x`, `o`, `+`
-	r.Sto = r.stone.String()
-
 	{
+		// stone to Sto
+		// Examples: `.`, `x`, `o`, `+`
+		r.Sto = r.stone.String()
+	}
+	{
+		// lorations to Loc
 		// Example: `A1 B2 C3 D4`
 		var tokens = r.createCoordBelt(r.locations, convertLocation)
 		// sort.Strings(tokens) // 辞書順ソート - 走査方向が変わってしまうので止めた
 		r.Loc = strings.Join(tokens, " ")
 	}
 	{
+		// libertyLocations to LibLoc
 		var tokens = r.createCoordBelt(r.libertyLocations, convertLocation)
 		r.LibLoc = strings.Join(tokens, " ")
 	}
 }
 
-// RefreshToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
-func (r *Ren) RefreshToInternal() {
-	// TODO from r.Sto
+// RefreshRenToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
+func (r *Ren) RefreshRenToInternal() {
+	{
+		var getDefaultStone = func() (bool, Stone) {
+			panic(fmt.Sprintf("unexpected stone:%s", r.Sto))
+		}
 
-	// TODO from r.Loc
+		// TODO stone from r.Sto
+		// Example: "x" --> black
+		var isOk, stone = GetStoneFromChar(r.Sto, getDefaultStone)
+		if isOk {
+			r.stone = stone
+		}
+	}
+	{
+		// TODO locations from r.Loc
+		// Example: "C1 D1 E1"
+		var codes = strings.Split(r.Loc, " ")
 
-	// TODO from r.LibLoc
+		var numbers = []Point{}
+		for _, code := range codes {
+			// TODO board
+			var number, err = strconv.Atoi(code)
+			if err != nil {
+				panic(err)
+			}
+
+			numbers = append(numbers, Point(number))
+		}
+
+		r.locations = numbers
+	}
+	{
+		// TODO libertyLocations from r.LibLoc
+		// Example: "F1 E2 D2 B1 C2"
+
+	}
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
