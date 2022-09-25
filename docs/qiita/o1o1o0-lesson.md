@@ -2752,8 +2752,11 @@ func (db *RenDb) RefreshToExternalFile(convertLocation func(Point) string) {
 	}
 }
 
-// RefreshToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
+// RefreshToInternal - 外部ファイルから入力された内容を内部状態に適用します
 func (db *RenDb) RefreshToInternal() {
+	for _, ren := range db.Rens {
+		ren.RefreshToInternal()
+	}
 }
 
 // RenDbDocHeader - ヘッダー

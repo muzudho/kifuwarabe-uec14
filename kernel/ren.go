@@ -126,6 +126,11 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 
 // RefreshToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
 func (r *Ren) RefreshToInternal() {
+	// TODO from r.Sto
+
+	// TODO from r.Loc
+
+	// TODO from r.LibLoc
 }
 
 // EOF [O1o1o0g11o_4o2o1o0]
