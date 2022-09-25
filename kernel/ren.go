@@ -5,7 +5,6 @@ package kernel
 import (
 	"fmt"
 	"math"
-	"strconv"
 	"strings"
 )
 
@@ -126,45 +125,6 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 		// libertyLocations to LibLoc
 		var tokens = r.createCoordBelt(r.libertyLocations, convertLocation)
 		r.LibLoc = strings.Join(tokens, " ")
-	}
-}
-
-// RefreshRenToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
-func RefreshRenToInternal(r *Ren) {
-	{
-		var getDefaultStone = func() (bool, Stone) {
-			panic(fmt.Sprintf("unexpected stone:%s", r.Sto))
-		}
-
-		// TODO stone from r.Sto
-		// Example: "x" --> black
-		var isOk, stone = GetStoneFromChar(r.Sto, getDefaultStone)
-		if isOk {
-			r.stone = stone
-		}
-	}
-	{
-		// TODO locations from r.Loc
-		// Example: "C1 D1 E1"
-		var codes = strings.Split(r.Loc, " ")
-
-		var numbers = []Point{}
-		for _, code := range codes {
-			// TODO board
-			var number, err = strconv.Atoi(code)
-			if err != nil {
-				panic(err)
-			}
-
-			numbers = append(numbers, Point(number))
-		}
-
-		r.locations = numbers
-	}
-	{
-		// TODO libertyLocations from r.LibLoc
-		// Example: "F1 E2 D2 B1 C2"
-
 	}
 }
 

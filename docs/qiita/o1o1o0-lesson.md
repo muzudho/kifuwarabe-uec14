@@ -2002,10 +2002,6 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 	}
 }
 
-// RefreshRenToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
-func RefreshRenToInternal(r *Ren) {
-}
-
 // EOF [O1o1o0g11o_4o2o1o0]
 ```
 
@@ -2931,12 +2927,51 @@ func (k *Kernel) LoadRenDb(path string, onError func(error) bool) bool {
 
 	// 外部ファイルからの入力を、内部状態へ適用
 	for _, ren := range db.Rens {
-		RefreshRenToInternal(ren)
+		k.RefreshRenToInternal(ren)
 	}
 
 	// 差し替え
 	k.renDb = db
 	return true
+}
+
+// RefreshRenToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
+func (k *Kernel) RefreshRenToInternal(r *Ren) {
+	{
+		var getDefaultStone = func() (bool, Stone) {
+			panic(fmt.Sprintf("unexpected stone:%s", r.Sto))
+		}
+
+		// TODO stone from r.Sto
+		// Example: "x" --> black
+		var isOk, stone = GetStoneFromChar(r.Sto, getDefaultStone)
+		if isOk {
+			r.stone = stone
+		}
+	}
+	{
+		// TODO locations from r.Loc
+		// Example: "C1 D1 E1"
+		var codes = strings.Split(r.Loc, " ")
+
+		var numbers = []Point{}
+		for _, code := range codes {
+			// TODO board
+			var number, err = strconv.Atoi(code)
+			if err != nil {
+				panic(err)
+			}
+
+			numbers = append(numbers, Point(number))
+		}
+
+		r.locations = numbers
+	}
+	{
+		// TODO libertyLocations from r.LibLoc
+		// Example: "F1 E2 D2 B1 C2"
+
+	}
 }
 
 // EOF [O1o1o0g12o__11o__10o5o__10o0]
