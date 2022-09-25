@@ -116,13 +116,6 @@ func (db *RenDb) RefreshToExternalFile(convertLocation func(Point) string) {
 	}
 }
 
-// RefreshRenDbToInternal - 外部ファイルから入力された内容を内部状態に適用します
-func RefreshRenDbToInternal(db *RenDb) {
-	for _, ren := range db.Rens {
-		RefreshRenToInternal(ren)
-	}
-}
-
 // RenDbDocHeader - ヘッダー
 type RenDbDocHeader struct {
 	// BoardWidth - 盤の横幅
