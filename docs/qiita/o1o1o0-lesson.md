@@ -6873,4 +6873,8 @@ TODO アンドゥ
 
 📖 [[math] 2つの値のうち小さい方を返す (Min)](http://www.openspc2.org/reibun/Go/1.1.1/pkg/math/1043/index.html)  
 
+### デバッギング
+
+📖 [標準入力のあるプログラムを delve でデバッグしたい](https://qiita.com/_natsu_no_yuki_/items/505e74e598d3d6a0cb24)  
+
 .
