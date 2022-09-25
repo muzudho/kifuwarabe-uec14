@@ -53,6 +53,9 @@ func LoadRenDb(path string, onError func(error) (*RenDb, bool)) (*RenDb, bool) {
 		return onError(errB)
 	}
 
+	// 外部ファイルからの入力を、内部状態へ適用
+	db.RefreshToInternal()
+
 	return db, true
 }
 
@@ -115,8 +118,8 @@ func (db *RenDb) Dump() string {
 	var sb strings.Builder
 
 	// 全ての要素
-	for idStr, item := range db.Rens {
-		sb.WriteString(fmt.Sprintf("[%s]%s \n", idStr, item.Dump()))
+	for idStr, ren := range db.Rens {
+		sb.WriteString(fmt.Sprintf("[%s]%s \n", idStr, ren.Dump()))
 	}
 
 	var text = sb.String()
@@ -131,6 +134,10 @@ func (db *RenDb) RefreshToExternalFile(convertLocation func(Point) string) {
 	for _, ren := range db.Rens {
 		ren.RefreshToExternalFile(convertLocation)
 	}
+}
+
+// RefreshToInternal - TODO 外部ファイルから入力された内容を内部状態に適用します
+func (db *RenDb) RefreshToInternal() {
 }
 
 // RenDbDocHeader - ヘッダー
