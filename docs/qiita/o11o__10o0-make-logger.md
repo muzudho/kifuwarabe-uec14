@@ -1,4 +1,4 @@
-目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会＜本編＞ Step [O11o__10o0] ロガー設定
+目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会＜本編＞ Step [O11o__10o0] ロガー設定 ～ Step [O11o__10o3o_2o0] welcome プログラム
 
 # 連載の目次
 
@@ -179,3 +179,147 @@ func encodeTimeSimpleInJapan(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 
 がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
 リモートリポジトリにプッシュしてほしい  
+
+# Step [O11o__10o3o_2o0] welcome プログラム
+
+## Step [O11o__10o3o0] ファイル編集
+
+👇 以下の既存ファイルを編集してほしい  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+ 	├── 📄 logger.go
+👉 	└── 📄 main.go
+```
+
+```go
+// ...略...
+
+import (
+	// ...略...
+	"github.com/muzudho/kifuwarabe-uec14/kernel" // * あとでリポジトリからダウンロードする
+)
+
+func main() {
+	// ...略...
+	// この下に初期設定を追加していく
+	// ---------------------------
+
+	// [O11o__10o3o0] ログファイル
+	var plainTextLogFile, _ = os.OpenFile(engineConfig.GetPlainTextLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer plainTextLogFile.Close() // ログファイル使用済み時にファイルを閉じる
+	// ログファイル
+	var jsonLogFile, _ = os.OpenFile(engineConfig.GetJsonLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer jsonLogFile.Close() // ログファイル使用済み時にファイルを閉じる
+	// カスタマイズしたロガーを使うなら
+	var logg = kernel.NewSugaredLoggerForGame(plainTextLogFile, jsonLogFile) // customized LOGGer
+
+	// この上に初期設定を追加していく
+	// ---------------------------
+
+	if name == "hello" { // [O9o0]
+		// ...略...
+		// この下に分岐を挟んでいく
+		// ---------------------
+		// ...略...
+
+
+	} else if name == "welcome" { // [O11o__10o0]
+		logg.C.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
+		logg.J.Infow("Welcome!",
+			"name", "nihon taro", "weight", 92.6, "x", 3)
+
+
+		// ...略...
+		// この上に分岐を挟んでいく
+		// ---------------------
+		// ...略...
+	}
+```
+
+## Step [O11o__10o4o0] tidy
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go get -u
+go mod tidy
+```
+
+Output:  
+
+```plaintext
+C:\Users\むずでょ\Documents\GitHub\kifuwarabe-uec14>go mod tidy
+go: finding module for package github.com/muzudho/kifuwarabe-uec14/kernel
+go: downloading github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911105808-5a17a869516a
+go: found github.com/muzudho/kifuwarabe-uec14/kernel in github.com/muzudho/kifuwarabe-uec14/kernel v0.0.0-20220911105808-5a17a869516a
+go: downloading github.com/stretchr/testify v1.8.0
+go: downloading github.com/benbjohnson/clock v1.1.0
+go: downloading go.uber.org/goleak v1.1.11
+go: downloading gopkg.in/yaml.v3 v3.0.1
+```
+
+👇 自分のパッケージはローカルPCにダウンロードされている  
+
+Example: 📂 `C:\Users\むずでょ\go\pkg\mod\github.com\muzudho`  
+
+## Step [O11o__10o5o0] 実行
+
+👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
+
+Input:  
+
+```shell
+go run . welcome
+```
+
+Output:  
+
+```shell
+2022-09-11T14:42:53.258+0900    Welcome! a:1 b:2 c:3
+```
+
+* 標準出力は、大会サーバーにメッセージを送るのに利用されることがある。従って 標準出力にログを出力すると反則負けになることがある
+  * 従って、ログをコンソールに表示したいときは、標準エラーに出力するようにする
+
+👇 以下のファイルが新規作成された  
+
+```plaintext
+  	📂 kifuwarabe-uec14
+	├── 📂 kernel
+	│	├── 📄 go.mod
+ 	│	└── 📄 logger.go
+    ├── 📄 .gitignore
+ 	├── 📄 engine_config.go
+  	├── 📄 engine.toml
+    ├── 📄 go.mod
+  	├── 📄 go.work
+👉	├── 📄 kifuwarabe-uec14-json.log
+👉	├── 📄 kifuwarabe-uec14.log
+ 	├── 📄 logger.go
+ 	└── 📄 main.go
+```
+
+👇 📄 `kifuwarabe-uec14-json.log`  
+
+```json
+{"level":"info","ts":"2022-09-11T14:43:54.145+0900","caller":"kifuwarabe-uec14/main.go:42","msg":"Welcome!","a":1,"b":2,"c":3}
+```
+
+* 作成されるログファイルは JSON形式ではない。 ワンライナーのJSONが複数行並ぶ
+
+👇 📄 `kifuwarabe-uec14.log`  
+
+```plaintext
+2022-09-11T14:43:54.112+0900	info	kifuwarabe-uec14/main.go:41	Welcome! a:1 b:2 c:3
+```
