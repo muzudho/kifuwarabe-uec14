@@ -1,4 +1,4 @@
-// BOF [O1o1o0g12o__11o__10o5o__10o0]
+// BOF [O12o__11o__10o5o__10o0]
 
 package kernel
 
@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
+// LoadRenDb - [O12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
 func (k *Kernel) LoadRenDb(path string, onError func(error) bool) bool {
 	// ファイル読込
 	var binary, errA = os.ReadFile(path)
@@ -96,7 +96,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	ren.ForeachLocation(setLocation)
 }
 
-// FindAllRens - [O1o1o0g23o_2o1o0] 盤上の全ての連を見つけます
+// FindAllRens - [O23o_2o1o0] 盤上の全ての連を見つけます
 // * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
@@ -114,4 +114,4 @@ func (k *Kernel) FindAllRens() {
 	k.Board.ForeachPayloadLocationOrderByYx(setLocation)
 }
 
-// EOF [O1o1o0g12o__11o__10o5o__10o0]
+// EOF [O12o__11o__10o5o__10o0]

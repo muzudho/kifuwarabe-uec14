@@ -1,4 +1,4 @@
-// BOF [O1o1o0g12o__11o__10o2o0]
+// BOF [O12o__11o__10o2o0]
 
 package kernel
 
@@ -145,4 +145,4 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	return h.BoardHeight + bothSidesWallThickness
 }
 
-// EOF [O1o1o0g12o__11o__10o2o0]
+// EOF [O12o__11o__10o2o0]

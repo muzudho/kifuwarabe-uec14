@@ -1,4 +1,4 @@
-# BOF [O1o1o0g11o__10o_2o0]
+# BOF [O11o__10o_2o0]
 # 思考エンジンのデフォルト値です。 CgfGoBan などの GUI はこのファイルを見ません
 
 # Game - 対局１つ分に相当
@@ -46,4 +46,4 @@ PlainTextLog = "kifuwarabe-uec14.log"
 # JsonLog - コンピューター向けのログ
 JsonLog = "kifuwarabe-uec14-json.log"
 
-# EOF [O1o1o0g11o__10o_2o0]
+# EOF [O11o__10o_2o0]

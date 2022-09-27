@@ -1,4 +1,4 @@
-// BOF [O1o1o0g11o__11o2o0]
+// BOF [O11o__11o2o0]
 
 package debugger
 
@@ -26,4 +26,4 @@ func main() {
 	}
 }
 
-// EOF [O1o1o0g11o__11o2o0]
+// EOF [O11o__11o2o0]

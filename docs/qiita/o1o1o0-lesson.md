@@ -1,4 +1,4 @@
-# Step [O1o1o0g1o0] はじめに
+# Step [O1o0] はじめに
 
 👇 Step の変な数字の説明  
 
@@ -25,7 +25,7 @@
 
 📖 [リポジトリ](https://github.com/muzudho/kifuwarabe-uec14)  
 
-## Step [O1o1o0g2o0] ソースの置き場所（ローカル）
+## Step [O2o0] ソースの置き場所（ローカル）
 
 Go言語では ローカルPCのどこにソースを置くかは自分で設定して決めておく。  
 サンプルでは　ユーザーホームの下に置いているので、真似る  
@@ -52,17 +52,17 @@ Output:
 
 以降の文章では、あなたのリポジトリに読み替えてほしい  
 
-## Step [O1o1o0g3o0] Visual Studio Code を使う
+## Step [O3o0] Visual Studio Code を使う
 
 がんばって、 `Visual Studio Code` を使えるようにしておいてほしい  
 
 📖 [Visual Studio Code](https://code.visualstudio.com/)  
 
-## Step [O1o1o0g4o0] Goエクステンションをインストールする
+## Step [O4o0] Goエクステンションをインストールする
 
 `Visual Studio Code` の `Extensions` から、 `Go` をインストールしておいてほしい  
 
-## Step [O1o1o0g5o0] マルチ ワークスペース
+## Step [O5o0] マルチ ワークスペース
 
 モジュールを複数作れるよう、  
 複数のワークスペースを作れるように対応しておく    
@@ -87,7 +87,7 @@ go 1.19
 
 ```
 
-## Step [O1o1o0g6o0] 設定 - .gitignore ファイル
+## Step [O6o0] 設定 - .gitignore ファイル
 
 👇 以下の既存ファイルを編集（無ければ新規作成）してほしい  
 
@@ -103,7 +103,7 @@ go 1.19
 # この下に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
 # ---------------------------------------------------------------
 
-# [O1o1o0g6o0]
+# [O6o0]
 go.work
 
 
@@ -112,7 +112,7 @@ go.work
 # ...略...
 ```
 
-## Step [O1o1o0g7o0] モジュール作成
+## Step [O7o0] モジュール作成
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -148,7 +148,7 @@ module github.com/muzudho/kifuwarabe-uec14
 go 1.19
 ```
 
-## Step [O1o1o0g8o0] ワークスペースズへ登録
+## Step [O8o0] ワークスペースズへ登録
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -175,7 +175,7 @@ go work use .
 use .
 ```
 
-# Step [O1o1o0g9o0] エントリーポイント作成 - ハローワールド
+# Step [O9o0] エントリーポイント作成 - ハローワールド
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -188,7 +188,7 @@ use .
 ```
 
 ```go
-// BOF [O1o1o0g9o0]
+// BOF [O9o0]
 
 package main
 
@@ -208,7 +208,7 @@ func main() {
 	// この上に初期設定を追加していく
 	// ---------------------------
 
-	if name == "hello" { // [O1o1o0g9o0]
+	if name == "hello" { // [O9o0]
 		fmt.Println("Hello, World!")
 
 		// この下に分岐を挟んでいく
@@ -222,10 +222,10 @@ func main() {
 	}
 }
 
-// EOF [O1o1o0g9o0]
+// EOF [O9o0]
 ```
 
-## Step [O1o1o0g10o0] tidy
+## Step [O10o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -233,7 +233,7 @@ func main() {
 go mod tidy
 ```
 
-## Step [O1o1o0g10o1o0] 実行
+## Step [O10o1o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -249,14 +249,14 @@ Output:
 Hello, World!
 ```
 
-# Step [O1o1o0g11o___100o0] カーネル作成
+# Step [O11o___100o0] カーネル作成
 
 👇 ここでは、カーネルは以下の意味を指す  
 
 * 思考エンジンのプログラムのうち、おおまかに言って **ゲームの知識（ドメイン）以外の部分**
 * １つのカーネルは、１つの対局に対応する
 
-## Step [O1o1o0g11o___100o1p0] フォルダー作成
+## Step [O11o___100o1p0] フォルダー作成
 
 👇 以下のフォルダーを新規作成してほしい  
 
@@ -269,7 +269,7 @@ Hello, World!
  	└── 📄 main.go
 ```
 
-## Step [O1o1o0g11o___100o2p0] カレントディレクトリーを移動
+## Step [O11o___100o2p0] カレントディレクトリーを移動
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -277,7 +277,7 @@ Hello, World!
 cd kernel
 ```
 
-## Step [O1o1o0g11o___100o3o_1o0] ワークスペースズへ登録
+## Step [O11o___100o3o_1o0] ワークスペースズへ登録
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -311,7 +311,7 @@ use (
 )
 ```
 
-## Step [O1o1o0g11o___100o3o0] Goモジュールの作成
+## Step [O11o___100o3o0] Goモジュールの作成
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -345,7 +345,7 @@ module github.com/muzudho/kifuwarabe-uec14/kernel
 go 1.19
 ```
 
-## Step [O1o1o0g11o___100o4p0] カレントディレクトリーを戻す
+## Step [O11o___100o4p0] カレントディレクトリーを戻す
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -353,9 +353,9 @@ go 1.19
 cd ..
 ```
 
-# Step [O1o1o0g11o__10o_1o0] 思考エンジン設定ファイル
+# Step [O11o__10o_1o0] 思考エンジン設定ファイル
 
-## Step [O1o1o0g11o__10o_2o0] ファイル作成 - engine.toml
+## Step [O11o__10o_2o0] ファイル作成 - engine.toml
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -371,7 +371,7 @@ cd ..
 ```
 
 ```toml
-# BOF [O1o1o0g11o__10o_2o0]
+# BOF [O11o__10o_2o0]
 # 思考エンジンのデフォルト値です。 CgfGoBan などの GUI はこのファイルを見ません
 
 # Game - 対局１つ分に相当
@@ -429,10 +429,10 @@ PlainTextLog = "kifuwarabe-uec14.log"
 # JsonLog - コンピューター向けのログ
 JsonLog = "kifuwarabe-uec14-json.log"
 
-# EOF [O1o1o0g11o__10o_2o0]
+# EOF [O11o__10o_2o0]
 ```
 
-## Step [O1o1o0g11o__10o_3o0] インストール - go-toml
+## Step [O11o__10o_3o0] インストール - go-toml
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -449,7 +449,7 @@ Output:
 go: added github.com/pelletier/go-toml v1.9.5
 ```
 
-## Step [O1o1o0g11o__10o_4o0] ファイル作成 - engine_config.go
+## Step [O11o__10o_4o0] ファイル作成 - engine_config.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -466,7 +466,7 @@ go: added github.com/pelletier/go-toml v1.9.5
 ```
 
 ```go
-// BOF [O1o1o0g11o__10o_4o0]
+// BOF [O11o__10o_4o0]
 
 package main
 
@@ -563,10 +563,10 @@ type Paths struct {
 	JsonLog string
 }
 
-// EOF [O1o1o0g11o__10o_4o0]
+// EOF [O11o__10o_4o0]
 ```
 
-## Step [O1o1o0g11o__10o_5o0] ファイル編集 - main.go
+## Step [O11o__10o_5o0] ファイル編集 - main.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -586,7 +586,7 @@ type Paths struct {
 // ...略...
 
 // func main() {
-	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
+	// [O11o__10o_5o0] 思考エンジン設定ファイル
 	var (
 		pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
 	)
@@ -596,7 +596,7 @@ type Paths struct {
 	// この下に初期設定を追加していく
 	// ---------------------------
 	// * この下に追加
-	// [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
+	// [O11o__10o_5o0] 思考エンジン設定ファイル
 	var onError = func(err error) *Config {
 		// ログファイルには出力できません。ログファイルはまだ読込んでいません
 
@@ -608,7 +608,7 @@ type Paths struct {
 // ...略...
 ```
 
-## Step [O1o1o0g11o__10o_6o0] 実行についての備考
+## Step [O11o__10o_6o0] 実行についての備考
 
 設定ファイルを使った例は、これ以降のステップで示す  
 
@@ -625,9 +625,9 @@ go run . -f engine.toml
 
 * `-f engine.toml` を省略すると、デフォルトで `./engine.toml` ファイルを読みに行く
 
-# Step [O1o1o0g11o__10o0] ロガー設定
+# Step [O11o__10o0] ロガー設定
 
-## Step [O1o1o0g11o__10o1o0] インストール
+## Step [O11o__10o1o0] インストール
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -637,7 +637,7 @@ Input:
 go get -u go.uber.org/zap
 ```
 
-## Step [O1o1o0g11o__10o2_1o0] 設定 - .gitignore ファイル
+## Step [O11o__10o2_1o0] 設定 - .gitignore ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -659,7 +659,7 @@ go get -u go.uber.org/zap
 # ---------------------------------------------------------------
 # ...略...
 
-# [O1o1o0g11o__10o2_1o0]
+# [O11o__10o2_1o0]
 *.log
 
 # この上に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
@@ -667,7 +667,7 @@ go get -u go.uber.org/zap
 # ...略...
 ```
 
-## Step [O1o1o0g11o__10o2o0] ファイル作成
+## Step [O11o__10o2o0] ファイル作成
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -685,7 +685,7 @@ go get -u go.uber.org/zap
 ```
 
 ```go
-// BOF [O1o1o0g11o__10o2o0]
+// BOF [O11o__10o2o0]
 
 package kernel
 
@@ -793,15 +793,15 @@ func encodeTimeSimpleInJapan(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.In(jst).Format(layout))
 }
 
-// EOF [O1o1o0g11o__10o2o0]
+// EOF [O11o__10o2o0]
 ```
 
-## Step [O1o1o0g11o__10o3o_1o0] リモートリポジトリにプッシュ
+## Step [O11o__10o3o_1o0] リモートリポジトリにプッシュ
 
 がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
 リモートリポジトリにプッシュしてほしい  
 
-## Step [O1o1o0g11o__10o3o0] ファイル編集
+## Step [O11o__10o3o0] ファイル編集
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -832,7 +832,7 @@ func main() {
 	// この下に初期設定を追加していく
 	// ---------------------------
 
-	// [O1o1o0g11o__10o3o0] ログファイル
+	// [O11o__10o3o0] ログファイル
 	var plainTextLogFile, _ = os.OpenFile(engineConfig.GetPlainTextLog(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer plainTextLogFile.Close() // ログファイル使用済み時にファイルを閉じる
 	// ログファイル
@@ -844,14 +844,14 @@ func main() {
 	// この上に初期設定を追加していく
 	// ---------------------------
 
-	if name == "hello" { // [O1o1o0g9o0]
+	if name == "hello" { // [O9o0]
 		// ...略...
 		// この下に分岐を挟んでいく
 		// ---------------------
 		// ...略...
 
 
-	} else if name == "welcome" { // [O1o1o0g11o__10o0]
+	} else if name == "welcome" { // [O11o__10o0]
 		logg.C.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
 		logg.J.Infow("Welcome!",
 			"name", "nihon taro", "weight", 92.6, "x", 3)
@@ -864,7 +864,7 @@ func main() {
 	}
 ```
 
-## Step [O1o1o0g11o__10o4o0] tidy
+## Step [O11o__10o4o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -892,7 +892,7 @@ go: downloading gopkg.in/yaml.v3 v3.0.1
 
 Example: 📂 `C:\Users\むずでょ\go\pkg\mod\github.com\muzudho`  
 
-## Step [O1o1o0g11o__10o5o0] 実行
+## Step [O11o__10o5o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -943,9 +943,9 @@ Output:
 2022-09-11T14:43:54.112+0900	info	kifuwarabe-uec14/main.go:41	Welcome! a:1 b:2 c:3
 ```
 
-# Step [O1o1o0g11o__11o0] デバッグ可能標準入力 作成
+# Step [O11o__11o0] デバッグ可能標準入力 作成
 
-## Step [O1o1o0g11o__11o1o0] git向け対応 - .gitignore ファイル
+## Step [O11o__11o1o0] git向け対応 - .gitignore ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -967,7 +967,7 @@ Output:
 # ---------------------------------------------------------------
 # ...略...
 
-# [O1o1o0g11o__11o1o0]
+# [O11o__11o1o0]
 *.input.txt
 
 # この上に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
@@ -975,7 +975,7 @@ Output:
 # ...略...
 ```
 
-## Step [O1o1o0g11o__11o2o_1o0] データファイル作成 - debugger/test.input.txt ファイル
+## Step [O11o__11o2o_1o0] データファイル作成 - debugger/test.input.txt ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1000,7 +1000,7 @@ Output:
 
 `*.input.txt` というファイル名は、内容が読み取られるとともに空っぽに消される目印にしている。消えて困る内容を書かないように注意してほしい  
 
-## Step [O1o1o0g11o__11o2o_1o0] バーチャルIO作成 - debugger/virtual_io.go ファイル
+## Step [O11o__11o2o_1o0] バーチャルIO作成 - debugger/virtual_io.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1021,7 +1021,7 @@ Output:
 ```
 
 ```go
-// BOF [O1o1o0g11o__11o2o_1o0]
+// BOF [O11o__11o2o_1o0]
 
 package debugger
 
@@ -1157,10 +1157,10 @@ func (vio *VirtualIO) WriterFlush() {
 	virtualIo.writer.Flush()
 }
 
-// EOF [O1o1o0g11o__11o2o_1o0]
+// EOF [O11o__11o2o_1o0]
 ```
 
-## Step [O1o1o0g11o__11o2o_2o0] バーチャルIO作成 - debugger/virtual_io_fmt.go ファイル
+## Step [O11o__11o2o_2o0] バーチャルIO作成 - debugger/virtual_io_fmt.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1182,7 +1182,7 @@ func (vio *VirtualIO) WriterFlush() {
 ```
 
 ```go
-// BOF [O1o1o0g11o__11o2o_2o0]
+// BOF [O11o__11o2o_2o0]
 
 package debugger
 
@@ -1193,10 +1193,10 @@ func (vio *VirtualIO) Printf(format string, a ...interface{}) {
 	fmt.Fprintf(vio.writer, format, a...)
 }
 
-// EOF [O1o1o0g11o__11o2o_2o0]
+// EOF [O11o__11o2o_2o0]
 ```
 
-## Step [O1o1o0g11o__11o2o0] ファイル作成 - debugger/main.go ファイル
+## Step [O11o__11o2o0] ファイル作成 - debugger/main.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1219,7 +1219,7 @@ func (vio *VirtualIO) Printf(format string, a ...interface{}) {
 ```
 
 ```go
-// BOF [O1o1o0g11o__11o2o0]
+// BOF [O11o__11o2o0]
 
 package debugger
 
@@ -1247,10 +1247,10 @@ func main() {
 	}
 }
 
-// EOF [O1o1o0g11o__11o2o0]
+// EOF [O11o__11o2o0]
 ```
 
-## Step [O1o1o0g11o__11o3o0] ファイル作成 - debugger/main_test.go ファイル
+## Step [O11o__11o3o0] ファイル作成 - debugger/main_test.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1274,7 +1274,7 @@ func main() {
 ```
 
 ```go
-// BOF [O1o1o0g11o__11o3o0]
+// BOF [O11o__11o3o0]
 
 package debugger
 
@@ -1287,10 +1287,10 @@ func TestMain(t *testing.T) {
 	main()
 }
 
-// EOF [O1o1o0g11o__11o3o0]
+// EOF [O11o__11o3o0]
 ```
 
-## Step [O1o1o0g11o__11o4o0] モジュール作成 - デバッガー
+## Step [O11o__11o4o0] モジュール作成 - デバッガー
 
 👇 📂 debugger をカレントディレクトリーとする  
 
@@ -1337,7 +1337,7 @@ module github.com/muzudho/kifuwarabe-uec14/debugger
 go 1.19
 ```
 
-## Step [O1o1o0g11o__11o5o0] ワークスペースズモードへ登録
+## Step [O11o__11o5o0] ワークスペースズモードへ登録
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -1354,9 +1354,9 @@ go mod tidy
 cd ..
 ```
 
-# Step [O1o1o0g11o__11o6o_1o0] TODO デバッグ用コマンドライン引数作成
+# Step [O11o__11o6o_1o0] TODO デバッグ用コマンドライン引数作成
 
-## Step [O1o1o0g11o__11o6o_2o0] データ作成 - debug.input.txt
+## Step [O11o__11o6o_2o0] データ作成 - debug.input.txt
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1384,7 +1384,7 @@ cd ..
 ```plaintext
 ```
 
-## Step [O1o1o0g11o__11o6o0] ファイル編集 - main.go
+## Step [O11o__11o6o0] ファイル編集 - main.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1410,10 +1410,10 @@ cd ..
 
 ```go
 // func main() {
-	// // [O1o1o0g11o__10o_5o0] 思考エンジン設定ファイル
+	// // [O11o__10o_5o0] 思考エンジン設定ファイル
 	// var (
 	// 	pEngineFilePath = flag.String("f", "engine.toml", "engine config file path")
-		// [O1o1o0g11o__11o6o0] デバッグ用
+		// [O11o__11o6o0] デバッグ用
 		pIsDebug = flag.Bool("d", false, "for debug")
 	// )
 	// ...略...
@@ -1422,7 +1422,7 @@ cd ..
 	// ---------------------------
 	// ...略...
 
-	// [O1o1o0g11o__11o6o0] デバッグ用
+	// [O11o__11o6o0] デバッグ用
 	if *pIsDebug {
 		virtualIo.ReplaceInputToFileLines("./debug.input.txt")
 	}
@@ -1433,7 +1433,7 @@ cd ..
 	// ...略...
 ```
 
-## Step [O1o1o0g11o__11o6o1o0] 入力データ編集 - debug.input.txt ファイル
+## Step [O11o__11o6o1o0] 入力データ編集 - debug.input.txt ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1462,7 +1462,7 @@ cd ..
 quit
 ```
 
-## Step [O1o1o0g11o__11o6o2o0] 動作確認
+## Step [O11o__11o6o2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -1470,9 +1470,9 @@ quit
 go run . -d=true
 ```
 
-# Step [O1o1o0g11o__12o0] インタープリター 作成
+# Step [O11o__12o0] インタープリター 作成
 
-## Step [O1o1o0g11o_1o0] コマンド実装 - ファイル編集 - main.go
+## Step [O11o_1o0] コマンド実装 - ファイル編集 - main.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1507,7 +1507,7 @@ import (
 	"strings"	// * 自動で追加される
 )
 
-// [O1o1o0g11o_1o0] グローバル変数として、バーチャルIOを１つ新規作成
+// [O11o_1o0] グローバル変数として、バーチャルIOを１つ新規作成
 // アプリケーションの中では 標準入出力は これを使うようにする
 var virtualIo = dbg.NewVirtualIO()
 
@@ -1516,7 +1516,7 @@ var virtualIo = dbg.NewVirtualIO()
 // func main() {
 	// ...略...
 
-	if name == "hello" { // [O1o1o0g9o0]
+	if name == "hello" { // [O9o0]
 		// ...略...
 	} else {
 
@@ -1524,27 +1524,27 @@ var virtualIo = dbg.NewVirtualIO()
 		// fmt.Println("go run . {programName}")
 
 		// * 追加
-		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
+		// [O11o_1o0] コンソール等からの文字列入力
 		for virtualIo.ScannerScan() {
 			var command = virtualIo.ScannerText()
 			logg.C.Infof("# %s", command)             // 人間向けの出力
 			logg.J.Infow("input", "command", command) // コンピューター向けの出力
 
-			// [O1o1o0g11o_1o0]
+			// [O11o_1o0]
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
 
 			// この下にコマンドを挟んでいく
 			// -------------------------
 
-			case "quit": // [O1o1o0g11o_1o0]
+			case "quit": // [O11o_1o0]
 				// os.Exit(0)
 				return
 
 			// この上にコマンドを挟んでいく
 			// -------------------------
 
-			default: // [O1o1o0g11o_1o0]
+			default: // [O11o_1o0]
 				logg.C.Infof("? unknown_command command:'%s'\n", tokens[0])
 				logg.J.Infow("? unknown_command", "command", tokens[0])
 			}
@@ -1556,7 +1556,7 @@ var virtualIo = dbg.NewVirtualIO()
 // }
 ```
 
-## Step [O1o1o0g11o_2o0] 動作確認
+## Step [O11o_2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -1596,7 +1596,7 @@ quit
 強制終了したいときは、 `[Ctrl]` キーを押しながら `[C]` キーを押してほしい。  
 これを以後 `[Ctrl] + [C]` と表記する  
 
-# Step [O1o1o0g11o_3o0] カーネルのインタープリター
+# Step [O11o_3o0] カーネルのインタープリター
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1615,7 +1615,7 @@ quit
 ```
 
 ```go
-// BOF [O1o1o0g11o_3o0]
+// BOF [O11o_3o0]
 
 package kernel
 
@@ -1659,10 +1659,10 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	return false
 }
 
-// EOF [O1o1o0g11o_3o0]
+// EOF [O11o_3o0]
 ```
 
-## Step [O1o1o0g11o_3o1o0] 外側のインタープリターから呼び出す
+## Step [O11o_3o1o0] 外側のインタープリターから呼び出す
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -1692,7 +1692,7 @@ import (
 )
 // ...略...
 
-		// [O1o1o0g12o__11o_4o0] 棋譜の初期化に利用
+		// [O12o__11o_4o0] 棋譜の初期化に利用
 		var onUnknownTurn = func() kernel.Stone {
 			var errMsg = fmt.Sprintf("? unexpected play_first:%s", engineConfig.GetPlayFirst())
 			logg.C.Info(errMsg)
@@ -1700,14 +1700,14 @@ import (
 			panic(errMsg)
 		}
 
-		// [O1o1o0g11o_3o0]
+		// [O11o_3o0]
 		var kernel1 = kernel.NewKernel(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 		// 設定ファイルの内容をカーネルへ反映
 		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 
 		/*
 		...以下略...
-		// [O1o1o0g11o_1o0] コンソール等からの文字列入力
+		// [O11o_1o0] コンソール等からの文字列入力
 		var scanner = bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			var command = scanner.Text()
@@ -1717,7 +1717,7 @@ import (
 		*/
 
 			// * これを追加する
-			// [O1o1o0g11o_3o0]
+			// [O11o_3o0]
 			var isHandled = kernel1.Execute(command, logg)
 			if isHandled {
 				continue
@@ -1725,7 +1725,7 @@ import (
 
 			/*
 			...以下略...
-			// [O1o1o0g11o_1o0]
+			// [O11o_1o0]
 			var tokens = strings.Split(command, " ")
 			switch tokens[0] {
 			*/
@@ -1734,7 +1734,7 @@ import (
 * カーネルと、自作の部分で コマンドが被ったなら、カーネルの方を優先する
   * これにより カーネルのアップデートにより 自作のコマンドが避けられることから、アップデート時は動作テストしてほしい
 
-# Step [O1o1o0g11o_4o0] 石の色定義
+# Step [O11o_4o0] 石の色定義
 
 `石` を定義していないが、先に `石の色` を定義する  
 
@@ -1746,7 +1746,7 @@ import (
 * `Color_White` - 白石の連とだけ隣接する
 * `Color_Mixed` - 黒石と白石の連の両方に隣接する
 
-## Step [O1o1o0g11o_4o1o0] ファイル作成 - color.go
+## Step [O11o_4o1o0] ファイル作成 - color.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1766,7 +1766,7 @@ import (
 ```
 
 ```go
-// BOF [O1o1o0g11o_4o1o0]
+// BOF [O11o_4o1o0]
 
 package kernel
 
@@ -1851,15 +1851,15 @@ func (c Color) GetOpponent() Color {
 	}
 }
 
-// EOF [O1o1o0g11o_4o1o0]
+// EOF [O11o_4o1o0]
 ```
 
-# Step [O1o1o0g11o_4o2o0] 連の定義
+# Step [O11o_4o2o0] 連の定義
 
 `石` を定義していないが、先に `連` （れん）を定義する。  
 `連` とは何かの説明は、ここでは省く  
 
-### Step [O1o1o0g11o_4o2o1o0] ファイル作成 - ren.go
+### Step [O11o_4o2o1o0] ファイル作成 - ren.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -1880,7 +1880,7 @@ func (c Color) GetOpponent() Color {
 ```
 
 ```go
-// BOF [O1o1o0g11o_4o2o1o0]
+// BOF [O11o_4o2o1o0]
 
 package kernel
 
@@ -2002,12 +2002,12 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 	}
 }
 
-// EOF [O1o1o0g11o_4o2o1o0]
+// EOF [O11o_4o2o1o0]
 ```
 
-# Step [O1o1o0g11o_5o0] 石定義
+# Step [O11o_5o0] 石定義
 
-## Step [O1o1o0g11o0] ファイル作成 - stone.go ファイル
+## Step [O11o0] ファイル作成 - stone.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -2027,7 +2027,7 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 ```
 
 ```go
-// BOF [O1o1o0g11o0]
+// BOF [O11o0]
 
 package kernel
 
@@ -2132,15 +2132,15 @@ func (s Stone) GetColor() Color {
 	}
 }
 
-// EOF [O1o1o0g11o0]
+// EOF [O11o0]
 ```
 
-## Step [O1o1o0g11o1o0] リモートリポジトリにプッシュ
+## Step [O11o1o0] リモートリポジトリにプッシュ
 
 がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
 リモートリポジトリにプッシュしてほしい  
 
-## Step [O1o1o0g11o2o0] カレントディレクトリーを移動
+## Step [O11o2o0] カレントディレクトリーを移動
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -2148,7 +2148,7 @@ func (s Stone) GetColor() Color {
 cd kernel
 ```
 
-## Step [O1o1o0g11o3o0] tidy
+## Step [O11o3o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -2159,7 +2159,7 @@ go get -u
 go mod tidy
 ```
 
-## Step [O1o1o0g11o4o0] カレントディレクトリーを戻す
+## Step [O11o4o0] カレントディレクトリーを戻す
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -2167,7 +2167,7 @@ go mod tidy
 cd ..
 ```
 
-## Step [O1o1o0g11o5o0] tidy
+## Step [O11o5o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -2177,11 +2177,11 @@ Input:
 go mod tidy
 ```
 
-# Step [O1o1o0g12o__10o0] 点定義、またはその盤座標符号定義
+# Step [O12o__10o0] 点定義、またはその盤座標符号定義
 
 盤を作る前に、これから盤座標符号を定義する  
 
-## Step [O1o1o0g12o__10o1o0] ファイル作成 - point.go ファイル
+## Step [O12o__10o1o0] ファイル作成 - point.go ファイル
 
 👇 以下の既存ファイルを新規作成してほしい  
 
@@ -2202,7 +2202,7 @@ go mod tidy
 ```
 
 ```go
-// BOF [O1o1o0g12o__10o1o0]
+// BOF [O12o__10o1o0]
 
 package kernel
 
@@ -2282,10 +2282,10 @@ func GetRankFromCode(code string) string {
 	return code[1:2]
 }
 
-// EOF [O1o1o0g12o__10o1o0]
+// EOF [O12o__10o1o0]
 ```
 
-## Step [O1o1o0g12o__10o2o0] コマンド実装 - kernel.go ファイル
+## Step [O12o__10o2o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -2316,21 +2316,21 @@ func GetRankFromCode(code string) string {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "test_file": // [O1o1o0g12o__10o2o0]
+	case "test_file": // [O12o__10o2o0]
 		// Example: "test_file A"
 		var file = GetFileFromCode(tokens[1])
 		logg.C.Infof("= %s\n", file)
 		logg.J.Infow("output", "file", file)
 		return true
 
-	case "test_rank": // [O1o1o0g12o__10o2o0]
+	case "test_rank": // [O12o__10o2o0]
 		// Example: "test_rank 13"
 		var rank = GetRankFromCode(tokens[1])
 		logg.C.Infof("= %s\n", rank)
 		logg.J.Infow("output", "rank", rank)
 		return true
 
-	case "test_x": // [O1o1o0g12o__10o2o0]
+	case "test_x": // [O12o__10o2o0]
 		// Example: "test_x 18"
 		var x, err = strconv.Atoi(tokens[1])
 		if err != nil {
@@ -2343,7 +2343,7 @@ func GetRankFromCode(code string) string {
 		logg.J.Infow("output", "file", file)
 		return true
 
-	case "test_y": // [O1o1o0g12o__10o2o0]
+	case "test_y": // [O12o__10o2o0]
 		// Example: "test_y 18"
 		var y, err = strconv.Atoi(tokens[1])
 		if err != nil {
@@ -2363,7 +2363,7 @@ func GetRankFromCode(code string) string {
 // ...略...
 ```
 
-## Step [O1o1o0g12o__10o3o0] 動作確認
+## Step [O12o__10o3o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -2524,7 +2524,7 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-13T23:58:42.782+0900","caller":"kernel/kernel.go:128","msg":"output","rank":"19"}
 ```
 
-# Step [O1o1o0g12o__11o__100o0] データファイル作成 - data/ren_db1.json ファイル
+# Step [O12o__11o__100o0] データファイル作成 - data/ren_db1.json ファイル
 
 あとで使うファイルを先に作成する  
 
@@ -2573,22 +2573,22 @@ Output > Log > JSON:
 }
 ```
 
-# ~~Step [O1o1o0g12o__11o__101o0]~~
+# ~~Step [O12o__11o__101o0]~~
 
 Removed
 
-# Step [O1o1o0g12o__11o__10o0] 連データベース定義
+# Step [O12o__11o__10o0] 連データベース定義
 
 * 取った石の場所を記憶しておく構造を作成する
 * 入出力ファイルの構造でもある
 
 📖 [目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会☆（＾ｑ＾）＜その４＞](http://grayscale2.dou-jin.com/go/%E7%9B%AE%E6%8C%87%E3%81%9B%EF%BC%81%E7%AC%AC%EF%BC%91%EF%BC%94%E5%9B%9E%EF%BC%B5%EF%BC%A5%EF%BC%A3%E6%9D%AF%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E5%9B%B2%E7%A2%81%E5%A4%A7%E4%BC%9A%E2%98%86%EF%BC%88%EF%BC%BE_19)  
 
-## ~~Step [O1o1o0g12o__11o__10o1o0]~~
+## ~~Step [O12o__11o__10o1o0]~~
 
 Removed  
 
-## Step [O1o1o0g12o__11o__10o2o0] ファイル作成 - ren_db.go ファイル
+## Step [O12o__11o__10o2o0] ファイル作成 - ren_db.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -2611,7 +2611,7 @@ Removed
 ```
 
 ```go
-// BOF [O1o1o0g12o__11o__10o2o0]
+// BOF [O12o__11o__10o2o0]
 
 package kernel
 
@@ -2757,10 +2757,10 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	return h.BoardHeight + bothSidesWallThickness
 }
 
-// EOF [O1o1o0g12o__11o__10o2o0]
+// EOF [O12o__11o__10o2o0]
 ```
 
-## Step [O1o1o0g12o__11o__10o3o0] ファイル編集 - kernel.go ファイル
+## Step [O12o__11o__10o3o0] ファイル編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -2788,7 +2788,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	// ...略...
 
 	// * 以下を追加
-	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
+	// RenDb - [O12o__11o__10o3o0] 連データベース
 	renDb *RenDb
 // }
 // ...略...
@@ -2797,7 +2797,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	// ...略...
 
 	// * 以下を追加
-	// RenDb - [O1o1o0g12o__11o__10o3o0] 連データベース
+	// RenDb - [O12o__11o__10o3o0] 連データベース
 	k.renDb = NewRenDb(k.Board.GetWidth(), k.Board.GetHeight())
 
 //	return k
@@ -2805,7 +2805,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 // ...略...
 ```
 
-## Step [O1o1o0g12o__11o__10o4o0] コマンド編集 - kernel.go ファイル
+## Step [O12o__11o__10o4o0] コマンド編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -2836,13 +2836,13 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "rendb_dump": // [O1o1o0g12o__11o__10o4o0]
+	case "rendb_dump": // [O12o__11o__10o4o0]
 		var text = k.renDb.Dump()
 		logg.C.Info("= dump'''%s\n'''\n", text)
 		logg.J.Infow("ok", "dump", text)
 		return true
 
-	case "rendb_save": // [O1o1o0g12o__11o__10o4o0]
+	case "rendb_save": // [O12o__11o__10o4o0]
 		// Example: `rendb_save data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
@@ -2873,12 +2873,12 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 ```
 
 
-# Step [O1o1o0g12o__11o__10o5o__10o0] 連データベースのロード
+# Step [O12o__11o__10o5o__10o0] 連データベースのロード
 
 連データベースをロードするには、盤のサイズも、連も既知でないといけない  
 盤のサイズ、連の定義を終えた段階で、連データベースのロードを実装する  
 
-## Step [O1o1o0g12o__11o__10o5o__10o_10o0] ファイル作成 - kernel/kernel_facade.go ファイル
+## Step [O12o__11o__10o5o__10o_10o0] ファイル作成 - kernel/kernel_facade.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -2902,7 +2902,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 ```
 
 ```go
-// BOF [O1o1o0g12o__11o__10o5o__10o0]
+// BOF [O12o__11o__10o5o__10o0]
 
 package kernel
 
@@ -2911,7 +2911,7 @@ import (
 	"os"
 )
 
-// LoadRenDb - [O1o1o0g12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
+// LoadRenDb - [O12o__11o__10o5o__10o_10o0] 連データベースの外部ファイル読取
 func (k *Kernel) LoadRenDb(path string, onError func(error) bool) bool {
 	// ファイル読込
 	var binary, errA = os.ReadFile(path)
@@ -2987,10 +2987,10 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 	return true
 }
 
-// EOF [O1o1o0g12o__11o__10o5o__10o0]
+// EOF [O12o__11o__10o5o__10o0]
 ```
 
-## Step [O1o1o0g12o__11o__10o5o__10o1o0] コマンド編集 - kernel.go ファイル
+## Step [O12o__11o__10o5o__10o1o0] コマンド編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3019,7 +3019,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 	// -------------------------
 	// ...略...
 
-	case "rendb_load": // [O1o1o0g12o__11o__10o5o__10o1o0]
+	case "rendb_load": // [O12o__11o__10o5o__10o1o0]
 		// Example: `rendb_load data/ren_db1_temp.json`
 		// * ファイルパスにスペースがはいっていてはいけない
 		var path = tokens[1]
@@ -3044,7 +3044,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 	// ...略...
 ```
 
-## Step [O1o1o0g12o__11o__10o5o_1o0] 設定 - .gitignore ファイル
+## Step [O12o__11o__10o5o_1o0] 設定 - .gitignore ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3060,7 +3060,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 # ---------------------------------------------------------------
 # ...略...
 
-# [O1o1o0g12o__11o__10o5o_1o0]
+# [O12o__11o__10o5o_1o0]
 *_temp.json
 
 # この上に kifuwarabe-uec14 でリポジトリにコミットしないものを追加する
@@ -3068,7 +3068,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 # ...略...
 ```
 
-## Step [O1o1o0g12o__11o__10o5o0] 動作確認
+## Step [O12o__11o__10o5o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -3134,9 +3134,9 @@ Output > Console:
 {"header":{"boardWidth":19,"boardHeight":19},"rens":{"001,01A":{"stone":".","locate":"","liberty":""},"001,06N":{"stone":".","locate":"","liberty":""},"001,13E":{"stone":".","locate":"","liberty":""}}}
 ```
 
-# Step [O1o1o0g12o__11o_1o0] 棋譜定義
+# Step [O12o__11o_1o0] 棋譜定義
 
-## Step [O1o1o0g12o__11o_2o_1o0] ファイル作成 - record_item.go ファイル
+## Step [O12o__11o_2o_1o0] ファイル作成 - record_item.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -3158,7 +3158,7 @@ Output > Console:
 ```
 
 ```go
-// BOF[O1o1o0g12o__11o_2o_1o0]
+// BOF[O12o__11o_2o_1o0]
 
 package kernel
 
@@ -3180,10 +3180,10 @@ func (ri *RecordItem) Clear() {
 	ri.ko = Point(0)
 }
 
-// EOF[O1o1o0g12o__11o_2o_1o0]
+// EOF[O12o__11o_2o_1o0]
 ```
 
-## Step [O1o1o0g12o__11o_2o0] ファイル作成 - record.go ファイル
+## Step [O12o__11o_2o0] ファイル作成 - record.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -3206,7 +3206,7 @@ func (ri *RecordItem) Clear() {
 ```
 
 ```go
-// BOF [O1o1o0g12o__11o_2o0]
+// BOF [O12o__11o_2o0]
 
 package kernel
 
@@ -3277,7 +3277,7 @@ func (r *Record) ForeachItem(setItem func(int, *RecordItem)) {
 
 // IsKo - コウか？
 func (r *Record) IsKo(placePlay Point) bool {
-	// [O1o1o0g22o7o1o0] コウの判定
+	// [O22o7o1o0] コウの判定
 	// 2手前に着手して石をぴったり１つ打ち上げたとき、その着手点はコウだ
 	var posNum = r.GetPositionNumber()
 	if 2 <= posNum {
@@ -3288,10 +3288,10 @@ func (r *Record) IsKo(placePlay Point) bool {
 	return false
 }
 
-// EOF [O1o1o0g12o__11o_2o0]
+// EOF [O12o__11o_2o0]
 ```
 
-## Step [O1o1o0g12o__11o_3o0] ファイル編集 - kernel.go ファイル
+## Step [O12o__11o_3o0] ファイル編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3316,19 +3316,19 @@ func (r *Record) IsKo(placePlay Point) bool {
 // type Kernel struct {
 	// ...略...
 
-	// Record - [O1o1o0g12o__11o_3o0] 棋譜
+	// Record - [O12o__11o_3o0] 棋譜
 	Record Record
 
 // }
 
 // NewKernel - カーネルの新規作成
 // func NewKernel(boardWidht int, boardHeight int,
-	// [O1o1o0g12o__11o_2o0] ,棋譜の初期化
+	// [O12o__11o_2o0] ,棋譜の初期化
 	maxMoves int, playFirst Stone//) *Kernel {
 	// ...略...
 
 	// * 以下を追加
-	// [O1o1o0g12o__11o_2o0] 棋譜の初期化
+	// [O12o__11o_2o0] 棋譜の初期化
 	k.Record = *NewRecord(maxMoves, playFirst)
 
 	// ...略...
@@ -3336,7 +3336,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 // }
 ```
 
-## Step [O1o1o0g12o__11o_4o0] ファイル編集 - main.go ファイル
+## Step [O12o__11o_4o0] ファイル編集 - main.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3358,14 +3358,14 @@ func (r *Record) IsKo(placePlay Point) bool {
 ```
 
 ```go
-		// [O1o1o0g11o_3o0]
+		// [O11o_3o0]
 		//var kernel1 = kernel.NewKernel(engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
-			// [O1o1o0g12o__11o_4o0] 棋譜の初期化
+			// [O12o__11o_4o0] 棋譜の初期化
 			engineConfig.GetMaxMovesNum(),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
 ```
 
-## Step [O1o1o0g12o__11o_5o0] コマンド実装 - kernel.go ファイル
+## Step [O12o__11o_5o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3395,7 +3395,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "record": // [O1o1o0g12o__11o_5o0]
+	case "record": // [O12o__11o_5o0]
 		// Example: "record"
 		var sb strings.Builder
 
@@ -3421,7 +3421,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 	// ...略...
 ```
 
-## Step [O1o1o0g12o__11o_6o0] 動作確認
+## Step [O12o__11o_6o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -3453,11 +3453,11 @@ Output > Console:
 [2022-09-17 19:05:16]   = record:'[1]A1 [2]B2 [3]C3 [4]D4 [5]E5'
 ```
 
-# Step [O1o1o0g12o__11o0] 盤定義（土台）
+# Step [O12o__11o0] 盤定義（土台）
 
 これから盤を作っていく前に、土台を作る  
 
-## Step [O1o1o0g12o__11o1o0] ファイル作成 - board.go
+## Step [O12o__11o1o0] ファイル作成 - board.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -3478,7 +3478,7 @@ Output > Console:
 ```
 
 ```go
-// BOF [O1o1o0g12o__11o1o0]
+// BOF [O12o__11o1o0]
 
 package kernel
 
@@ -3586,10 +3586,10 @@ func (b *Board) getMemoryArea() int {
 	return b.memoryWidth * b.memoryHeight
 }
 
-// EOF [O1o1o0g12o__11o1o0]
+// EOF [O12o__11o1o0]
 ```
 
-## Step [O1o1o0g12o__11o2o0] コマンド実装 - kernel.go ファイル
+## Step [O12o__11o2o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3618,7 +3618,7 @@ func (b *Board) getMemoryArea() int {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "test_get_point_from_xy": // [O1o1o0g12o__11o2o0]
+	case "test_get_point_from_xy": // [O12o__11o2o0]
 		// Example: "test_get_point_from_xy 2 3"
 		var x, errX = strconv.Atoi(tokens[1])
 		if errX != nil {
@@ -3643,7 +3643,7 @@ func (b *Board) getMemoryArea() int {
 	// ...略...
 ```
 
-## Step [O1o1o0g12o__11o3o0] 動作確認
+## Step [O12o__11o3o0] 動作確認
 
 19路盤とする  
 
@@ -3686,9 +3686,9 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-14T22:37:42.638+0900","caller":"kernel/kernel.go:119","msg":"output","point":65}
 ```
 
-# Step [O1o1o0g12o_1o0] 盤定義（盤面）
+# Step [O12o_1o0] 盤定義（盤面）
 
-## Step [O1o1o0g12o0] ファイル作成 - board_area.go
+## Step [O12o0] ファイル作成 - board_area.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -3710,7 +3710,7 @@ Output > Log > JSON:
 ```
 
 ```go
-// BOF [O1o1o0g12o0]
+// BOF [O12o0]
 
 package kernel
 
@@ -3797,7 +3797,7 @@ func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
 	}
 }
 
-// ForeachNeumannNeighborhood - [O1o1o0g13o__10o0] 隣接する４方向の定義
+// ForeachNeumannNeighborhood - [O13o__10o0] 隣接する４方向の定義
 func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Point)) {
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
@@ -3817,10 +3817,10 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Poi
 	}
 }
 
-// EOF [O1o1o0g12o0]
+// EOF [O12o0]
 ```
 
-## Step [O1o1o0g12o1o0] カレントディレクトリーを移動
+## Step [O12o1o0] カレントディレクトリーを移動
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -3828,7 +3828,7 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Poi
 cd kernel
 ```
 
-## Step [O1o1o0g12o2o0] tidy
+## Step [O12o2o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -3839,7 +3839,7 @@ go get -u
 go mod tidy
 ```
 
-## Step [O1o1o0g12o3o0] カレントディレクトリーを戻す
+## Step [O12o3o0] カレントディレクトリーを戻す
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -3847,12 +3847,12 @@ go mod tidy
 cd ..
 ```
 
-## Step [O1o1o0g12o4o0] リモートリポジトリにプッシュ
+## Step [O12o4o0] リモートリポジトリにプッシュ
 
 がんばって git などを使い、 `github.com/muzudho/kifuwarabe-uec14/kernel` モジュールの各パッケージのソースを  
 リモートリポジトリにプッシュしてほしい  
 
-## Step [O1o1o0g12o5o0] tidy
+## Step [O12o5o0] tidy
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい  
 
@@ -3875,9 +3875,9 @@ Input:
 go mod tidy
 ```
 
-# Step [O1o1o0g13o_1o0] 盤表示 - board コマンド
+# Step [O13o_1o0] 盤表示 - board コマンド
 
-## Step [O1o1o0g13o0] コマンド実装 - kernel.go ファイル
+## Step [O13o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -3905,7 +3905,7 @@ go mod tidy
 	// この下にコマンドを挟んでいく
 	// -------------------------
 
-	case "board": // [O1o1o0g13o0]
+	case "board": // [O13o0]
 		// 人間向けの出力
 		{
 			// 25列まで対応
@@ -3962,7 +3962,7 @@ go mod tidy
 	// ...略...
 ```
 
-## Step [O1o1o0g14o0] 動作確認
+## Step [O14o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -4074,9 +4074,9 @@ Output > Console:
 
 `quit` コマンドで 思考エンジンを終了してほしい  
 
-# Step [O1o1o0g15o__10o0] 盤サイズの変更 - resize コマンド
+# Step [O15o__10o0] 盤サイズの変更 - resize コマンド
 
-## Step [O1o1o0g15o__11o0] コマンド実装 - kernel.go ファイル
+## Step [O15o__11o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -4105,7 +4105,7 @@ Output > Console:
 	// この下にコマンドを挟んでいく
 	// -------------------------
 
-	case "boardsize": // [O1o1o0g15o__11o0]
+	case "boardsize": // [O15o__11o0]
 		// Example: `boardsize 19`
 		var sideLength, err = strconv.Atoi(tokens[1])
 
@@ -4129,7 +4129,7 @@ Output > Console:
 // ...略...
 ```
 
-## Step [O1o1o0g15o__12o0] 動作確認
+## Step [O15o__12o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -4195,31 +4195,31 @@ Output:
 . '''
 ```
 
-# ~~Step [O1o1o0g15o__13o0]~~
+# ~~Step [O15o__13o0]~~
 
 Removed  
 
-## ~~Step [O1o1o0g15o__13o1o0]~~
+## ~~Step [O15o__13o1o0]~~
 
-Moved to `O1o1o0g11o__10o_2o0`  
+Moved to `O11o__10o_2o0`  
 
-## ~~Step [O1o1o0g15o__13o2o_1o0]~~
+## ~~Step [O15o__13o2o_1o0]~~
 
-Moved to `[O1o1o0g11o__10o_3o0]`  
+Moved to `[O11o__10o_3o0]`  
 
-## ~~Step [O1o1o0g15o__13o2o_2o0]~~
+## ~~Step [O15o__13o2o_2o0]~~
 
-Moved to `[O1o1o0g11o__10o_4o0]`  
+Moved to `[O11o__10o_4o0]`  
 
-## ~~Step [O1o1o0g15o__13o2o_3o0]~~
+## ~~Step [O15o__13o2o_3o0]~~
 
-Merged to `[O1o1o0g11o_3o0]`  
+Merged to `[O11o_3o0]`  
 
-## ~~Step [O1o1o0g15o__13o2o_4o0]~~
+## ~~Step [O15o__13o2o_4o0]~~
 
-Moved to `[O1o1o0g11o__10o_6o0]`  
+Moved to `[O11o__10o_6o0]`  
 
-# Step [O1o1o0g15o__14o_1o0] データファイル作成 - data/board1.txt ファイル
+# Step [O15o__14o_1o0] データファイル作成 - data/board1.txt ファイル
 
 あとで使うファイルを先に作成する  
 
@@ -4272,9 +4272,9 @@ Moved to `[O1o1o0g11o__10o_6o0]`
    +++++++++++++++++++++
 ```
 
-# Step [O1o1o0g15o__14o0] 初期盤面を設定する - board_set コマンド
+# Step [O15o__14o0] 初期盤面を設定する - board_set コマンド
 
-## Step [O1o1o0g15o__14o1o0] ファイル作成 - board_set.go ファイル
+## Step [O15o__14o1o0] ファイル作成 - board_set.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -4299,7 +4299,7 @@ Moved to `[O1o1o0g11o__10o_6o0]`
 ```
 
 ```go
-// BOF [O1o1o0g15o__14o1o0]
+// BOF [O15o__14o1o0]
 
 package kernel
 
@@ -4360,10 +4360,10 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 
 }
 
-// EOF [O1o1o0g15o__14o1o0]
+// EOF [O15o__14o1o0]
 ```
 
-## Step [O1o1o0g15o__14o2o0] コマンド実装 - kernel.go ファイル
+## Step [O15o__14o2o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -4395,7 +4395,7 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	// -------------------------
 	// ...略...
 
-	case "board_set": // [O1o1o0g15o__14o2o0]
+	case "board_set": // [O15o__14o2o0]
 		// Example: `board_set file data/board1.txt`
 		k.DoSetBoard(command, logg)
 		logg.C.Infof("=\n")
@@ -4408,7 +4408,7 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 	// ...略...
 ```
 
-## Step [O1o1o0g15o__14o3o0] 動作確認
+## Step [O15o__14o3o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -4431,13 +4431,13 @@ board
 
 出力は略  
 
-# Step [O1o1o0g15o_1o0] 座標の定義
+# Step [O15o_1o0] 座標の定義
 
-## ~~Step [O1o1o0g15o0]~~
+## ~~Step [O15o0]~~
 
-Moved to `[O1o1o0g12o__10o1o0]`  
+Moved to `[O12o__10o1o0]`  
 
-## Step [O1o1o0g16o0] ファイル作成 - board_coord.go ファイル
+## Step [O16o0] ファイル作成 - board_coord.go ファイル
 
 👇 以下の既存ファイルを新規作成してほしい  
 
@@ -4460,7 +4460,7 @@ Moved to `[O1o1o0g12o__10o1o0]`
 ```
 
 ```go
-// BOF [O1o1o0g16o0]
+// BOF [O16o0]
 
 package kernel
 
@@ -4499,10 +4499,10 @@ func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
 	return file, rank
 }
 
-// EOF [O1o1o0g16o0]
+// EOF [O16o0]
 ```
 
-### Step [O1o1o0g16o1o0] コマンド実装 - kernel.go ファイル
+### Step [O16o1o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -4533,7 +4533,7 @@ func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "test_get_point_from_code": // [O1o1o0g16o1o0]
+	case "test_get_point_from_code": // [O16o1o0]
 		// Example: "test_get_point_from_code A1"
 		var point = k.Board.GetPointFromCode(tokens[1])
 		var code = k.Board.GetCodeFromPoint(point)
@@ -4547,7 +4547,7 @@ func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
 	// ...略...
 ```
 
-## Step [O1o1o0g16o2o0] 動作確認
+## Step [O16o2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -4574,17 +4574,17 @@ Output > Console:
 [2022-09-17 17:18:46]   = 22 A1
 ```
 
-## ~~Step [O1o1o0g17o0]~~
+## ~~Step [O17o0]~~
 
-Moved to `[O1o1o0g12o__10o2o0]`  
+Moved to `[O12o__10o2o0]`  
 
-## ~~Step [O1o1o0g18o0]~~
+## ~~Step [O18o0]~~
 
-Moved to `[O1o1o0g12o__10o3o0]`  
+Moved to `[O12o__10o3o0]`  
 
-# Step [O1o1o0g19o_1o0] 石を打つ - play コマンド
+# Step [O19o_1o0] 石を打つ - play コマンド
 
-## Step [O1o1o0g19o0] ファイル作成 - play.go ファイル
+## Step [O19o0] ファイル作成 - play.go ファイル
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -4609,7 +4609,7 @@ Moved to `[O1o1o0g12o__10o3o0]`
 ```
 
 ```go
-// BOF [O1o1o0g19o0]
+// BOF [O19o0]
 
 package kernel
 
@@ -4638,7 +4638,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var coord = tokens[2]
 	var point = k.Board.GetPointFromCode(coord)
 
-	// [O1o1o0g22o1o2o0] 石（または壁）の上に石を置こうとした
+	// [O22o1o2o0] 石（または壁）の上に石を置こうとした
 	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -4646,7 +4646,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	}
 
 	var isOk = k.Play(stone, point, logg,
-		// [O1o1o0g22o1o2o0] ,onMasonry
+		// [O22o1o2o0] ,onMasonry
 		onMasonry)
 
 	if isOk {
@@ -4662,10 +4662,10 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 // isOk : bool
 //		石を置けたら真、置けなかったら偽
 func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
-	// [O1o1o0g22o1o2o0] onMasonry
+	// [O22o1o2o0] onMasonry
 	onMasonry func() bool) bool {
 
-	// [O1o1o0g22o1o2o0]
+	// [O22o1o2o0]
 	if k.IsMasonryError(stoneA, pointB) {
 		return onMasonry()
 	}
@@ -4678,10 +4678,10 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	return true
 }
 
-// EOF [O1o1o0g19o0]
+// EOF [O19o0]
 ```
 
-## Step [O1o1o0g20o0] 実装 - kernel.go ファイル
+## Step [O20o0] 実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -4712,7 +4712,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "play": // [O1o1o0g20o0]
+	case "play": // [O20o0]
 		// Example: `play black A19`
 		k.DoPlay(command, logg)
 		return true
@@ -4723,7 +4723,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// ...略...
 ```
 
-## Step [O1o1o0g21o0] 実行
+## Step [O21o0] 実行
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -4799,7 +4799,7 @@ Output > Console:
 . '''
 ```
 
-# Step [O1o1o0g22o_1o0] データファイル作成 - data/board2.txt ファイル
+# Step [O22o_1o0] データファイル作成 - data/board2.txt ファイル
 
 あとで使うファイルを先に作成する  
 
@@ -4853,7 +4853,7 @@ Output > Console:
    +++++++++++++++++++++
 ```
 
-# Step [O1o1o0g22o_2o0] データファイル作成 - data/board3.txt ファイル
+# Step [O22o_2o0] データファイル作成 - data/board3.txt ファイル
 
 あとで使うファイルを先に作成する  
 
@@ -4908,15 +4908,15 @@ Output > Console:
    +++++++++++++++++++++
 ```
 
-# Step [O1o1o0g22o0] 囲碁の石を打つルールの実装
+# Step [O22o0] 囲碁の石を打つルールの実装
 
-## Step [O1o1o0g22o1o0] 空点以外のところ（石または壁の上）に石を置くことの禁止 - IsMasonryError関数作成
+## Step [O22o1o0] 空点以外のところ（石または壁の上）に石を置くことの禁止 - IsMasonryError関数作成
 
 とりあえず、 `石または壁の上に石を置く行為` に `Masonry` （メイスンリー）という名前を付ける。  
 従って この主のエラーは `Masonry error` と呼ぶことにする。  
 そのようなエラーであるかどうか判定する関数の名前は `IsMasonryError` と呼ぶことにする  
 
-### Step [O1o1o0g22o1o1o0] ファイル作成 - masonry.go
+### Step [O22o1o1o0] ファイル作成 - masonry.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -4944,7 +4944,7 @@ Output > Console:
 ```
 
 ```go
-// BOF [O1o1o0g22o1o1o0]
+// BOF [O22o1o1o0]
 
 package kernel
 
@@ -4963,10 +4963,10 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 	}
 }
 
-// EOF [O1o1o0g22o1o1o0]
+// EOF [O22o1o1o0]
 ```
 
-### Step [O1o1o0g22o1o2o0] 呼出し
+### Step [O22o1o2o0] 呼出し
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5001,7 +5001,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 	// var point = k.Board.GetPointFromCode(tokens[2])
 
 	// * 以下を追加
-	// [O1o1o0g22o1o2o0]
+	// [O22o1o2o0]
 	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, point)
 		logg.J.Infow("error", "my_stone", stone, "point", point)
@@ -5010,18 +5010,18 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 
 	// var isOk = k.Play(stone, point, logg,
 		// * 以下を追加
-		// [O1o1o0g22o1o2o0] ,onMasonry
+		// [O22o1o2o0] ,onMasonry
 		onMasonry//)
 	// ...略...
 // }
 
 // func (k *Kernel) Play(stone Stone, point Point, logg *Logger,
 	// * 以下を追加
-	// [O1o1o0g22o1o2o0] onMasonry
+	// [O22o1o2o0] onMasonry
 	onMasonry func() bool//) bool {
 
 	// * 以下を追加
-	// [O1o1o0g22o1o2o0]
+	// [O22o1o2o0]
 	if k.IsMasonryError(stone, point) {
 		return onMasonry()
 	}
@@ -5031,7 +5031,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 // }
 ```
 
-## Step [O1o1o0g22o2o0] 連の認識と、呼吸点のカウント - GetLiberty 関数作成
+## Step [O22o2o0] 連の認識と、呼吸点のカウント - GetLiberty 関数作成
 
 盤上の座標を指定することで、そこにある `連` の `呼吸点` の数を算出したい  
 
@@ -5046,11 +5046,11 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 このような探索を行う関数に名前を付ける。  
 `GetRen` がふさわしいが、慣習を優先して `GetLiberty` と名付けることにする  
 
-### ~~Step [O1o1o0g22o2o1o0]~~
+### ~~Step [O22o2o1o0]~~
 
-Moved to `[O1o1o0g11o_4o2o1o0]`  
+Moved to `[O11o_4o2o1o0]`  
 
-### Step [O1o1o0g22o2o2o0] ファイル作成 - check_board.go
+### Step [O22o2o2o0] ファイル作成 - check_board.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -5080,7 +5080,7 @@ Moved to `[O1o1o0g11o_4o2o1o0]`
 ```
 
 ```go
-// BOF [O1o1o0g22o2o2o0]
+// BOF [O22o2o2o0]
 
 package kernel
 
@@ -5157,10 +5157,10 @@ func (b *CheckBoard) getMemoryArea() int {
 	return b.memoryWidth * b.memoryHeight
 }
 
-// EOF [O1o1o0g22o2o2o0]
+// EOF [O22o2o2o0]
 ```
 
-### Step [O1o1o0g22o2o3o_1o0] ファイル編集 - board.go
+### Step [O22o2o3o_1o0] ファイル編集 - board.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5208,7 +5208,7 @@ func (b *CheckBoard) getMemoryArea() int {
 // }
 ```
 
-### Step [O1o1o0g22o2o3o0] ファイル編集 - kernel.go
+### Step [O22o2o3o0] ファイル編集 - kernel.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5245,7 +5245,7 @@ func (b *CheckBoard) getMemoryArea() int {
 //	Board *Board
 
 	// * 以下を追加
-	// [O1o1o0g22o2o3o0]
+	// [O22o2o3o0]
 	// CheckBoard - 呼吸点の探索時に使います
 	CheckBoard *CheckBoard
 	// tempRen - 呼吸点の探索時に使います
@@ -5257,14 +5257,14 @@ func (b *CheckBoard) getMemoryArea() int {
 //	k.Board = NewBoard(boardWidht, boardHeight)
 
 	// * 以下を追加
-	// [O1o1o0g22o2o3o0]
+	// [O22o2o3o0]
 	k.CheckBoard = NewCheckBoard()
 
 //	return k
 // }
 ```
 
-### Step [O1o1o0g22o2o4o0] ファイル作成 - liberty.go
+### Step [O22o2o4o0] ファイル作成 - liberty.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -5295,7 +5295,7 @@ func (b *CheckBoard) getMemoryArea() int {
 ```
 
 ```go
-// BOF [O1o1o0g22o2o4o0]
+// BOF [O22o2o4o0]
 
 package kernel
 
@@ -5412,10 +5412,10 @@ func (k *Kernel) searchSpaceRen(here Point) {
 	k.Board.ForeachNeumannNeighborhood(here, setAdjacent)
 }
 
-// EOF [O1o1o0g22o2o4o0]
+// EOF [O22o2o4o0]
 ```
 
-### Step [O1o1o0g22o2o5o0] コマンド実装 - kernel.go ファイル
+### Step [O22o2o5o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5457,7 +5457,7 @@ func (k *Kernel) searchSpaceRen(here Point) {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "test_get_liberty": // [O1o1o0g22o2o5o0]
+	case "test_get_liberty": // [O22o2o5o0]
 		// Example: "test_get_liberty B2"
 		var coord = tokens[1]
 		var point = k.Board.GetPointFromCode(coord)
@@ -5479,7 +5479,7 @@ func (k *Kernel) searchSpaceRen(here Point) {
 // ...略...
 ```
 
-### Step [O1o1o0g22o2o6o0] 動作確認
+### Step [O22o2o6o0] 動作確認
 
 19路盤とする  
 
@@ -5531,7 +5531,7 @@ Output > Log > JSON:
 {"level":"info","ts":"2022-09-14T23:36:21.465+0900","caller":"kernel/kernel.go:115","msg":"output ren","color":"x","area":1,"libertyArea":4,"adjacentColor":""}
 ```
 
-## Step [O1o1o0g22o3o0] 相手の眼に石を置くことの禁止 - OpponentEye
+## Step [O22o3o0] 相手の眼に石を置くことの禁止 - OpponentEye
 
 囲碁のルールでは、相手の眼へは石を置けない。これを判定する  
 
@@ -5539,7 +5539,7 @@ Output > Log > JSON:
 
 このルールは、あとで出てくる `Captured` のルールよりは優先度が低いとする  
 
-### Step [O1o1o0g22o3o1o0] ファイル編集 - kernel.go
+### Step [O22o3o1o0] ファイル編集 - kernel.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5578,7 +5578,7 @@ Output > Log > JSON:
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// ...略...
-	// [O1o1o0g22o3o1o0] 相手の眼に石を置こうとした
+	// [O22o3o1o0] 相手の眼に石を置こうとした
 	var onOpponentEye = func() bool {
 		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -5586,9 +5586,9 @@ Output > Log > JSON:
 	}
 
 //	var isOk = k.Play(stone, point, logg,
-//		// [O1o1o0g22o1o2o0] ,onMasonry
+//		// [O22o1o2o0] ,onMasonry
 //		onMasonry,
-		// [O1o1o0g22o3o1o0] ,onOpponentEye
+		// [O22o3o1o0] ,onOpponentEye
 		onOpponentEye//)
 //
 //	if isOk {
@@ -5598,18 +5598,18 @@ Output > Log > JSON:
 // }
 
 // func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
-	// // [O1o1o0g22o1o2o0] onMasonry
+	// // [O22o1o2o0] onMasonry
 	// onMasonry func() bool,
-	// [O1o1o0g22o3o1o0] onOpponentEye
+	// [O22o3o1o0] onOpponentEye
 	onOpponentEye func() bool//) bool {
 
 	// ...略...
-	// // [O1o1o0g22o1o2o0]
+	// // [O22o1o2o0]
 	// if k.IsMasonryError(stone, point) {
 	//	return onMasonry()
 	// }
 
-	// [O1o1o0g22o3o1o0]
+	// [O22o3o1o0]
 	var renC, isFound = k.GetLiberty(pointB)
 	if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
@@ -5624,7 +5624,7 @@ Output > Log > JSON:
 	// return true
 ```
 
-### Step [O1o1o0g22o3o2o0] 動作確認
+### Step [O22o3o2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -5652,12 +5652,12 @@ Output > Console:
 [2022-09-17 00:41:29]   ? opponent_eye my_stone:o point:C3
 ```
 
-## Step [O1o1o0g22o4o0] 自分の眼に石を置くことの任意の禁止
+## Step [O22o4o0] 自分の眼に石を置くことの任意の禁止
 
 囲碁のルール上可能だが、明らかに損な手は、プレイアウトから除外したい。  
 対局時には許可し、プレイアウト時には禁止するよう、選択できるようにする  
 
-### Step [O1o1o0g22o4o1o0] ファイル編集 - play.go
+### Step [O22o4o1o0] ファイル編集 - play.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5697,7 +5697,7 @@ Output > Console:
 // type Kernel struct {
 	// ...略...
 
-	// CanNotPutOnMyEye - [O1o1o0g22o4o1o0] 自分の眼に石を置くことはできません
+	// CanNotPutOnMyEye - [O22o4o1o0] 自分の眼に石を置くことはできません
 	CanNotPutOnMyEye bool
 // }
 // ...略...
@@ -5705,7 +5705,7 @@ Output > Console:
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// ...略...
-	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとした
+	// [O22o4o1o0] 自分の眼に石を置こうとした
 	var onForbiddenMyEye = func() bool {
 		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -5713,11 +5713,11 @@ Output > Console:
 	}
 
 //	var isOk = k.Play(stone, point, logg,
-//		// [O1o1o0g22o1o2o0] ,onMasonry
+//		// [O22o1o2o0] ,onMasonry
 //		onMasonry,
-//		// [O1o1o0g22o3o1o0] ,onOpponentEye
+//		// [O22o3o1o0] ,onOpponentEye
 //		onOpponentEye,
-		// [O1o1o0g22o4o1o0] ,onForbiddenMyEye
+		// [O22o4o1o0] ,onForbiddenMyEye
 		onForbiddenMyEye//)
 //
 //	if isOk {
@@ -5727,15 +5727,15 @@ Output > Console:
 // }
 
 // func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
-	// // [O1o1o0g22o1o2o0] onMasonry
+	// // [O22o1o2o0] onMasonry
 	// onMasonry func() bool,
-	// [O1o1o0g22o3o1o0] onOpponentEye
+	// [O22o3o1o0] onOpponentEye
 	onOpponentEye func() bool,
-	// [O1o1o0g22o4o1o0]
+	// [O22o4o1o0]
 	onForbiddenMyEye func() bool//) bool {
 
 	// ...略...
-	// // [O1o1o0g22o3o1o0]
+	// // [O22o3o1o0]
 	// var renC, isFound = k.GetLiberty(pointB)
 	// if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 	// 	if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
@@ -5744,7 +5744,7 @@ Output > Console:
 	// 		return onOpponentEye()
 
 		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
-			// [O1o1o0g22o4o1o0]
+			// [O22o4o1o0]
 			// かつ、連Cに隣接する連の色が、石Aの色であったなら、
 			// 自分の眼に石を置こうとしたとみなす
 			return onForbiddenMyEye()
@@ -5756,7 +5756,7 @@ Output > Console:
 	// return true
 ```
 
-### Step [O1o1o0g22o4o2o_1o0] ファイル編集 - kernel.go
+### Step [O22o4o2o_1o0] ファイル編集 - kernel.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5798,7 +5798,7 @@ Output > Console:
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "can_not_put_on_my_eye": // [O1o1o0g22o4o2o_1o0]
+	case "can_not_put_on_my_eye": // [O22o4o2o_1o0]
 		// Example 1: "can_not_put_on_my_eye get"
 		// Example 2: "can_not_put_on_my_eye set true"
 		var method = tokens[1]
@@ -5836,7 +5836,7 @@ Output > Console:
 	// ...略...
 ```
 
-### Step [O1o1o0g22o4o2o0] 動作確認
+### Step [O22o4o2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -5881,9 +5881,9 @@ Output > Console:
 [2022-09-17 09:11:48]   ? my_eye my_stone:x point:C3
 ```
 
-## Step [O1o1o0g22o5o0] 任意の連の打ち上げ - RemoveRen 関数作成
+## Step [O22o5o0] 任意の連の打ち上げ - RemoveRen 関数作成
 
-### Step [O1o1o0g22o5o1o0] ファイル編集 - kernel_facade.go
+### Step [O22o5o1o0] ファイル編集 - kernel_facade.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5930,7 +5930,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 }
 ```
 
-### Step [O1o1o0g22o5o2o0] コマンド実装 - kernel.go ファイル
+### Step [O22o5o2o0] コマンド実装 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -5973,7 +5973,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "remove_ren": // [O1o1o0g22o5o2o0]
+	case "remove_ren": // [O22o5o2o0]
 		// Example: `remove_ren B2`
 		var coord = tokens[1]
 		var point = k.Board.GetPointFromCode(coord)
@@ -5995,7 +5995,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	// ...略...
 ```
 
-### Step [O1o1o0g22o5o3o0] 動作確認
+### Step [O22o5o3o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -6023,14 +6023,14 @@ Output > Console:
 [2022-09-17 12:17:02]   =
 ```
 
-## Step [O1o1o0g22o6o0] 死に石の連の打ち上げ - Captured
+## Step [O22o6o0] 死に石の連の打ち上げ - Captured
 
 石Aを盤上に置いて指を離したばかりの盤面とする。  
 石Aに隣接する相手の石の連のうち、呼吸点が０のものは打ち上げる。  
 
 このとき、 `OpponentEye` のルールと相反することがある
 
-### Step [O1o1o0g22o6o1o0] ファイル編集 - play.go
+### Step [O22o6o1o0] ファイル編集 - play.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6069,19 +6069,19 @@ Output > Console:
 ```go
 // func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 
-	// [O1o1o0g22o6o1o0] Captured ルール
+	// [O22o6o1o0] Captured ルール
 	var isExists4rensToRemove = false
 	var o4rensToRemove [4]*Ren
 	var isChecked4rensToRemove = false
 
 	// ...略...
-	// [O1o1o0g22o3o1o0]
+	// [O22o3o1o0]
 	// var renC, isFound = k.GetLiberty(pointB)
 	// if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		// if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 
 			// * 以下を追加
-			// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+			// [O22o6o1o0] 打ちあげる死に石の連を取得
 			k.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
 			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 			isChecked4rensToRemove = true
@@ -6105,12 +6105,12 @@ Output > Console:
 	// k.Board.SetStoneAt(pointB, stoneA)
 
 	// * 以下を追加
-	// [O1o1o0g22o6o1o0] 打ちあげる死に石の連を取得
+	// [O22o6o1o0] 打ちあげる死に石の連を取得
 	if !isChecked4rensToRemove {
 		isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 	}
 
-	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
+	// [O22o6o1o0] 死に石を打ちあげる
 	if isExists4rensToRemove {
 		for dir := 0; dir < 4; dir++ {
 			var ren = o4rensToRemove[dir]
@@ -6131,7 +6131,7 @@ Output > Console:
 // renToRemove : [4]*Ren
 // 隣接する東、北、西、南にある石を含む連
 func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
-	// [O1o1o0g22o6o1o0]
+	// [O22o6o1o0]
 	var isExists bool
 	var rensToRemove [4]*Ren
 	var renIds = [4]Point{math.MaxInt, math.MaxInt, math.MaxInt, math.MaxInt}
@@ -6162,7 +6162,7 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 }
 ```
 
-### Step [O1o1o0g22o6o2o0] 動作確認
+### Step [O22o6o2o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -6190,11 +6190,11 @@ Output > Console:
 [2022-09-17 14:35:58]   =
 ```
 
-## Step [O1o1o0g22o7o0] コウの禁止 - Ko
+## Step [O22o7o0] コウの禁止 - Ko
 
 自分が１手前に置いたところに２手続けて置けない
 
-### Step [O1o1o0g22o7o1o0] ファイル編集 - record_item.go
+### Step [O22o7o1o0] ファイル編集 - record_item.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6235,13 +6235,13 @@ Output > Console:
 // type RecordItem struct {
 	// ...略...
 
-	// [O1o1o0g22o7o1o0] コウの位置
+	// [O22o7o1o0] コウの位置
 	ko Point
 // }
 // ...略...
 ```
 
-### Step [O1o1o0g22o7o1o0] ファイル編集 - record.go
+### Step [O22o7o1o0] ファイル編集 - record.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6281,20 +6281,20 @@ Output > Console:
 // ...略...
 // Push - 末尾に追加
 // func (r *Record) Push(placePlay Point,
-	// [O1o1o0g22o7o1o0] コウの位置
+	// [O22o7o1o0] コウの位置
 	ko Point//) {
 
 	// var item = r.items[r.posNum]
 	// item.placePlay = placePlay
 
-	// [O1o1o0g22o7o1o0] コウの位置
+	// [O22o7o1o0] コウの位置
 	item.ko = ko
 
 	// r.posNum++
 // }
 ```
 
-### Step [O1o1o0g22o7o2o0] ファイル編集 - play.go
+### Step [O22o7o2o0] ファイル編集 - play.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6336,12 +6336,12 @@ Output > Console:
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 	// ...略...
-	// [O1o1o0g22o4o1o0] 自分の眼に石を置こうとした
+	// [O22o4o1o0] 自分の眼に石を置こうとした
 	// var onForbiddenMyEye = func() bool {
 		// ...略...
 	// }
 
-	// [O1o1o0g22o7o2o0] コウに石を置こうとした
+	// [O22o7o2o0] コウに石を置こうとした
 	var onKo = func() bool {
 		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
 		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
@@ -6349,13 +6349,13 @@ Output > Console:
 	}
 
 	// var isOk = k.Play(stone, point, logg,
-		// // [O1o1o0g22o1o2o0] ,onMasonry
+		// // [O22o1o2o0] ,onMasonry
 		// onMasonry,
-		// // [O1o1o0g22o3o1o0] ,onOpponentEye
+		// // [O22o3o1o0] ,onOpponentEye
 		// onOpponentEye,
-		// // [O1o1o0g22o4o1o0] ,onForbiddenMyEye
+		// // [O22o4o1o0] ,onForbiddenMyEye
 		// onForbiddenMyEye,
-		// // [O1o1o0g22o7o2o0] ,onKo
+		// // [O22o7o2o0] ,onKo
 		onKo//)
 	// ...略...
 
@@ -6363,32 +6363,32 @@ Output > Console:
 // ...略...
 
 // func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
-	// // [O1o1o0g22o1o2o0] onMasonry
+	// // [O22o1o2o0] onMasonry
 	// onMasonry func() bool,
-	// // [O1o1o0g22o3o1o0] onOpponentEye
+	// // [O22o3o1o0] onOpponentEye
 	// onOpponentEye func() bool,
-	// // [O1o1o0g22o4o1o0] onForbiddenMyEye
+	// // [O22o4o1o0] onForbiddenMyEye
 	// onForbiddenMyEye func() bool,
-	// [O1o1o0g22o7o2o0] onKo
+	// [O22o7o2o0] onKo
 	onKo func() bool//) bool {
 
-	// [O1o1o0g22o1o2o0]
+	// [O22o1o2o0]
 	// if k.IsMasonryError(stoneA, pointB) {
 	// 	return onMasonry()
 	// }
 	// ...略...
 
-	// [O1o1o0g22o7o2o0] コウの判定
+	// [O22o7o2o0] コウの判定
 	if k.Record.IsKo(pointB) {
 		return onKo()
 	}
 	// ...略...
 
 	// * 以下を追加
-	// [O1o1o0g22o7o2o0] コウの判定
+	// [O22o7o2o0] コウの判定
 	var capturedCount = 0 // アゲハマ
 
-//	// [O1o1o0g22o6o1o0] 死に石を打ちあげる
+//	// [O22o6o1o0] 死に石を打ちあげる
 //	if isExists4rensToRemove {
 //		for dir := 0; dir < 4; dir++ {
 //			var ren = o4rensToRemove[dir]
@@ -6396,14 +6396,14 @@ Output > Console:
 //				k.RemoveRen(ren)
 
 				// * 以下を追加
-				// [O1o1o0g22o7o2o0] コウの判定
+				// [O22o7o2o0] コウの判定
 				capturedCount += ren.GetArea()
 
 //			}
 //		}
 //	}
 
-	// [O1o1o0g22o7o2o0] コウの判定
+	// [O22o7o2o0] コウの判定
 	var ko = Point(0)
 	if capturedCount == 1 {
 		ko = pointB
@@ -6412,12 +6412,12 @@ Output > Console:
 	// 棋譜に追加
 	//k.Record.Push(pointB,
 		// * 以下を追加
-		// [O1o1o0g22o7o2o0] コウの判定
+		// [O22o7o2o0] コウの判定
 		ko//)
 
 ```
 
-### Step [O1o1o0g22o7o4o0] コマンド編集 - kernel.go ファイル
+### Step [O22o7o4o0] コマンド編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6464,7 +6464,7 @@ Output > Console:
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	// case "record": // [O1o1o0g12o__11o_5o0]
+	// case "record": // [O12o__11o_5o0]
 		// ...略...
 
 		// var setPoint = func(i int, item *RecordItem) {
@@ -6475,7 +6475,7 @@ Output > Console:
 			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 
 			// * 以下を追加
-			// [O1o1o0g22o7o4o0] コウを追加
+			// [O22o7o4o0] コウを追加
 			var koStr string
 			if item.ko == Point(0) {
 				koStr = ""
@@ -6492,7 +6492,7 @@ Output > Console:
 	// ...略...
 ```
 
-### Step [O1o1o0g22o7o4o0] 動作確認
+### Step [O22o7o4o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -6531,7 +6531,7 @@ Output > Console:
 [2022-09-17 22:39:55]   ? ko my_stone:x point:D3
 ```
 
-# Step [O1o1o0g23o_1o0] データファイル作成 - data/board4.txt ファイル
+# Step [O23o_1o0] データファイル作成 - data/board4.txt ファイル
 
 あとで使うファイルを先に作成する  
 
@@ -6597,14 +6597,14 @@ Output > Console:
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-# Step [O1o1o0g23o_2o0] 盤上の連のスキャン
+# Step [O23o_2o0] 盤上の連のスキャン
 
 `石を打つ` ことを実装できたなら、呼吸点を調べるアルゴリズムも実装されていて、  
 着手点に隣接する上下左右にある石の連の認識はできているはずだ  
 
 次は、盤面全体に点在する連を認識できるか試したい  
 
-## Step [O1o1o0g23o_2o1o0] ファイル編集 - kernel_facade.go
+## Step [O23o_2o1o0] ファイル編集 - kernel_facade.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6647,7 +6647,7 @@ Output > Console:
 
 ```go
 // ...略...
-// FindAllRens - [O1o1o0g23o_2o1o0] 盤上の全ての連を見つけます
+// FindAllRens - [O23o_2o1o0] 盤上の全ての連を見つけます
 // * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
@@ -6667,7 +6667,7 @@ func (k *Kernel) FindAllRens() {
 // ...略...
 ```
 
-## Step [O1o1o0g23o_2o2o0] コマンド編集 - kernel.go ファイル
+## Step [O23o_2o2o0] コマンド編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6715,7 +6715,7 @@ func (k *Kernel) FindAllRens() {
 	// ...略...
 
 	// * アルファベット順になる位置に、以下のケース文を挿入
-	case "find_all_rens": // [O1o1o0g23o_2o2o0]
+	case "find_all_rens": // [O23o_2o2o0]
 		// Example: `find_all_rens`
 		k.FindAllRens()
 		logg.C.Infof("=\n")
@@ -6728,7 +6728,7 @@ func (k *Kernel) FindAllRens() {
 	// ...略...
 ```
 
-## Step [O1o1o0g23o_2o3o_1o0] ファイル編集 - board_set.go
+## Step [O23o_2o3o_1o0] ファイル編集 - board_set.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6782,7 +6782,7 @@ func (k *Kernel) FindAllRens() {
 		// }
 
 		// * 以下を追加
-		// [O1o1o0g23o_2o3o_1o0] 連データベース初期化
+		// [O23o_2o3o_1o0] 連データベース初期化
 		k.renDb.Init(k.Board.GetWidth(), k.Board.GetHeight())
 		k.FindAllRens()
 	// }
@@ -6790,7 +6790,7 @@ func (k *Kernel) FindAllRens() {
 // ...略...
 ```
 
-## Step [O1o1o0g23o_2o3o0] 動作確認
+## Step [O23o_2o3o0] 動作確認
 
 👇 以下のコマンドをコピーして、ターミナルに貼り付けてほしい
 
@@ -6824,9 +6824,9 @@ Output > Console:
 [2022-09-18 23:58:51]   =
 ```
 
-# Step [O1o1o0g23o_2o4o0] TODO 出力ファイルの内容の盤表示
+# Step [O23o_2o4o0] TODO 出力ファイルの内容の盤表示
 
-# Step [O1o1o0g23o_2o4o1o0] ファイル編集 - kernel.go ファイル
+# Step [O23o_2o4o1o0] ファイル編集 - kernel.go ファイル
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -6873,7 +6873,7 @@ TODO 📄 `ren_db1_temp.json` ファイルを読み込む
 
 TODO 連データベースには「何手目」の「どの連」という形で項目がいくつもある。その全項目をコンソールへ盤表示  
 
-# Step [O1o1o0g23o_2o4o2o0]
+# Step [O23o_2o4o2o0]
 
 TODO FIXME rendb_dump の結果が全部空っぽ？
 
@@ -6911,13 +6911,13 @@ find_all_rens
 rendb_dump
 ```
 
-# Step [O1o1o0g23o_3o0] TODO 石を打った後の連の再スキャン
+# Step [O23o_3o0] TODO 石を打った後の連の再スキャン
 
-# Step [O1o1o0g23o0] 打った石のアンドゥ - Undo
+# Step [O23o0] 打った石のアンドゥ - Undo
 
 打った石をやっぱり止める、一手戻す、ということは、石を打つよりも実装がむずかしい  
 
-### Step [O1o1o0g23o1o0] ファイル作成 - play_undo.go
+### Step [O23o1o0] ファイル作成 - play_undo.go
 
 👇 以下のファイルを新規作成してほしい  
 
@@ -6957,7 +6957,7 @@ rendb_dump
 ```
 
 ```go
-// BOF [O1o1o0g23o1o0]
+// BOF [O23o1o0]
 
 package kernel
 
@@ -6987,7 +6987,7 @@ func (k *Kernel) UndoPlay() bool {
 	return false
 }
 
-// EOF [O1o1o0g23o1o0]
+// EOF [O23o1o0]
 ```
 
 TODO 東、北、西、南に隣接する連を重複して数えないように常に注意すること

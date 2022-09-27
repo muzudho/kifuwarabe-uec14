@@ -1,4 +1,4 @@
-// BOF[O1o1o0g12o__11o_2o_1o0]
+// BOF[O12o__11o_2o_1o0]
 
 package kernel
 
@@ -7,7 +7,7 @@ type RecordItem struct {
 	// 着手点
 	placePlay Point
 
-	// [O1o1o0g22o7o1o0] コウの位置
+	// [O22o7o1o0] コウの位置
 	ko Point
 }
 
@@ -23,4 +23,4 @@ func (ri *RecordItem) Clear() {
 	ri.ko = Point(0)
 }
 
-// EOF[O1o1o0g12o__11o_2o_1o0]
+// EOF[O12o__11o_2o_1o0]

@@ -1,4 +1,4 @@
-// BOF [O1o1o0g22o2o2o0]
+// BOF [O22o2o2o0]
 
 package kernel
 
@@ -75,4 +75,4 @@ func (b *CheckBoard) getMemoryArea() int {
 	return b.memoryWidth * b.memoryHeight
 }
 
-// EOF [O1o1o0g22o2o2o0]
+// EOF [O22o2o2o0]

@@ -1,4 +1,4 @@
-// BOF [O1o1o0g11o_4o2o1o0]
+// BOF [O11o_4o2o1o0]
 
 package kernel
 
@@ -128,4 +128,4 @@ func (r *Ren) RefreshToExternalFile(convertLocation func(Point) string) {
 	}
 }
 
-// EOF [O1o1o0g11o_4o2o1o0]
+// EOF [O11o_4o2o1o0]

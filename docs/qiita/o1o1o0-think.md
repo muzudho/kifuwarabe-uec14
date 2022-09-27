@@ -1,6 +1,6 @@
 # 没
 
-# Step [O1o1o0g9o0]
+# Step [O9o0]
 
 ```go
 		var setMsgArgs = func(msg string, args ...interface{}) {
@@ -9,7 +9,7 @@
 		logg.Infow(setMsgArgs, "Welcome!", "name", "nihon taro", "weight", 92.6, "x", 3)
 ```
 
-# Step [O1o1o0g11o__10o2o0]
+# Step [O11o__10o2o0]
 
 ```go
 func (logg *Logger) Infow(setMsgArgs func(string, ...interface{}), msg string, keysAndValues ...interface{}) {

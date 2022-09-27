@@ -1,4 +1,4 @@
-// BOF [O1o1o0g11o__11o3o0]
+// BOF [O11o__11o3o0]
 
 package debugger
 
@@ -11,4 +11,4 @@ func TestMain(t *testing.T) {
 	main()
 }
 
-// EOF [O1o1o0g11o__11o3o0]
+// EOF [O11o__11o3o0]

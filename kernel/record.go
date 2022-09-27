@@ -1,4 +1,4 @@
-// BOF [O1o1o0g12o__11o_2o0]
+// BOF [O12o__11o_2o0]
 
 package kernel
 
@@ -49,13 +49,13 @@ func (r *Record) GetPositionNumber() int {
 
 // Push - 末尾に追加
 func (r *Record) Push(placePlay Point,
-	// [O1o1o0g22o7o1o0] コウの位置
+	// [O22o7o1o0] コウの位置
 	ko Point) {
 
 	var item = r.items[r.posNum]
 	item.placePlay = placePlay
 
-	// [O1o1o0g22o7o1o0] コウの位置
+	// [O22o7o1o0] コウの位置
 	item.ko = ko
 
 	r.posNum++
@@ -76,7 +76,7 @@ func (r *Record) ForeachItem(setItem func(int, *RecordItem)) {
 
 // IsKo - コウか？
 func (r *Record) IsKo(placePlay Point) bool {
-	// [O1o1o0g22o7o1o0] コウの判定
+	// [O22o7o1o0] コウの判定
 	// 2手前に着手して石をぴったり１つ打ち上げたとき、その着手点はコウだ
 	var posNum = r.GetPositionNumber()
 	if 2 <= posNum {
@@ -87,4 +87,4 @@ func (r *Record) IsKo(placePlay Point) bool {
 	return false
 }
 
-// EOF [O1o1o0g12o__11o_2o0]
+// EOF [O12o__11o_2o0]

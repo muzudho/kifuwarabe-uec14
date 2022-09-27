@@ -1,4 +1,4 @@
-// BOF [O1o1o0g11o__11o2o_1o0]
+// BOF [O11o__11o2o_1o0]
 
 package debugger
 
@@ -134,4 +134,4 @@ func (vio *VirtualIO) WriterFlush() {
 	virtualIo.writer.Flush()
 }
 
-// EOF [O1o1o0g11o__11o2o_1o0]
+// EOF [O11o__11o2o_1o0]

@@ -1,4 +1,4 @@
-// BOF [O1o1o0g11o0]
+// BOF [O11o0]
 
 package kernel
 
@@ -103,4 +103,4 @@ func (s Stone) GetColor() Color {
 	}
 }
 
-// EOF [O1o1o0g11o0]
+// EOF [O11o0]

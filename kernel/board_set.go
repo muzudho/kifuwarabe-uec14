@@ -1,4 +1,4 @@
-// BOF [O1o1o0g15o__14o1o0]
+// BOF [O15o__14o1o0]
 
 package kernel
 
@@ -56,10 +56,10 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			return
 		}
 
-		// [O1o1o0g23o_2o3o_1o0] 連データベース初期化
+		// [O23o_2o3o_1o0] 連データベース初期化
 		k.renDb.Init(k.Board.GetWidth(), k.Board.GetHeight())
 		k.FindAllRens()
 	}
 }
 
-// EOF [O1o1o0g15o__14o1o0]
+// EOF [O15o__14o1o0]

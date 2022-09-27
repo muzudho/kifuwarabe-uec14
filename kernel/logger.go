@@ -1,4 +1,4 @@
-// BOF [O1o1o0g11o__10o2o0]
+// BOF [O11o__10o2o0]
 
 package kernel
 
@@ -106,4 +106,4 @@ func encodeTimeSimpleInJapan(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.In(jst).Format(layout))
 }
 
-// EOF [O1o1o0g11o__10o2o0]
+// EOF [O11o__10o2o0]

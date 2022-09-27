@@ -1,4 +1,4 @@
-// BOF [O1o1o0g11o__10o_4o0]
+// BOF [O11o__10o_4o0]
 
 package main
 
@@ -95,4 +95,4 @@ type Paths struct {
 	JsonLog string
 }
 
-// EOF [O1o1o0g11o__10o_4o0]
+// EOF [O11o__10o_4o0]

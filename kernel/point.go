@@ -1,4 +1,4 @@
-// BOF [O1o1o0g12o__10o1o0]
+// BOF [O12o__10o1o0]
 
 package kernel
 
@@ -82,4 +82,4 @@ func GetRankFromCode(code string) string {
 	return code[1:2]
 }
 
-// EOF [O1o1o0g12o__10o1o0]
+// EOF [O12o__10o1o0]

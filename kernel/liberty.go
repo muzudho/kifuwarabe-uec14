@@ -1,4 +1,4 @@
-// BOF [O1o1o0g22o2o4o0]
+// BOF [O22o2o4o0]
 
 package kernel
 
@@ -115,4 +115,4 @@ func (k *Kernel) searchSpaceRen(here Point) {
 	k.Board.ForeachNeumannNeighborhood(here, setAdjacent)
 }
 
-// EOF [O1o1o0g22o2o4o0]
+// EOF [O22o2o4o0]

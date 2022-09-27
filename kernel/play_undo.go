@@ -1,4 +1,4 @@
-// BOF [O1o1o0g23o1o0]
+// BOF [O23o1o0]
 
 package kernel
 
@@ -33,4 +33,4 @@ func (k *Kernel) UndoPlay() bool {
 	return false
 }
 
-// EOF [O1o1o0g23o1o0]
+// EOF [O23o1o0]

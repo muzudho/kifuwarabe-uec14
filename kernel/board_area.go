@@ -1,4 +1,4 @@
-// BOF [O1o1o0g12o0]
+// BOF [O12o0]
 
 package kernel
 
@@ -85,7 +85,7 @@ func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
 	}
 }
 
-// ForeachNeumannNeighborhood - [O1o1o0g13o__10o0] 隣接する４方向の定義
+// ForeachNeumannNeighborhood - [O13o__10o0] 隣接する４方向の定義
 func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Point)) {
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
@@ -105,4 +105,4 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Poi
 	}
 }
 
-// EOF [O1o1o0g12o0]
+// EOF [O12o0]

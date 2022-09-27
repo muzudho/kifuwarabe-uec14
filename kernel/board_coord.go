@@ -1,4 +1,4 @@
-// BOF [O1o1o0g16o0]
+// BOF [O16o0]
 
 package kernel
 
@@ -37,4 +37,4 @@ func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
 	return file, rank
 }
 
-// EOF [O1o1o0g16o0]
+// EOF [O16o0]
