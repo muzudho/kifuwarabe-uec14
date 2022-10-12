@@ -33,12 +33,12 @@ type Kernel struct {
 }
 
 // NewKernel - カーネルの新規作成
-func NewKernel(boardWidht int, boardHeight int,
+func NewKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	// [O12o__11o_2o0] 棋譜の初期化
 	maxMoves int, playFirst Stone) *Kernel {
 
 	var k = new(Kernel)
-	k.Board = NewBoard(boardWidht, boardHeight)
+	k.Board = NewBoard(gameRule, boardWidht, boardHeight)
 
 	// [O22o2o3o0]
 	k.CheckBoard = NewCheckBoard()

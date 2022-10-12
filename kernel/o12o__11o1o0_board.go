@@ -10,9 +10,11 @@ const bothSidesWallThickness = 2
 
 // Board - 盤
 type Board struct {
+	// ゲームルール
+	gameRule GameRule
+
 	// 枠付きの横幅
 	memoryWidth int
-
 	// 枠付きの縦幅
 	memoryHeight int
 
@@ -26,13 +28,26 @@ type Board struct {
 }
 
 // NewBoard - 新規作成
-func NewBoard(boardWidht int, boardHeight int) *Board {
+func NewBoard(gameRule GameRule, boardWidht int, boardHeight int) *Board {
 	var b = new(Board)
+
+	// 設定ファイルから読込むので動的設定
+	b.gameRule = gameRule
 
 	// 盤のサイズ指定と、盤面の初期化
 	b.resize(boardWidht, boardHeight)
 
 	return b
+}
+
+// GetGameRule - ゲームルール取得
+func (b *Board) GetGameRule() *GameRule {
+	return &b.gameRule
+}
+
+// SetGameRule - ゲームルール設定
+func (b *Board) SetGameRule(gameRule *GameRule) {
+	b.gameRule = *gameRule
 }
 
 // GetMemoryWidth - 枠の厚みを含んだ横幅
