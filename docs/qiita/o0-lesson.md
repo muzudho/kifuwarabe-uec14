@@ -13,6 +13,7 @@
 📖 [Step [O12o__11o__100o0] データファイル作成 ～ Step [O12o__11o__10o0] 連データベース定義 ～ Step [O12o__11o__10o5o__10o0] 連データベースのロード](https://qiita.com/muzudho1/items/03454c8efcf8b8927086)  
 📖 [Step [O12o__11o_1o0] 棋譜定義](https://qiita.com/muzudho1/items/c00dd77f8cefc5c12dcd)  
 📖 [Step [O12o__11o0] 盤定義（土台）](https://qiita.com/muzudho1/items/d6584b3a7a200aa90e1b)  
+📖 [Step [O15o__10o0] 盤サイズの変更](https://qiita.com/muzudho1/items/9907f1878480877661fb)  
 📖 [Step [O15o__14o_1o0] データファイル作成](https://qiita.com/muzudho1/items/91c040149eecabd3e78c)  
 📖 [Step [O15o__14o0] 初期盤面を設定する](https://qiita.com/muzudho1/items/0cc500bc18b36bb7cbd2)  
 📖 [Step [O15o_1o0] 座標の定義](https://qiita.com/muzudho1/items/b443433b89dfae8a8098)  
