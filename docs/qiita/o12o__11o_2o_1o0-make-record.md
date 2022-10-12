@@ -229,7 +229,8 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 ```go
 		// [O11o_3o0]
-		//var kernel1 = kernel.NewKernel(engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
+		//var gameRule = kernel.NewGameRule(kernel.KomiFloat(engineConfig.GetKomi()), kernel.PositionNumberInt(engineConfig.GetMaxMovesNum()))
+		//var kernel1 = kernel.NewKernel(*gameRule, engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
 			// [O12o__11o_4o0] 棋譜の初期化
 			engineConfig.GetMaxMovesNum(),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
