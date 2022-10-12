@@ -14,7 +14,7 @@
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
   	│	├── 📄 board_area.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go

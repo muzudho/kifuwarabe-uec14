@@ -15,7 +15,7 @@
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
@@ -112,7 +112,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	├── 📂 kernel
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
@@ -236,7 +236,7 @@ Output > Console:
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
  	│	├── 📄 board_set.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
@@ -291,7 +291,7 @@ Output > Console:
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
  	│	├── 📄 board_set.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
@@ -348,7 +348,7 @@ Output > Console:
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
@@ -398,7 +398,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
@@ -482,7 +482,7 @@ Moved to `[O11o_4o2o1o0]`
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 👉 	│	├── 📄 check_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
@@ -592,7 +592,7 @@ func (b *CheckBoard) getMemoryArea() int {
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-👉 	│	├── 📄 board.go
+👉 	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
@@ -640,7 +640,7 @@ func (b *CheckBoard) getMemoryArea() int {
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
@@ -696,7 +696,7 @@ func (b *CheckBoard) getMemoryArea() int {
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
@@ -847,7 +847,7 @@ func (k *Kernel) searchSpaceRen(here Point) {
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
@@ -973,7 +973,7 @@ Output > Log > JSON:
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1091,7 +1091,7 @@ Output > Console:
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1190,7 +1190,7 @@ Output > Console:
 	│	├── 📂 play_rule
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1317,7 +1317,7 @@ Output > Console:
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1364,7 +1364,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1464,7 +1464,7 @@ Output > Console:
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1628,7 +1628,7 @@ Output > Console:
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1675,7 +1675,7 @@ Output > Console:
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1730,7 +1730,7 @@ Output > Console:
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -1853,7 +1853,7 @@ Output > Console:
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod

@@ -16,7 +16,7 @@
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
 👉 	│	├── 📄 board_set.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
  	│	├── 📄 kernel.go
@@ -105,7 +105,7 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
  	│	├── 📄 board_set.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
 👉 	│	├── 📄 kernel.go

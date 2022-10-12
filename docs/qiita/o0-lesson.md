@@ -38,7 +38,7 @@
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -109,7 +109,7 @@
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -172,7 +172,7 @@ func (k *Kernel) FindAllRens() {
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -234,7 +234,7 @@ func (k *Kernel) FindAllRens() {
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
 👉 	│	├── 📄 board_set.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -332,7 +332,7 @@ Output > Console:
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
  	│	├── 📄 board_set.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod
@@ -421,7 +421,7 @@ rendb_dump
 	│	├── 📂 play_rule
 	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
  	│	├── 📄 color.go
 	│	├── 📄 go.mod

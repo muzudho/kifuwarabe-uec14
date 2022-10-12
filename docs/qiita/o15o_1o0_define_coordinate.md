@@ -19,7 +19,7 @@ Moved to `[O12o__10o1o0]`
 	├── 📂 kernel
 👉  │	├── 📄 board_coord.go
   	│	├── 📄 board_area.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
@@ -84,7 +84,7 @@ func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
 	├── 📂 kernel
 	│	├── 📄 board_coord.go
   	│	├── 📄 board_area.go
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go

@@ -15,7 +15,7 @@
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
-👉  │	├── 📄 board.go
+👉  │	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
@@ -147,7 +147,7 @@ func (b *Board) getMemoryArea() int {
 ```plaintext
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
-  	│	├── 📄 board.go
+  	│	├── 📄 o12o__11o1o0_board.go
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
