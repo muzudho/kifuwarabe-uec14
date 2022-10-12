@@ -4,6 +4,7 @@
 📖 [Step [O11o___100o0] カーネル作成 ～ Step [O11o__10o_1o0] 思考エンジン設定ファイル](https://qiita.com/muzudho1/items/6c0b16d3b87ac598fe86)  
 📖 [Step [O11o__10o0] ロガー設定 ～ Step [O11o__10o3o_2o0] welcome プログラム](https://qiita.com/muzudho1/items/26af2c9f5dcc16175acd)  
 📖 [Step [O11o__11o0] デバッグ可能標準入力 作成](https://qiita.com/muzudho1/items/252eef6d00417dbd82a1)  
+📖 [Step [O11o_3o_10o0] ゲームルール作成](https://qiita.com/muzudho1/items/a102ec5b03811f34b22c)  
 📖 [Step [O11o_3o0] カーネルのインタープリター ～ Step [O11o_4o0] 石の色定義 ～ Step [O11o_4o2o0] 連の定義 ～ Step [O11o_5o0] 石定義 ～ Step [O12o__10o0] 点定義、またはその盤座標符号定義](https://qiita.com/muzudho1/items/374b040f4e025f42b970)  
 📖 [Step [O12o__11o__100o0] データファイル作成 ～ Step [O12o__11o__10o0] 連データベース定義 ～ Step [O12o__11o__10o5o__10o0] 連データベースのロード](https://qiita.com/muzudho1/items/03454c8efcf8b8927086)  
 📖 [Step [O12o__11o_1o0] 棋譜定義](https://qiita.com/muzudho1/items/c00dd77f8cefc5c12dcd)  
