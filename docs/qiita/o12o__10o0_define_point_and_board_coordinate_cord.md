@@ -33,7 +33,7 @@
 
 package kernel
 
-// Point - 交点の座標。壁を含む盤の左上を 0 とします
+// Point - 交点の座標。枠を含む盤の左上を 0 とします
 type Point int
 
 // Cell_Pass - パス
@@ -84,6 +84,17 @@ const oneSideWallThickness = 1
 // 両側の枠の厚み。南北、または東西
 const bothSidesWallThickness = 2
 
+// Cell_4Directions - 東、北、西、南を指す配列のインデックスに対応
+type Cell_4Directions int
+
+// 東、北、西、南を指す配列のインデックスに対応
+const (
+	Cell_East Cell_4Directions = iota
+	Cell_North
+	Cell_West
+	Cell_South
+)
+
 // BoardCoordinate - 盤座標
 type BoardCoordinate struct {
 	// 枠付きの盤の水平一辺の交点の要素数
@@ -95,34 +106,36 @@ type BoardCoordinate struct {
 	cell4Directions [4]Point
 }
 
-// GetMemoryBoardWidth - 枠付きの盤の水平一辺の交点数
-func (bc *BoardCoordinate) GetMemoryBoardWidth() int {
+// GetMemoryWidth - 枠付きの盤の水平一辺の交点数
+func (bc *BoardCoordinate) GetMemoryWidth() int {
 	return bc.memoryWidth
 }
 
-// GetMemoryBoardWidth - 枠付きの盤の垂直一辺の交点数
-func (bc *BoardCoordinate) GetMemoryBoardHeight() int {
+// GetMemoryHeight - 枠付きの盤の垂直一辺の交点数
+func (bc *BoardCoordinate) GetMemoryHeight() int {
 	return bc.memoryHeight
 }
 
-// GetMemoryBoardArea - 壁付き盤の面積
-func (bc *BoardCoordinate) GetMemoryBoardArea() int {
-	return bc.GetMemoryBoardWidth() * bc.GetMemoryBoardHeight()
+// GetMemoryArea - 枠付き盤の面積
+func (bc *BoardCoordinate) GetMemoryArea() int {
+	return bc.GetMemoryWidth() * bc.GetMemoryHeight()
 }
 
-func (bc *BoardCoordinate) GetBoardWidth() int {
+// GetWidth - 枠無し盤の横幅
+func (bc *BoardCoordinate) GetWidth() int {
 	// 枠の分、２つ減らす
 	return bc.memoryWidth - bothSidesWallThickness
 }
 
-func (bc *BoardCoordinate) GetBoardHeight() int {
+// GetHeight - 枠無し盤の縦幅
+func (bc *BoardCoordinate) GetHeight() int {
 	// 枠の分、２つ減らす
 	return bc.memoryHeight - bothSidesWallThickness
 }
 
-// GetBoardArea - 壁無し盤の面積
+// GetBoardArea - 枠無し盤の面積
 func (bc *BoardCoordinate) GetBoardArea() int {
-	return bc.GetBoardWidth() * bc.GetBoardWidth()
+	return bc.GetWidth() * bc.GetHeight()
 }
 
 // GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
@@ -172,7 +185,7 @@ func GetYFromRank(rank string) int {
 //
 //	"1" .. "99"
 func GetRankFromY(y int) string {
-	return strconv.Itoa(getRankFromY(y))
+	return strconv.Itoa(getRankFromY(y))GetBoardHeight
 }
 
 func getRankFromY(y int) int {
@@ -198,14 +211,14 @@ func GetRankFromCode(code string) string {
 }
 
 // GetPointFromXy - x,y 形式の座標を、 point （配列のインデックス）へ変換します。
-// point は壁を含む盤上での座標です
+// point は枠を含む盤上での座標です
 //
 // Parameters
 // ----------
 // x : int
-//	壁を含まない盤での筋番号。 Example: 19路盤なら0～18
+//	枠を含まない盤での筋番号。 Example: 19路盤なら0～18
 // y : int
-//	壁を含まない盤での段番号。 Example: 19路盤なら0～18
+//	枠を含まない盤での段番号。 Example: 19路盤なら0～18
 //
 // Returns
 // -------
