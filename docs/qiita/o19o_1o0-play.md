@@ -60,7 +60,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var coord = tokens[2]
 	var point = k.Board.coordinate.GetPointFromGtpMove(coord)
 
-	// [O22o1o2o0] 石（または壁）の上に石を置こうとした
+	// [O22o1o2o0] 石（または枠）の上に石を置こうとした
 	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
 		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
@@ -332,9 +332,9 @@ Output > Console:
 
 # Step [O22o0] 囲碁の石を打つルールの実装
 
-## Step [O22o1o0] 空点以外のところ（石または壁の上）に石を置くことの禁止 - IsMasonryError関数作成
+## Step [O22o1o0] 空点以外のところ（石または枠の上）に石を置くことの禁止 - IsMasonryError関数作成
 
-とりあえず、 `石または壁の上に石を置く行為` に `Masonry` （メイスンリー）という名前を付ける。  
+とりあえず、 `石または枠の上に石を置く行為` に `Masonry` （メイスンリー）という名前を付ける。  
 従って この主のエラーは `Masonry error` と呼ぶことにする。  
 そのようなエラーであるかどうか判定する関数の名前は `IsMasonryError` と呼ぶことにする  
 
@@ -690,7 +690,7 @@ package kernel
 // - bool is found
 func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
+	k.CheckBoard.Init(k.Board.coordinate.GetWidth(), k.Board.coordinate.GetHeight())
 	return k.findRen(arbitraryPoint)
 }
 
@@ -730,7 +730,7 @@ func (k *Kernel) searchStoneRen(here Point) {
 	k.tempRen.AddLocation(here)
 
 	var setAdjacent = func(dir int, p Point) {
-		// 呼吸点と壁のチェック
+		// 呼吸点と枠のチェック
 		var stone = k.Board.GetStoneAt(p)
 		switch stone {
 		case Space: // 空点
@@ -741,7 +741,7 @@ func (k *Kernel) searchStoneRen(here Point) {
 
 			return // あとの処理をスキップ
 
-		case Wall: // 壁
+		case Wall: // 枠
 			return // あとの処理をスキップ
 		}
 
