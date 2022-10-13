@@ -45,12 +45,12 @@ func (bc *BoardCoordinate) GetMemoryHeight() int {
 	return bc.memoryHeight
 }
 
-// GetMemoryArea - 壁付き盤の面積
+// GetMemoryArea - 枠付き盤の面積
 func (bc *BoardCoordinate) GetMemoryArea() int {
 	return bc.GetMemoryWidth() * bc.GetMemoryHeight()
 }
 
-// GetWidth - 壁無し盤の横幅
+// GetWidth - 枠無し盤の横幅
 func (bc *BoardCoordinate) GetWidth() int {
 	// 枠の分、２つ減らす
 	return bc.memoryWidth - bothSidesWallThickness
@@ -62,7 +62,7 @@ func (bc *BoardCoordinate) GetHeight() int {
 	return bc.memoryHeight - bothSidesWallThickness
 }
 
-// GetBoardArea - 壁無し盤の面積
+// GetBoardArea - 枠無し盤の面積
 func (bc *BoardCoordinate) GetBoardArea() int {
 	return bc.GetWidth() * bc.GetHeight()
 }
@@ -140,17 +140,17 @@ func GetRankFromCode(code string) string {
 }
 
 // GetPointFromXy - x,y 形式の座標を、 point （配列のインデックス）へ変換します。
-// point は壁を含む盤上での座標です
+// point は枠を含む盤上での座標です
 //
 // Parameters
 // ----------
 // x : int
 //
-//	壁を含まない盤での筋番号。 Example: 19路盤なら0～18
+//	枠を含まない盤での筋番号。 Example: 19路盤なら0～18
 //
 // y : int
 //
-//	壁を含まない盤での段番号。 Example: 19路盤なら0～18
+//	枠を含まない盤での段番号。 Example: 19路盤なら0～18
 //
 // Returns
 // -------
