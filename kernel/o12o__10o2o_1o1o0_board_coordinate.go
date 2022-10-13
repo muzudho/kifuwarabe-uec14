@@ -13,6 +13,17 @@ const oneSideWallThickness = 1
 // 両側の枠の厚み。南北、または東西
 const bothSidesWallThickness = 2
 
+// Cell_4Directions - 東、北、西、南を指す配列のインデックスに対応
+type Cell_4Directions int
+
+// 東、北、西、南を指す配列のインデックスに対応
+const (
+	Cell_East Cell_4Directions = iota
+	Cell_North
+	Cell_West
+	Cell_South
+)
+
 // BoardCoordinate - 盤座標
 type BoardCoordinate struct {
 	// 枠付きの盤の水平一辺の交点の要素数
@@ -24,19 +35,19 @@ type BoardCoordinate struct {
 	cell4Directions [4]Point
 }
 
-// GetMemoryBoardWidth - 枠付きの盤の水平一辺の交点数
-func (bc *BoardCoordinate) GetMemoryBoardWidth() int {
+// GetMemoryWidth - 枠付きの盤の水平一辺の交点数
+func (bc *BoardCoordinate) GetMemoryWidth() int {
 	return bc.memoryWidth
 }
 
-// GetMemoryBoardWidth - 枠付きの盤の垂直一辺の交点数
-func (bc *BoardCoordinate) GetMemoryBoardHeight() int {
+// GetMemoryWidth - 枠付きの盤の垂直一辺の交点数
+func (bc *BoardCoordinate) GetMemoryHeight() int {
 	return bc.memoryHeight
 }
 
-// GetMemoryBoardArea - 壁付き盤の面積
-func (bc *BoardCoordinate) GetMemoryBoardArea() int {
-	return bc.GetMemoryBoardWidth() * bc.GetMemoryBoardHeight()
+// GetMemoryArea - 壁付き盤の面積
+func (bc *BoardCoordinate) GetMemoryArea() int {
+	return bc.GetMemoryWidth() * bc.GetMemoryHeight()
 }
 
 func (bc *BoardCoordinate) GetBoardWidth() int {

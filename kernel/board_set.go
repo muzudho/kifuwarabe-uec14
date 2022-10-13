@@ -30,7 +30,7 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			return false, Space
 		}
 
-		var size = k.Board.coordinate.GetMemoryBoardArea()
+		var size = k.Board.coordinate.GetMemoryArea()
 		var i Point = 0
 		for _, c := range string(fileData) {
 			var str = string([]rune{c})

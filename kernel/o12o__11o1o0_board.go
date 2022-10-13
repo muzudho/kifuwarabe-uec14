@@ -30,7 +30,7 @@ func NewBoard(gameRule GameRule, boardWidht int, boardHeight int) *Board {
 		memoryBoardWidth,
 		memoryBoardHeight,
 		// ４方向（東、北、西、南）の番地への相対インデックス
-		[4]Point{1, Point(-b.coordinate.GetMemoryBoardWidth()), -1, Point(b.coordinate.GetMemoryBoardWidth())}}
+		[4]Point{1, Point(-b.coordinate.GetMemoryWidth()), -1, Point(b.coordinate.GetMemoryWidth())}}
 
 	// 盤のサイズ指定と、盤面の初期化
 	b.resize(boardWidht, boardHeight)
@@ -77,10 +77,10 @@ func getXyFromPointOnBoard(memoryWidth int, point Point) (int, int) {
 func (b *Board) resize(width int, height int) {
 	b.coordinate.memoryWidth = width + bothSidesWallThickness
 	b.coordinate.memoryHeight = height + bothSidesWallThickness
-	b.cells = make([]Stone, b.coordinate.GetMemoryBoardArea())
+	b.cells = make([]Stone, b.coordinate.GetMemoryArea())
 
 	// ４方向（東、北、西、南）の番地への相対インデックス
-	b.coordinate.cell4Directions = [4]Point{1, Point(-b.coordinate.GetMemoryBoardWidth()), -1, Point(b.coordinate.GetMemoryBoardWidth())}
+	b.coordinate.cell4Directions = [4]Point{1, Point(-b.coordinate.GetMemoryWidth()), -1, Point(b.coordinate.GetMemoryWidth())}
 }
 
 // EOF [O12o__11o1o0]

@@ -92,7 +92,7 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Poi
 		var p = here + b.coordinate.cell4Directions[dir] // 隣接する交点
 
 		// 範囲外チェック
-		if p < 0 || b.coordinate.GetMemoryBoardArea() <= int(p) {
+		if p < 0 || b.coordinate.GetMemoryArea() <= int(p) {
 			continue
 		}
 
