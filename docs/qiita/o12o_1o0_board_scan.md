@@ -65,8 +65,8 @@ func (b *Board) Init(width int, height int) {
 	}
 	// 枠の内側を空点で埋める
 	{
-		var height = b.coordinate.GetBoardHeight()
-		var width = b.coordinate.GetBoardWidth()
+		var height = b.coordinate.GetHeight()
+		var width = b.coordinate.GetWidth()
 		for y := 1; y < height; y++ {
 			for x := 1; x < width; x++ {
 				var i = b.coordinate.GetPointFromXy(x, y)
@@ -122,11 +122,11 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Poi
 		var p = here + b.coordinate.cell4Directions[dir] // 隣接する交点
 
 		// 範囲外チェック
-		if p < 0 || b.coordinate.GetMemoryBoardArea() <= int(p) {
+		if p < 0 || b.coordinate.GetMemoryArea() <= int(p) {
 			continue
 		}
 
-		// 壁チェック
+		// 枠チェック
 		if b.GetStoneAt(p) == Wall {
 			continue
 		}
