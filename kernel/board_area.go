@@ -36,7 +36,7 @@ func (b *Board) Init(width int, height int) {
 	// 枠の内側を空点で埋める
 	{
 		var height = b.coordinate.GetBoardHeight()
-		var width = b.coordinate.GetBoardWidth()
+		var width = b.coordinate.GetWidth()
 		for y := 1; y < height; y++ {
 			for x := 1; x < width; x++ {
 				var i = b.coordinate.GetPointFromXy(x, y)

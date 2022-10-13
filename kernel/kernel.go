@@ -47,7 +47,7 @@ func NewKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	k.Record = *NewRecord(maxMoves, playFirst)
 
 	// RenDb - [O12o__11o__10o3o0] 連データベース
-	k.renDb = NewRenDb(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
+	k.renDb = NewRenDb(k.Board.coordinate.GetWidth(), k.Board.coordinate.GetBoardHeight())
 
 	return k
 }
@@ -81,7 +81,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			// 25行まで対応
 			var rankSimbols = strings.Split("  , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25", ",")
 
-			var filesMax = int(math.Min(25, float64(k.Board.coordinate.GetBoardWidth())))
+			var filesMax = int(math.Min(25, float64(k.Board.coordinate.GetWidth())))
 			var rowsMax = int(math.Min(25, float64(k.Board.coordinate.GetBoardHeight())))
 			var filesLabel = fileSimbols[:filesMax]
 

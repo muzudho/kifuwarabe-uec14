@@ -50,7 +50,8 @@ func (bc *BoardCoordinate) GetMemoryArea() int {
 	return bc.GetMemoryWidth() * bc.GetMemoryHeight()
 }
 
-func (bc *BoardCoordinate) GetBoardWidth() int {
+// GetWidth - 壁無し盤の横幅
+func (bc *BoardCoordinate) GetWidth() int {
 	// 枠の分、２つ減らす
 	return bc.memoryWidth - bothSidesWallThickness
 }
@@ -62,7 +63,7 @@ func (bc *BoardCoordinate) GetBoardHeight() int {
 
 // GetBoardArea - 壁無し盤の面積
 func (bc *BoardCoordinate) GetBoardArea() int {
-	return bc.GetBoardWidth() * bc.GetBoardWidth()
+	return bc.GetWidth() * bc.GetBoardHeight()
 }
 
 // GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
