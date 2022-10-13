@@ -19,6 +19,9 @@ type BoardCoordinate struct {
 	memoryWidth int
 	// 枠付きの盤の垂直一辺の交点の要素数
 	memoryHeight int
+
+	// ４方向（東、北、西、南）への相対番地。2015年講習会サンプル、GoGo とは順序が違います
+	cell4Directions [4]Point
 }
 
 // GetMemoryBoardWidth - 枠付きの盤の水平一辺の交点数

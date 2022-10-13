@@ -13,9 +13,6 @@ type Board struct {
 	//
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
 	cells []Stone
-
-	// Cell4Directions - ４方向（東、北、西、南）の番地への相対インデックス
-	Cell4Directions [4]Point
 }
 
 // NewBoard - 新規作成
@@ -29,7 +26,11 @@ func NewBoard(gameRule GameRule, boardWidht int, boardHeight int) *Board {
 	var memoryBoardWidth = boardWidht + 2
 	var memoryBoardHeight = boardHeight + 2
 
-	b.coordinate = BoardCoordinate{memoryBoardWidth, memoryBoardHeight}
+	b.coordinate = BoardCoordinate{
+		memoryBoardWidth,
+		memoryBoardHeight,
+		// ４方向（東、北、西、南）の番地への相対インデックス
+		[4]Point{1, Point(-b.coordinate.GetMemoryBoardWidth()), -1, Point(b.coordinate.GetMemoryBoardWidth())}}
 
 	// 盤のサイズ指定と、盤面の初期化
 	b.resize(boardWidht, boardHeight)
@@ -79,7 +80,7 @@ func (b *Board) resize(width int, height int) {
 	b.cells = make([]Stone, b.coordinate.GetMemoryBoardArea())
 
 	// ４方向（東、北、西、南）の番地への相対インデックス
-	b.Cell4Directions = [4]Point{1, Point(-b.coordinate.GetMemoryBoardWidth()), -1, Point(b.coordinate.GetMemoryBoardWidth())}
+	b.coordinate.cell4Directions = [4]Point{1, Point(-b.coordinate.GetMemoryBoardWidth()), -1, Point(b.coordinate.GetMemoryBoardWidth())}
 }
 
 // EOF [O12o__11o1o0]
