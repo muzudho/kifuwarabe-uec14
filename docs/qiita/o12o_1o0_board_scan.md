@@ -35,56 +35,56 @@ package kernel
 // Init - 盤面初期化
 func (b *Board) Init(width int, height int) {
 	// 盤面のサイズが異なるなら、盤面を作り直す
-	if b.memoryWidth != width || b.memoryHeight != height {
+	if b.coordinate.memoryWidth != width || b.coordinate.memoryHeight != height {
 		b.resize(width, height)
 	}
 
 	// 枠の上辺、下辺を引く
 	{
 		var y = 0
-		var y2 = b.memoryHeight - 1
-		for x := 0; x < b.memoryWidth; x++ {
-			var i = b.GetPointFromXy(x, y)
+		var y2 = b.coordinate.memoryHeight - 1
+		for x := 0; x < b.coordinate.memoryWidth; x++ {
+			var i = b.coordinate.GetPointFromXy(x, y)
 			b.cells[i] = Wall
 
-			i = b.GetPointFromXy(x, y2)
+			i = b.coordinate.GetPointFromXy(x, y2)
 			b.cells[i] = Wall
 		}
 	}
 	// 枠の左辺、右辺を引く
 	{
 		var x = 0
-		var x2 = b.memoryWidth - 1
-		for y := 1; y < b.memoryHeight-1; y++ {
-			var i = b.GetPointFromXy(x, y)
+		var x2 = b.coordinate.memoryWidth - 1
+		for y := 1; y < b.coordinate.memoryHeight-1; y++ {
+			var i = b.coordinate.GetPointFromXy(x, y)
 			b.cells[i] = Wall
 
-			i = b.GetPointFromXy(x2, y)
+			i = b.coordinate.GetPointFromXy(x2, y)
 			b.cells[i] = Wall
 		}
 	}
 	// 枠の内側を空点で埋める
 	{
-		var height = b.GetHeight()
-		var width = b.GetWidth()
+		var height = b.coordinate.GetBoardHeight()
+		var width = b.coordinate.GetBoardWidth()
 		for y := 1; y < height; y++ {
 			for x := 1; x < width; x++ {
-				var i = b.GetPointFromXy(x, y)
+				var i = b.coordinate.GetPointFromXy(x, y)
 				b.cells[i] = Space
 			}
 		}
 	}
 }
 
-// ForeachLikeText - 枠を含めた各セル
+// ForeachLikeText - 枠を含めた各セルの石
 func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
-	for y := 0; y < b.memoryHeight; y++ {
+	for y := 0; y < b.coordinate.memoryHeight; y++ {
 		if y != 0 {
 			doNewline()
 		}
 
-		for x := 0; x < b.memoryWidth; x++ {
-			var i = b.GetPointFromXy(x, y)
+		for x := 0; x < b.coordinate.memoryWidth; x++ {
+			var i = b.coordinate.GetPointFromXy(x, y)
 			var stone = b.cells[i]
 			setStone(stone)
 		}
@@ -93,11 +93,11 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 
 // ForeachPayloadLocation - 枠や改行を含めない各セルの番地
 func (b *Board) ForeachPayloadLocation(setLocation func(Point)) {
-	var height = b.memoryHeight - 1
-	var width = b.memoryWidth - 1
+	var height = b.coordinate.memoryHeight - 1
+	var width = b.coordinate.memoryWidth - 1
 	for y := 1; y < height; y++ {
 		for x := 1; x < width; x++ {
-			var i = b.GetPointFromXy(x, y)
+			var i = b.coordinate.GetPointFromXy(x, y)
 			setLocation(i)
 		}
 	}
@@ -105,11 +105,11 @@ func (b *Board) ForeachPayloadLocation(setLocation func(Point)) {
 
 // ForeachPayloadLocation - 枠や改行を含めない各セルの番地。筋、段の順
 func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
-	var height = b.memoryHeight - 1
-	var width = b.memoryWidth - 1
+	var height = b.coordinate.memoryHeight - 1
+	var width = b.coordinate.memoryWidth - 1
 	for x := 1; x < width; x++ {
 		for y := 1; y < height; y++ {
-			var i = b.GetPointFromXy(x, y)
+			var i = b.coordinate.GetPointFromXy(x, y)
 			setLocation(i)
 		}
 	}
@@ -122,7 +122,7 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Poi
 		var p = here + Point(b.Direction[dir]) // 隣接する交点
 
 		// 範囲外チェック
-		if p < 1 || b.getMemoryArea() <= int(p) {
+		if p < 0 || b.coordinate.GetMemoryBoardArea() <= int(p) {
 			continue
 		}
 
