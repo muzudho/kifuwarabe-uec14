@@ -1,4 +1,4 @@
-// BOF [O12o__10o1o0]
+// BOF [O12o__10o2o_1o1o0]
 
 package kernel
 
@@ -6,9 +6,6 @@ import (
 	"fmt"
 	"strconv"
 )
-
-// Point - 交点の座標。いわゆる配列のインデックス。壁を含む盤の左上を 0 とします
-type Point int
 
 // GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
 func GetXFromFile(file string) int {
@@ -82,4 +79,4 @@ func GetRankFromCode(code string) string {
 	return code[1:2]
 }
 
-// EOF [O12o__10o1o0]
+// EOF [O12o__10o2o_1o1o0]
