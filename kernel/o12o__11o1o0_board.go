@@ -14,8 +14,8 @@ type Board struct {
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
 	cells []Stone
 
-	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
-	Direction [4]int
+	// Cell4Directions - ４方向（東、北、西、南）の番地への相対インデックス
+	Cell4Directions [4]Point
 }
 
 // NewBoard - 新規作成
@@ -79,7 +79,7 @@ func (b *Board) resize(width int, height int) {
 	b.cells = make([]Stone, b.coordinate.GetMemoryBoardArea())
 
 	// ４方向（東、北、西、南）の番地への相対インデックス
-	b.Direction = [4]int{1, -b.coordinate.GetMemoryBoardWidth(), -1, b.coordinate.GetMemoryBoardWidth()}
+	b.Cell4Directions = [4]Point{1, Point(-b.coordinate.GetMemoryBoardWidth()), -1, Point(b.coordinate.GetMemoryBoardWidth())}
 }
 
 // EOF [O12o__11o1o0]
