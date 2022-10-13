@@ -16,7 +16,7 @@
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 👉	│	├── 📄 record_item.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -63,7 +63,7 @@ func (ri *RecordItem) Clear() {
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 record_item.go
 👉	│	├── 📄 record.go
  	│	└── 📄 stone.go
@@ -171,7 +171,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 record.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -216,7 +216,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 record.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -246,7 +246,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 record.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
