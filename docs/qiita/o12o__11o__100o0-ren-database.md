@@ -278,7 +278,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 
 	// * 以下を追加
 	// RenDb - [O12o__11o__10o3o0] 連データベース
-	k.renDb = NewRenDb(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
+	k.renDb = NewRenDb(k.Board.coordinate.GetWidth(), k.Board.coordinate.GetHeight())
 
 //	return k
 // }
