@@ -58,12 +58,12 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	}
 
 	var coord = tokens[2]
-	var point = k.Board.GetPointFromCode(coord)
+	var point = k.Board.coordinate.GetPointFromGtpMove(coord)
 
 	// [O22o1o2o0] 石（または壁）の上に石を置こうとした
 	var onMasonry = func() bool {
-		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
-		logg.J.Infow("error", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
+		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -420,7 +420,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 ```go
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 	// ...略...
-	// var point = k.Board.GetPointFromCode(tokens[2])
+	// var point = k.Board.GetPointFromGtpMove(tokens[2])
 
 	// * 以下を追加
 	// [O22o1o2o0]
@@ -734,7 +734,7 @@ package kernel
 // - bool is found
 func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+	k.CheckBoard.Init(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
 	return k.findRen(arbitraryPoint)
 }
 
@@ -882,7 +882,7 @@ func (k *Kernel) searchSpaceRen(here Point) {
 	case "test_get_liberty": // [O22o2o5o0]
 		// Example: "test_get_liberty B2"
 		var coord = tokens[1]
-		var point = k.Board.GetPointFromCode(coord)
+		var point = k.Board.coordinate.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.GetLibertyArea(), ren.adjacentColor)
@@ -1002,8 +1002,8 @@ Output > Log > JSON:
 	// ...略...
 	// [O22o3o1o0] 相手の眼に石を置こうとした
 	var onOpponentEye = func() bool {
-		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
-		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
+		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -1129,8 +1129,8 @@ Output > Console:
 	// ...略...
 	// [O22o4o1o0] 自分の眼に石を置こうとした
 	var onForbiddenMyEye = func() bool {
-		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
-		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
+		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -1398,7 +1398,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	case "remove_ren": // [O22o5o2o0]
 		// Example: `remove_ren B2`
 		var coord = tokens[1]
-		var point = k.Board.GetPointFromCode(coord)
+		var point = k.Board.coordinate.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			k.RemoveRen(ren)
@@ -1765,8 +1765,8 @@ Output > Console:
 
 	// [O22o7o2o0] コウに石を置こうとした
 	var onKo = func() bool {
-		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.GetCodeFromPoint(point))
-		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.GetCodeFromPoint(point))
+		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -1891,7 +1891,7 @@ Output > Console:
 
 		// var setPoint = func(i int, item *RecordItem) {
 			// var positionNth = i + geta // 基数を序数に変換
-			// var coord = k.Board.GetCodeFromPoint(item.placePlay)
+			// var coord = k.Board.GetGtpMoveFromPoint(item.placePlay)
 
 			// * 以下を削除
 			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
@@ -1902,7 +1902,7 @@ Output > Console:
 			if item.ko == Point(0) {
 				koStr = ""
 			} else {
-				koStr = fmt.Sprintf("(%s)", k.Board.GetCodeFromPoint(item.ko))
+				koStr = fmt.Sprintf("(%s)", k.Board.coordinate.GetGtpMoveFromPoint(item.ko))
 			}
 			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionNth, coord, koStr))
 		// }
