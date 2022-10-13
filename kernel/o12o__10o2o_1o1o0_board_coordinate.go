@@ -7,6 +7,29 @@ import (
 	"strconv"
 )
 
+// BoardCoordinate - 盤座標
+type BoardCoordinate struct {
+	// 枠付きの盤の水平一辺の交点の要素数
+	memoryWidth int
+	// 枠付きの盤の垂直一辺の交点の要素数
+	memoryHeight int
+}
+
+// GetMemoryBoardWidth - 枠付きの盤の水平一辺の交点数
+func (bc *BoardCoordinate) GetMemoryBoardWidth() int {
+	return bc.memoryWidth
+}
+
+// GetMemoryBoardWidth - 枠付きの盤の垂直一辺の交点数
+func (bc *BoardCoordinate) GetMemoryBoardHeight() int {
+	return bc.memoryHeight
+}
+
+// GetMemoryBoardArea - 壁付き盤の面積
+func (bc *BoardCoordinate) GetMemoryBoardArea() int {
+	return bc.GetMemoryBoardWidth() * bc.GetMemoryBoardHeight()
+}
+
 // GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
 func GetXFromFile(file string) int {
 	// 筋

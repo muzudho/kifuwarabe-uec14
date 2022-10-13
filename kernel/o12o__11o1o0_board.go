@@ -12,6 +12,8 @@ const bothSidesWallThickness = 2
 type Board struct {
 	// ゲームルール
 	gameRule GameRule
+	// 盤座標
+	coordinate BoardCoordinate
 
 	// 枠付きの横幅
 	memoryWidth int
@@ -34,6 +36,12 @@ func NewBoard(gameRule GameRule, boardWidht int, boardHeight int) *Board {
 	// 設定ファイルから読込むので動的設定
 	b.gameRule = gameRule
 
+	// 枠の分、２つ増える
+	var memoryBoardWidth = boardWidht + 2
+	var memoryBoardHeight = boardHeight + 2
+
+	b.coordinate = BoardCoordinate{memoryBoardWidth, memoryBoardHeight}
+
 	// 盤のサイズ指定と、盤面の初期化
 	b.resize(boardWidht, boardHeight)
 
@@ -48,6 +56,11 @@ func (b *Board) GetGameRule() *GameRule {
 // SetGameRule - ゲームルール設定
 func (b *Board) SetGameRule(gameRule *GameRule) {
 	b.gameRule = *gameRule
+}
+
+// GetCoordinate - 盤座標取得
+func (b *Board) GetCoordinate() *BoardCoordinate {
+	return &b.coordinate
 }
 
 // GetMemoryWidth - 枠の厚みを含んだ横幅
