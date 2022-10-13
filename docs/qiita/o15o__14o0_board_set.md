@@ -63,7 +63,7 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			return false, Space
 		}
 
-		var size = k.Board.getMemoryArea()
+		var size = k.Board.coordinate.GetMemoryBoardArea()
 		var i Point = 0
 		for _, c := range string(fileData) {
 			var str = string([]rune{c})
@@ -88,8 +88,11 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 			logg.J.Infow("error not enough size", "i", i, "size", size)
 			return
 		}
-	}
 
+		// [O23o_2o3o_1o0] 連データベース初期化
+		k.renDb.Init(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
+		k.FindAllRens()
+	}
 }
 
 // EOF [O15o__14o1o0]
