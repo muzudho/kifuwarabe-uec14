@@ -582,53 +582,9 @@ func (b *CheckBoard) getMemoryArea() int {
 // EOF [O22o2o2o0]
 ```
 
-### Step [O22o2o3o_1o0] ファイル編集 - board.go
+### ~~Step [O22o2o3o_1o0]~~
 
-👇 以下の既存ファイルを編集してほしい  
-
-```plaintext
-  	📂 kifuwarabe-uec14
-	├── 📂 kernel
-	│	├── 📂 play_rule
-  	│	├── 📄 board_area.go
-  	│	├── 📄 board_coord.go
-👉 	│	├── 📄 o12o__11o1o0_board.go
- 	│	├── 📄 check_board.go
-	│	├── 📄 go.mod
-	│	├── 📄 go.sum
- 	│	├── 📄 kernel.go
- 	│	├── 📄 logger.go
- 	│	├── 📄 masonry.go
- 	│	├── 📄 play.go
- 	│	├── 📄 o12o__10o1o0_point.go
- 	│	├── 📄 ren.go
- 	│	└── 📄 stone.go
-    ├── 📄 .gitignore
- 	├── 📄 engine_config.go
-  	├── 📄 engine.toml
-    ├── 📄 go.mod
-  	├── 📄 go.work
-	└── 📄 main.go
-```
-
-```go
-// type Board struct {
-// ...略...
-
-	// Direction - ４方向（東、北、西、南）の番地への相対インデックス
-	Direction [4]int
-
-// }
-// ...略...
-
-// func (b *Board) resize(width int, height int) {
-	// ...略...
-
-	// ４方向（東、北、西、南）の番地への相対インデックス
-	b.Direction = [4]int{1, -b.GetMemoryWidth(), -1, b.GetMemoryWidth()}
-
-// }
-```
+Removed  
 
 ### Step [O22o2o3o0] ファイル編集 - kernel.go
 
