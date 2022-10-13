@@ -119,7 +119,7 @@ func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
 func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Point)) {
 	// 東、北、西、南
 	for dir := 0; dir < 4; dir++ {
-		var p = here + Point(b.Direction[dir]) // 隣接する交点
+		var p = here + b.coordinate.cell4Directions[dir] // 隣接する交点
 
 		// 範囲外チェック
 		if p < 0 || b.coordinate.GetMemoryBoardArea() <= int(p) {
