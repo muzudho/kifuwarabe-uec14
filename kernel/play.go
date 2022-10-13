@@ -28,33 +28,33 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	}
 
 	var coord = tokens[2]
-	var point = k.Board.GetPointFromGtpMove(coord)
+	var point = k.Board.coordinate.GetPointFromGtpMove(coord)
 
 	// [O22o1o2o0] 石（または壁）の上に石を置こうとした
 	var onMasonry = func() bool {
-		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
 	// [O22o3o1o0] 相手の眼に石を置こうとした
 	var onOpponentEye = func() bool {
-		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
 	// [O22o4o1o0] 自分の眼に石を置こうとした
 	var onForbiddenMyEye = func() bool {
-		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
 	// [O22o7o2o0] コウに石を置こうとした
 	var onKo = func() bool {
-		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
