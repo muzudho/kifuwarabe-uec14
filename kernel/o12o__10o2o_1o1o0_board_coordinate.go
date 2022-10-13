@@ -67,6 +67,69 @@ func (bc *BoardCoordinate) GetBoardArea() int {
 	return bc.GetWidth() * bc.GetHeight()
 }
 
+// GetRelativePointOf - ４方向（東、北、西、南）の先の番地
+func (bc *BoardCoordinate) GetRelativePointOf(dir4 Cell_4Directions) Point {
+	return bc.cell4Directions[dir4]
+}
+
+// GetEastOf - 東
+func (bc *BoardCoordinate) GetEastOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_East]
+}
+
+// GetNorthEastOf - 北東
+func (bc *BoardCoordinate) GetNorthEastOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_North] + bc.cell4Directions[Cell_East]
+}
+
+// GetNorthOf - 北
+func (bc *BoardCoordinate) GetNorthOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_North]
+}
+
+// GetNorthWestOf - 北西
+func (bc *BoardCoordinate) GetNorthWestOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_North] + bc.cell4Directions[Cell_West]
+}
+
+// GetWestOf - 西
+func (bc *BoardCoordinate) GetWestOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_West]
+}
+
+// GetSouthWestOf - 南西
+func (bc *BoardCoordinate) GetSouthWestOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_South] + bc.cell4Directions[Cell_West]
+}
+
+// GetSouthOf - 南
+func (bc *BoardCoordinate) GetSouthOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_South]
+}
+
+// GetSouthEastOf - 南東
+func (bc *BoardCoordinate) GetSouthEastOf(point Point) Point {
+	return point + bc.cell4Directions[Cell_South] + bc.cell4Directions[Cell_East]
+}
+
+// GetPointFromXy - x,y 形式の座標を、 point （配列のインデックス）へ変換します。
+// point は枠を含む盤上での座標です
+//
+// Parameters
+// ----------
+// x : int
+// 枠を含む盤での筋番号。 Example: 19路盤なら0～20
+// y : int
+// 枠を含む盤での段番号。 Example: 19路盤なら0～20
+//
+// Returns
+// -------
+// point : Point
+// 配列インデックス
+func (bc *BoardCoordinate) GetPointFromXy(x int, y int) Point {
+	return Point(y*bc.memoryWidth + x)
+}
+
 // GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
 func GetXFromFile(file string) int {
 	// 筋
@@ -137,28 +200,6 @@ func GetRankFromCode(code string) string {
 	}
 
 	return code[1:2]
-}
-
-// GetPointFromXy - x,y 形式の座標を、 point （配列のインデックス）へ変換します。
-// point は枠を含む盤上での座標です
-//
-// Parameters
-// ----------
-// x : int
-//
-//	枠を含まない盤での筋番号。 Example: 19路盤なら0～18
-//
-// y : int
-//
-//	枠を含まない盤での段番号。 Example: 19路盤なら0～18
-//
-// Returns
-// -------
-// point : Point
-//
-//	配列インデックス。 Example: 2,3 なら 65
-func (bc *BoardCoordinate) GetPointFromXy(x int, y int) Point {
-	return Point(y*bc.memoryWidth + x)
 }
 
 // GetXyFromPoint - `GetPointFromXy` の逆関数
