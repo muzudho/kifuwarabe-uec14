@@ -272,7 +272,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 		var setPoint = func(positionNumber int, item *RecordItem) {
 			var positionNth = positionNumber + geta // 基数を序数に変換
-			var coord = k.Board.GetCodeFromPoint(item.placePlay)
+			var coord = k.Board.coordinate.GetGtpMoveFromPoint(item.placePlay)
 			sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 		}
 
