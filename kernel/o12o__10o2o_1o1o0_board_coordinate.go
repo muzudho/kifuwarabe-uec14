@@ -130,6 +130,11 @@ func (bc *BoardCoordinate) GetPointFromXy(x int, y int) Point {
 	return Point(y*bc.memoryWidth + x)
 }
 
+// GetXyFromPoint - `GetPointFromXy` の逆関数
+func (bc *BoardCoordinate) GetXyFromPoint(point Point) (int, int) {
+	return getXyFromPointOnBoard(bc.memoryWidth, point)
+}
+
 // GetXFromFile - `A` ～ `Z` を 0 ～ 24 へ変換します。 国際囲碁連盟のルールに倣い、筋の符号に `I` は使いません
 func GetXFromFile(file string) int {
 	// 筋
@@ -200,11 +205,6 @@ func GetRankFromCode(code string) string {
 	}
 
 	return code[1:2]
-}
-
-// GetXyFromPoint - `GetPointFromXy` の逆関数
-func (bc *BoardCoordinate) GetXyFromPoint(point Point) (int, int) {
-	return getXyFromPointOnBoard(bc.memoryWidth, point)
 }
 
 // EOF [O12o__10o2o_1o1o0]
