@@ -30,7 +30,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var coord = tokens[2]
 	var point = k.Board.coordinate.GetPointFromGtpMove(coord)
 
-	// [O22o1o2o0] 石（または壁）の上に石を置こうとした
+	// [O22o1o2o0] 石（または枠）の上に石を置こうとした
 	var onMasonry = func() bool {
 		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
 		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))

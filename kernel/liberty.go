@@ -55,7 +55,7 @@ func (k *Kernel) searchStoneRen(here Point) {
 	k.tempRen.AddLocation(here)
 
 	var setAdjacent = func(dir int, p Point) {
-		// 呼吸点と壁のチェック
+		// 呼吸点と枠のチェック
 		var stone = k.Board.GetStoneAt(p)
 		switch stone {
 		case Space: // 空点
@@ -66,7 +66,7 @@ func (k *Kernel) searchStoneRen(here Point) {
 
 			return // あとの処理をスキップ
 
-		case Wall: // 壁
+		case Wall: // 枠
 			return // あとの処理をスキップ
 		}
 
