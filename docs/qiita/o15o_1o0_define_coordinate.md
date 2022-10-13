@@ -39,17 +39,17 @@ package kernel
 
 import "fmt"
 
-// GetPointFromCode - "A7" や "J13" といった符号を Point へ変換します
+// GetPointFromGtpMove - "A7" や "J13" といった符号を Point へ変換します
 //
-// * `code` - 座標の符号。 Example: "A7" や "J13"
-func (b *Board) GetPointFromCode(code string) Point {
-	return b.GetPointFromXy(
-		GetXFromFile(GetFileFromCode(code))+oneSideWallThickness,
-		GetYFromRank(GetRankFromCode(code))+oneSideWallThickness)
+// * `gtp_move` - 座標の符号。 Example: "A7" や "J13"
+func (bc *BoardCoordinate) GetPointFromGtpMove(gtp_move string) Point {
+	return bc.GetPointFromXy(
+		GetXFromFile(GetFileFromCode(gtp_move))+oneSideWallThickness,
+		GetYFromRank(GetRankFromCode(gtp_move))+oneSideWallThickness)
 }
 
-// GetCodeFromPoint - `GetPointFromCode` の逆関数
-func (b *Board) GetCodeFromPoint(point Point) string {
+// GetGtpMoveFromPoint - `GetPointFromGtpMove` の逆関数
+func (b *Board) GetGtpMoveFromPoint(point Point) string {
 	return getCodeFromPointOnBoard(b.memoryWidth, point)
 }
 
@@ -108,8 +108,8 @@ func getFileRankFromPointOnBoard(memoryWidth int, point Point) (string, int) {
 	// * アルファベット順になる位置に、以下のケース文を挿入
 	case "test_get_point_from_code": // [O16o1o0]
 		// Example: "test_get_point_from_code A1"
-		var point = k.Board.GetPointFromCode(tokens[1])
-		var code = k.Board.GetCodeFromPoint(point)
+		var point = k.Board.coordinate.GetPointFromGtpMove(tokens[1])
+		var code = k.Board.coordinate.GetGtpMoveFromPoint(point)
 		logg.C.Infof("= %d %s", point, code)
 		logg.J.Infow("ok", "point", point, "code", code)
 		return true
