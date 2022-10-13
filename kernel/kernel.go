@@ -191,7 +191,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 		var setPoint = func(positionNumber int, item *RecordItem) {
 			var positionNth = positionNumber + geta // 基数を序数に変換
-			var coord = k.Board.GetCodeFromPoint(item.placePlay)
+			var coord = k.Board.GetGtpMoveFromPoint(item.placePlay)
 			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 
 			// [O22o7o4o0] コウを追加
@@ -199,7 +199,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			if item.ko == Point(0) {
 				koStr = ""
 			} else {
-				koStr = fmt.Sprintf("(%s)", k.Board.GetCodeFromPoint(item.ko))
+				koStr = fmt.Sprintf("(%s)", k.Board.GetGtpMoveFromPoint(item.ko))
 			}
 			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionNth, coord, koStr))
 		}
@@ -217,7 +217,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "remove_ren": // [O22o5o2o0]
 		// Example: `remove_ren B2`
 		var coord = tokens[1]
-		var point = k.Board.GetPointFromCode(coord)
+		var point = k.Board.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			k.RemoveRen(ren)
@@ -260,7 +260,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		var path = tokens[1]
 
 		var convertLocation = func(location Point) string {
-			return k.Board.GetCodeFromPoint(location)
+			return k.Board.GetGtpMoveFromPoint(location)
 		}
 
 		var onError = func(err error) bool {
@@ -280,7 +280,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	case "test_coord": // [O12o__10o2o0]
 		// Example: "test_coord A13"
-		var point = k.Board.GetPointFromCode(tokens[1])
+		var point = k.Board.GetPointFromGtpMove(tokens[1])
 		logg.C.Infof("= %d\n", point)
 		logg.J.Infow("output", "point", point)
 		return true
@@ -295,7 +295,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "test_get_liberty": // [O22o2o5o0]
 		// Example: "test_get_liberty B2"
 		var coord = tokens[1]
-		var point = k.Board.GetPointFromCode(coord)
+		var point = k.Board.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.GetLibertyArea(), ren.adjacentColor)
@@ -309,8 +309,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	case "test_get_point_from_code": // [O16o1o0]
 		// Example: "test_get_point_from_code A1"
-		var point = k.Board.GetPointFromCode(tokens[1])
-		var code = k.Board.GetCodeFromPoint(point)
+		var point = k.Board.GetPointFromGtpMove(tokens[1])
+		var code = k.Board.GetGtpMoveFromPoint(point)
 		logg.C.Infof("= %d %s", point, code)
 		logg.J.Infow("ok", "point", point, "code", code)
 		return true

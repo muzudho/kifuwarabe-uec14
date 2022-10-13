@@ -4,18 +4,18 @@ package kernel
 
 import "fmt"
 
-// GetPointFromCode - "A7" や "J13" といった符号を Point へ変換します
+// GetPointFromGtpMove - "A7" や "J13" といった符号を Point へ変換します
 //
-// * `code` - 座標の符号。 Example: "A7" や "J13"
-func (b *Board) GetPointFromCode(code string) Point {
-	return b.GetPointFromXy(
-		GetXFromFile(GetFileFromCode(code))+oneSideWallThickness,
-		GetYFromRank(GetRankFromCode(code))+oneSideWallThickness)
+// * `gtp_move` - 座標の符号。 Example: "A7" や "J13"
+func (bc *BoardCoordinate) GetPointFromGtpMove(gtp_move string) Point {
+	return bc.GetPointFromXy(
+		GetXFromFile(GetFileFromCode(gtp_move))+oneSideWallThickness,
+		GetYFromRank(GetRankFromCode(gtp_move))+oneSideWallThickness)
 }
 
-// GetCodeFromPoint - `GetPointFromCode` の逆関数
-func (b *Board) GetCodeFromPoint(point Point) string {
-	return getCodeFromPointOnBoard(b.memoryWidth, point)
+// GetGtpMoveFromPoint - `GetPointFromGtpMove` の逆関数
+func (bc *BoardCoordinate) GetGtpMoveFromPoint(point Point) string {
+	return getCodeFromPointOnBoard(bc.memoryWidth, point)
 }
 
 // 例えば "A1" のように、行番号をゼロサプレスして返す

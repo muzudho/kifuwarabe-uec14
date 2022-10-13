@@ -59,7 +59,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 
 			var numbers = []Point{}
 			for _, code := range codes {
-				var location = k.Board.GetPointFromCode(code)
+				var location = k.Board.coordinate.GetPointFromGtpMove(code)
 				numbers = append(numbers, location)
 			}
 
@@ -74,7 +74,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 
 			var numbers = []Point{}
 			for _, code := range codes {
-				var location = k.Board.GetPointFromCode(code)
+				var location = k.Board.coordinate.GetPointFromGtpMove(code)
 				numbers = append(numbers, location)
 			}
 
@@ -100,7 +100,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 // * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+	k.CheckBoard.Init(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
 
 	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
 
