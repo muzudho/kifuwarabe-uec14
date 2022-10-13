@@ -49,7 +49,7 @@
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -120,7 +120,7 @@
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -183,7 +183,7 @@ func (k *Kernel) FindAllRens() {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -245,7 +245,7 @@ func (k *Kernel) FindAllRens() {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -343,7 +343,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -433,7 +433,7 @@ rendb_dump
  	│	├── 📄 masonry.go
 👉 	│	├── 📄 play_undo.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go

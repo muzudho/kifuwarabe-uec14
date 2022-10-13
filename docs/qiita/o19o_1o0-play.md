@@ -20,7 +20,7 @@
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
 👉 	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -355,7 +355,7 @@ Output > Console:
  	│	├── 📄 logger.go
 👉 	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -405,7 +405,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
 👉 	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
  	├── 📄 engine_config.go
@@ -490,7 +490,7 @@ Moved to `[O11o_4o2o1o0]`
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -600,7 +600,7 @@ func (b *CheckBoard) getMemoryArea() int {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -648,7 +648,7 @@ func (b *CheckBoard) getMemoryArea() int {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -705,7 +705,7 @@ func (b *CheckBoard) getMemoryArea() int {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -856,7 +856,7 @@ func (k *Kernel) searchSpaceRen(here Point) {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -983,7 +983,7 @@ Output > Log > JSON:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
 👉 	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1101,7 +1101,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
 👉 	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1200,7 +1200,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1328,7 +1328,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1375,7 +1375,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1475,7 +1475,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
 👉 	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 ren.go
  	│	└── 📄 stone.go
     ├── 📄 .gitignore
@@ -1639,7 +1639,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
 👉	│	├── 📄 record_item.go
 	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -1686,7 +1686,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 record_item.go
 👉	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -1741,7 +1741,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
 👉 	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go
@@ -1864,7 +1864,7 @@ Output > Console:
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
- 	│	├── 📄 point.go
+ 	│	├── 📄 o12o__10o1o0_point.go
  	│	├── 📄 record_item.go
  	│	├── 📄 record.go
  	│	├── 📄 ren.go

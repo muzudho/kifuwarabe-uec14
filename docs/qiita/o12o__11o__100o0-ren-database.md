@@ -78,7 +78,7 @@ Removed
 	│	├── 📄 go.mod
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 ren_db_item.go
 👉	│	├── 📄 ren_db.go
  	│	└── 📄 stone.go
@@ -250,7 +250,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 ren_db_item.go
 	│	├── 📄 ren_db.go
  	│	└── 📄 stone.go
@@ -295,7 +295,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 ren_db_item.go
 	│	├── 📄 ren_db.go
  	│	└── 📄 stone.go
@@ -369,7 +369,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 👉 	│	├── 📄 kernel_facade.go
  	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 ren_db_item.go
 	│	├── 📄 ren_db.go
  	│	└── 📄 stone.go
@@ -480,7 +480,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 	│	├── 📄 go.mod
 👉 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
-	│	├── 📄 point.go
+	│	├── 📄 o12o__10o1o0_point.go
 	│	├── 📄 ren_db_item.go
 	│	├── 📄 ren_db.go
  	│	└── 📄 stone.go
