@@ -278,7 +278,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 
 	// * 以下を追加
 	// RenDb - [O12o__11o__10o3o0] 連データベース
-	k.renDb = NewRenDb(k.Board.GetWidth(), k.Board.GetHeight())
+	k.renDb = NewRenDb(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
 
 //	return k
 // }
@@ -328,7 +328,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 		var path = tokens[1]
 
 		var convertLocation = func(location Point) string {
-			return k.Board.GetCodeFromPoint(location)
+			return k.Board.coordinate.GetGtpMoveFromPoint(location)
 		}
 
 		var onError = func(err error) bool {
@@ -441,7 +441,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 
 			var numbers = []Point{}
 			for _, code := range codes {
-				var location = k.Board.GetPointFromCode(code)
+				var location = k.Board.coordinate.GetPointFromGtpMove(code)
 				numbers = append(numbers, location)
 			}
 
@@ -456,7 +456,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 
 			var numbers = []Point{}
 			for _, code := range codes {
-				var location = k.Board.GetPointFromCode(code)
+				var location = k.Board.coordinate.GetPointFromGtpMove(code)
 				numbers = append(numbers, location)
 			}
 
