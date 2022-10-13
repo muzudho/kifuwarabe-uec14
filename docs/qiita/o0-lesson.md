@@ -137,11 +137,12 @@
 
 ```go
 // ...略...
+
 // FindAllRens - [O23o_2o1o0] 盤上の全ての連を見つけます
 // * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.GetWidth(), k.Board.GetHeight())
+	k.CheckBoard.Init(k.Board.coordinate.GetBoardWidth(), k.Board.coordinate.GetBoardHeight())
 
 	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
 
@@ -154,6 +155,7 @@ func (k *Kernel) FindAllRens() {
 	// 盤上の枠の内側をスキャン。筋、段の順
 	k.Board.ForeachPayloadLocationOrderByYx(setLocation)
 }
+
 // ...略...
 ```
 
