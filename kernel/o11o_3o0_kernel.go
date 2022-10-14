@@ -41,7 +41,7 @@ func NewKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	k.Board = NewBoard(gameRule, boardWidht, boardHeight)
 
 	// [O22o2o3o0]
-	k.CheckBoard = NewCheckBoard()
+	k.CheckBoard = NewCheckBoard(k.Board.coordinate)
 
 	// [O12o__11o_2o0] 棋譜の初期化
 	k.Record = *NewRecord(maxMoves, playFirst)

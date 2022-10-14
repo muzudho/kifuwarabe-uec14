@@ -100,7 +100,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 // * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.coordinate.GetWidth(), k.Board.coordinate.GetHeight())
+	k.CheckBoard.Init(k.Board.coordinate)
 
 	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
 

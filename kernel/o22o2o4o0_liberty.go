@@ -15,7 +15,7 @@ package kernel
 // - bool is found
 func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.coordinate.GetWidth(), k.Board.coordinate.GetHeight())
+	k.CheckBoard.Init(k.Board.coordinate)
 	return k.findRen(arbitraryPoint)
 }
 
