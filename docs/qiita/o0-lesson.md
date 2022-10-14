@@ -20,6 +20,7 @@
 📖 [Step [O15o__14o0] 初期盤面を設定する](https://qiita.com/muzudho1/items/0cc500bc18b36bb7cbd2)  
 📖 [Step [O15o_1o0] 座標の定義](https://qiita.com/muzudho1/items/b443433b89dfae8a8098)  
 📖 [Step [O19o_1o0] 石を打つ](https://qiita.com/muzudho1/items/99a3bad83d0f7d2887a6)  
+📖 [Step [O22o7o0] コウの禁止](https://qiita.com/muzudho1/items/a98a287015beee4601c9)  
 
 # Step [O23o_1o0] データファイル作成 - data/board4.txt ファイル
 
