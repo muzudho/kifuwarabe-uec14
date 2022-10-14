@@ -53,8 +53,9 @@
 .    `, filesLabel))
 
 			var rowNumber = 1
-			var setStone = func(s Stone) {
-				sb.WriteString(fmt.Sprintf("%v", s))
+			var setPoint = func(point Point) {
+				var stone = k.Board.cells[point]
+				sb.WriteString(fmt.Sprintf("%v", stone))
 			}
 			var doNewline = func() {
 				var rankLabel string
@@ -67,7 +68,7 @@
 				sb.WriteString(fmt.Sprintf("\n. %2s ", rankLabel))
 				rowNumber++
 			}
-			k.Board.ForeachLikeText(setStone, doNewline)
+			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			sb.WriteString("\n. '''\n")
 			logg.C.Info(sb.String())
 		}
@@ -75,13 +76,14 @@
 		{
 			var sb strings.Builder
 
-			var setStone = func(s Stone) {
-				sb.WriteString(fmt.Sprintf("%v", s))
+			var setPoint = func(point Point) {
+				var stone = k.Board.cells[point]
+				sb.WriteString(fmt.Sprintf("%v", stone))
 			}
 			var doNewline = func() {
 				// pass
 			}
-			k.Board.ForeachLikeText(setStone, doNewline)
+			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			logg.J.Infow("output", "board", sb.String())
 		}
 		return true
