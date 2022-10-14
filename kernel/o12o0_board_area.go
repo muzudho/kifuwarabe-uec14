@@ -46,20 +46,6 @@ func (b *Board) Init(width int, height int) {
 	}
 }
 
-// ForeachLikeText - 枠を含めた各セルの石
-func (b *Board) ForeachLikeText(setPoint func(Point), doNewline func()) {
-	for y := 0; y < b.coordinate.memoryHeight; y++ {
-		if y != 0 {
-			doNewline()
-		}
-
-		for x := 0; x < b.coordinate.memoryWidth; x++ {
-			var i = b.coordinate.GetPointFromXy(x, y)
-			setPoint(i)
-		}
-	}
-}
-
 // ForeachPayloadLocation - 枠や改行を含めない各セルの番地
 func (b *Board) ForeachPayloadLocation(setLocation func(Point)) {
 	var height = b.coordinate.memoryHeight - 1

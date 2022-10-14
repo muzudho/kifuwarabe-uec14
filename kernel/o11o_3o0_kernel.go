@@ -107,7 +107,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 				sb.WriteString(fmt.Sprintf("\n. %2s ", rankLabel))
 				rowNumber++
 			}
-			k.Board.ForeachLikeText(setPoint, doNewline)
+			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			sb.WriteString("\n. '''\n")
 			logg.C.Info(sb.String())
 		}
@@ -122,7 +122,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			var doNewline = func() {
 				// pass
 			}
-			k.Board.ForeachLikeText(setPoint, doNewline)
+			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			logg.J.Infow("output", "board", sb.String())
 		}
 		return true

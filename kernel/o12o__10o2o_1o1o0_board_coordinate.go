@@ -207,4 +207,18 @@ func GetRankFromCode(code string) string {
 	return code[1:2]
 }
 
+// ForeachLikeText - 枠を含めた各セルの石
+func (bc *BoardCoordinate) ForeachLikeText(setPoint func(Point), doNewline func()) {
+	for y := 0; y < bc.memoryHeight; y++ {
+		if y != 0 {
+			doNewline()
+		}
+
+		for x := 0; x < bc.memoryWidth; x++ {
+			var i = bc.GetPointFromXy(x, y)
+			setPoint(i)
+		}
+	}
+}
+
 // EOF [O12o__10o2o_1o1o0]
