@@ -102,29 +102,19 @@ func (cb *CheckBoard) Init(newBoardCoordinate BoardCoordinate) {
 	}
 }
 
-// CheckStone - 石をチェックした
-func (cb *CheckBoard) CheckStone(p Point) {
-	cb.cells[p] |= Mark_BitStone
+// Overwrite - 上書き
+func (cb *CheckBoard) Overwrite(point Point, mark Mark) {
+	cb.cells[point] |= mark
 }
 
-// IsChecked - 石はチェックされているか？
-func (cb *CheckBoard) IsStoneChecked(p Point) bool {
-	return cb.cells[p]&Mark_BitStone == Mark_BitStone
+// Erase - 消す
+func (cb *CheckBoard) Erase(point Point, mark Mark) {
+	cb.cells[point] &= ^mark // ^ はビット反転
 }
 
-// CheckLiberty - 呼吸点をチェックした
-func (cb *CheckBoard) CheckLiberty(p Point) {
-	cb.cells[p] |= Mark_BitLiberty
-}
-
-// UncheckLiberty - 呼吸点のチェックを外した
-func (cb *CheckBoard) UncheckLiberty(p Point) {
-	cb.cells[p] &= ^Mark_BitLiberty // ^ はビット反転
-}
-
-// IsLibertyChecked - 呼吸点はチェックされているか？
-func (cb *CheckBoard) IsLibertyChecked(p Point) bool {
-	return cb.cells[p]&Mark_BitLiberty == Mark_BitLiberty
+// Contains - 含む
+func (cb *CheckBoard) Contains(point Point, mark Mark) bool {
+	return cb.cells[point]&mark == mark
 }
 
 // EOF [O22o2o2o0]
@@ -250,7 +240,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 // - bool is found
 func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 	// 探索済みならスキップ
-	if k.CheckBoard.IsStoneChecked(arbitraryPoint) {
+	if k.CheckBoard.Contains(arbitraryPoint, Mark_BitStone) {
 		return nil, false
 	}
 
@@ -264,7 +254,7 @@ func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 
 		// チェックボードの呼吸点のチェックをクリアー
 		for _, p := range k.tempRen.libertyLocations {
-			k.CheckBoard.UncheckLiberty(p)
+			k.CheckBoard.Erase(p, Mark_BitLiberty)
 		}
 	}
 
@@ -274,7 +264,7 @@ func (k *Kernel) findRen(arbitraryPoint Point) (*Ren, bool) {
 // 石の連の探索
 // - 再帰関数
 func (k *Kernel) searchStoneRen(here Point) {
-	k.CheckBoard.CheckStone(here)
+	k.CheckBoard.Overwrite(here, Mark_BitStone)
 	k.tempRen.AddLocation(here)
 
 	var setAdjacent = func(dir int, p Point) {
@@ -282,8 +272,8 @@ func (k *Kernel) searchStoneRen(here Point) {
 		var stone = k.Board.GetStoneAt(p)
 		switch stone {
 		case Space: // 空点
-			if !k.CheckBoard.IsLibertyChecked(p) { // まだチェックしていない呼吸点なら
-				k.CheckBoard.CheckLiberty(p)
+			if !k.CheckBoard.Contains(p, Mark_BitLiberty) { // まだチェックしていない呼吸点なら
+				k.CheckBoard.Overwrite(p, Mark_BitLiberty)
 				k.tempRen.libertyLocations = append(k.tempRen.libertyLocations, p) // 呼吸点を追加
 			}
 
@@ -294,7 +284,7 @@ func (k *Kernel) searchStoneRen(here Point) {
 		}
 
 		// 探索済みの石ならスキップ
-		if k.CheckBoard.IsStoneChecked(p) {
+		if k.CheckBoard.Contains(p, Mark_BitStone) {
 			return
 		}
 
@@ -314,12 +304,12 @@ func (k *Kernel) searchStoneRen(here Point) {
 // 空点の連の探索
 // - 再帰関数
 func (k *Kernel) searchSpaceRen(here Point) {
-	k.CheckBoard.CheckStone(here)
+	k.CheckBoard.Overwrite(here, Mark_BitStone)
 	k.tempRen.AddLocation(here)
 
 	var setAdjacent = func(dir int, p Point) {
 		// 探索済みならスキップ
-		if k.CheckBoard.IsStoneChecked(p) {
+		if k.CheckBoard.Contains(p, Mark_BitStone) {
 			return
 		}
 
