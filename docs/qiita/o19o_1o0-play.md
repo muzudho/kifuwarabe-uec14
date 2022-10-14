@@ -506,6 +506,14 @@ Moved to `[O11o_4o2o1o0]`
 
 package kernel
 
+// Mark - 目印
+type Mark uint8
+
+const (
+	Mark_BitStone   Mark = 0b00000001
+	Mark_BitLiberty Mark = 0b00000010
+)
+
 // CheckBoard - チェック盤
 type CheckBoard struct {
 	// 枠付きの横幅
@@ -517,7 +525,7 @@ type CheckBoard struct {
 	// 交点
 	//
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
-	cells []uint8
+	cells []Mark
 }
 
 // NewCheckBoard - 新規作成
@@ -546,32 +554,32 @@ func (b *CheckBoard) Init(width int, height int) {
 func (b *CheckBoard) Resize(width int, height int) {
 	b.memoryWidth = width + 2
 	b.memoryHeight = height + 2
-	b.cells = make([]uint8, b.getMemoryArea())
+	b.cells = make([]Mark, b.getMemoryArea())
 }
 
 // CheckStone - 石をチェックした
 func (b *CheckBoard) CheckStone(p Point) {
-	b.cells[p] |= 0b00000001
+	b.cells[p] |= Mark_BitStone
 }
 
 // IsChecked - 石はチェックされているか？
 func (b *CheckBoard) IsStoneChecked(p Point) bool {
-	return b.cells[p]&0b00000001 == 0b00000001
+	return b.cells[p]&Mark_BitStone == Mark_BitStone
 }
 
 // CheckLiberty - 呼吸点をチェックした
 func (b *CheckBoard) CheckLiberty(p Point) {
-	b.cells[p] |= 0b00000010
+	b.cells[p] |= Mark_BitLiberty
 }
 
 // UncheckLiberty - 呼吸点のチェックを外した
 func (b *CheckBoard) UncheckLiberty(p Point) {
-	b.cells[p] &= 0b11111101
+	b.cells[p] &= ^Mark_BitLiberty // ^ はビット反転
 }
 
 // IsLibertyChecked - 呼吸点はチェックされているか？
 func (b *CheckBoard) IsLibertyChecked(p Point) bool {
-	return b.cells[p]&0b00000010 == 0b00000010
+	return b.cells[p]&Mark_BitLiberty == Mark_BitLiberty
 }
 
 // 枠付き盤の面積
