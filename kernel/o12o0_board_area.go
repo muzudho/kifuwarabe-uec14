@@ -47,7 +47,7 @@ func (b *Board) Init(width int, height int) {
 }
 
 // ForeachLikeText - 枠を含めた各セルの石
-func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
+func (b *Board) ForeachLikeText(setPoint func(Point), doNewline func()) {
 	for y := 0; y < b.coordinate.memoryHeight; y++ {
 		if y != 0 {
 			doNewline()
@@ -55,8 +55,7 @@ func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
 
 		for x := 0; x < b.coordinate.memoryWidth; x++ {
 			var i = b.coordinate.GetPointFromXy(x, y)
-			var stone = b.cells[i]
-			setStone(stone)
+			setPoint(i)
 		}
 	}
 }
