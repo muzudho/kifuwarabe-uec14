@@ -32,8 +32,9 @@ type Kernel struct {
 	renDb *RenDb
 }
 
-// NewKernel - カーネルの新規作成
-func NewKernel(gameRule GameRule, boardWidht int, boardHeight int,
+// NewDirtyKernel - カーネルの新規作成
+// - 一部のメンバーは、初期化されていないので、別途初期化処理が要る
+func NewDirtyKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	// [O12o__11o_2o0] 棋譜の初期化
 	maxMoves int, playFirst Stone) *Kernel {
 
@@ -41,7 +42,7 @@ func NewKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	k.Board = NewBoard(gameRule, boardWidht, boardHeight)
 
 	// [O22o2o3o0]
-	k.CheckBoard = NewCheckBoard(k.Board.coordinate)
+	k.CheckBoard = NewDirtyCheckBoard()
 
 	// [O12o__11o_2o0] 棋譜の初期化
 	k.Record = *NewRecord(maxMoves, playFirst)
