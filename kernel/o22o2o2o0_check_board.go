@@ -15,7 +15,7 @@ type CheckBoard struct {
 	// 盤座標
 	coordinate BoardCoordinate
 
-	// 交点
+	// 長さが可変な盤
 	//
 	// * 英語で交点は node かも知れないが、表計算でよく使われる cell の方を使う
 	cells []Mark
@@ -47,29 +47,19 @@ func (cb *CheckBoard) Init(newBoardCoordinate BoardCoordinate) {
 	}
 }
 
-// CheckStone - 石をチェックした
-func (cb *CheckBoard) CheckStone(p Point) {
-	cb.cells[p] |= Mark_BitStone
+// Overwrite - 上書き
+func (cb *CheckBoard) Overwrite(point Point, mark Mark) {
+	cb.cells[point] |= mark
 }
 
-// IsChecked - 石はチェックされているか？
-func (cb *CheckBoard) IsStoneChecked(p Point) bool {
-	return cb.cells[p]&Mark_BitStone == Mark_BitStone
+// Erase - 消す
+func (cb *CheckBoard) Erase(point Point, mark Mark) {
+	cb.cells[point] &= ^mark // ^ はビット反転
 }
 
-// CheckLiberty - 呼吸点をチェックした
-func (cb *CheckBoard) CheckLiberty(p Point) {
-	cb.cells[p] |= Mark_BitLiberty
-}
-
-// UncheckLiberty - 呼吸点のチェックを外した
-func (cb *CheckBoard) UncheckLiberty(p Point) {
-	cb.cells[p] &= ^Mark_BitLiberty // ^ はビット反転
-}
-
-// IsLibertyChecked - 呼吸点はチェックされているか？
-func (cb *CheckBoard) IsLibertyChecked(p Point) bool {
-	return cb.cells[p]&Mark_BitLiberty == Mark_BitLiberty
+// Contains - 含む
+func (cb *CheckBoard) Contains(point Point, mark Mark) bool {
+	return cb.cells[point]&mark == mark
 }
 
 // EOF [O22o2o2o0]
