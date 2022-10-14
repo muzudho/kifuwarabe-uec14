@@ -191,8 +191,8 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 // }
 
-// NewKernel - カーネルの新規作成
-// func NewKernel(boardWidht int, boardHeight int,
+// NewDirtyKernel - カーネルの新規作成
+// func NewDirtyKernel(boardWidht int, boardHeight int,
 	// [O12o__11o_2o0] ,棋譜の初期化
 	maxMoves int, playFirst Stone//) *Kernel {
 	// ...略...
@@ -230,7 +230,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 ```go
 		// [O11o_3o0]
 		//var gameRule = kernel.NewGameRule(kernel.KomiFloat(engineConfig.GetKomi()), kernel.PositionNumberInt(engineConfig.GetMaxMovesNum()))
-		//var kernel1 = kernel.NewKernel(*gameRule, engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
+		//var kernel1 = kernel.NewDirtyKernel(*gameRule, engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
 			// [O12o__11o_4o0] 棋譜の初期化
 			engineConfig.GetMaxMovesNum(),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
