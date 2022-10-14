@@ -221,4 +221,18 @@ func (bc *BoardCoordinate) ForeachLikeText(setPoint func(Point), doNewline func(
 	}
 }
 
+// GetPointFromGtpMove - "A7" や "J13" といった符号を Point へ変換します
+//
+// * `gtp_move` - 座標の符号。 Example: "A7" や "J13"
+func (bc *BoardCoordinate) GetPointFromGtpMove(gtp_move string) Point {
+	return bc.GetPointFromXy(
+		GetXFromFile(GetFileFromCode(gtp_move))+oneSideWallThickness,
+		GetYFromRank(GetRankFromCode(gtp_move))+oneSideWallThickness)
+}
+
+// GetGtpMoveFromPoint - `GetPointFromGtpMove` の逆関数
+func (bc *BoardCoordinate) GetGtpMoveFromPoint(point Point) string {
+	return getCodeFromPointOnBoard(bc.memoryWidth, point)
+}
+
 // EOF [O12o__10o2o_1o1o0]
