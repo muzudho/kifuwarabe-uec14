@@ -273,7 +273,7 @@ func (h *RenDbDocHeader) GetBoardMemoryHeight() int {
 // }
 // ...略...
 
-// func NewKernel(boardWidht int, boardHeight int,
+// func NewDirtyKernel(boardWidht int, boardHeight int,
 	// ...略...
 
 	// * 以下を追加
