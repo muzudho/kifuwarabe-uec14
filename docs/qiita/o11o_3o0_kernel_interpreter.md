@@ -37,8 +37,9 @@ type Kernel struct {
 	Board *Board
 }
 
-// NewKernel - カーネルの新規作成
-func NewKernel(gameRule GameRule, boardWidht int, boardHeight int) *Kernel {
+// NewDirtyKernel - カーネルの新規作成
+// - 一部のメンバーは、初期化されていないので、別途初期化処理が要る
+func NewDirtyKernel(gameRule GameRule, boardWidht int, boardHeight int) *Kernel {
 	var k = new(Kernel)
 	k.Board = NewBoard(gameRule, boardWidht, boardHeight)
 	return k
@@ -110,7 +111,7 @@ import (
 
 		// [O11o_3o0]
 		var gameRule = kernel.NewGameRule(kernel.KomiFloat(engineConfig.GetKomi()), kernel.PositionNumberInt(engineConfig.GetMaxMovesNum()))
-		var kernel1 = kernel.NewKernel(*gameRule, engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
+		var kernel1 = kernel.NewDirtyKernel(*gameRule, engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 		// 設定ファイルの内容をカーネルへ反映
 		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 
