@@ -30,7 +30,7 @@ func NewBoard(gameRule GameRule, boardWidht int, boardHeight int) *Board {
 		memoryBoardWidth,
 		memoryBoardHeight,
 		// ４方向（東、北、西、南）の番地への相対インデックス
-		[4]Point{1, Point(-b.coordinate.GetMemoryWidth()), -1, Point(b.coordinate.GetMemoryWidth())}}
+		[4]Point{1, Point(-memoryBoardWidth), -1, Point(memoryBoardWidth)}}
 
 	// 盤のサイズ指定と、盤面の初期化
 	b.resize(boardWidht, boardHeight)
