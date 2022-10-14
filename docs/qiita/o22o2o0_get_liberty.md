@@ -61,8 +61,9 @@ package kernel
 type Mark uint8
 
 const (
-	Mark_BitStone   Mark = 0b00000001
-	Mark_BitLiberty Mark = 0b00000010
+	Mark_BitAllZeros Mark = 0b00000000
+	Mark_BitStone    Mark = 0b00000001
+	Mark_BitLiberty  Mark = 0b00000010
 )
 
 // CheckBoard - チェック盤
@@ -76,18 +77,18 @@ type CheckBoard struct {
 	cells []Mark
 }
 
-// NewCheckBoard - 新規作成
+// NewDirtyCheckBoard - 新規作成しますが、初期化されていない
 //
 // * このメソッドを呼び出した後に Init 関数を呼び出してほしい
-func NewCheckBoard(coordinate BoardCoordinate) *CheckBoard {
+func NewDirtyCheckBoard() *CheckBoard {
 	var cb = new(CheckBoard)
 
-	cb.coordinate = coordinate
+	cb.coordinate = BoardCoordinate{}
 
 	return cb
 }
 
-// Init - 盤面初期化
+// Init - 初期化
 func (cb *CheckBoard) Init(newBoardCoordinate BoardCoordinate) {
 	// 盤面のサイズが異なるなら、盤面を作り直す
 	if cb.coordinate.memoryWidth != newBoardCoordinate.memoryWidth || cb.coordinate.memoryHeight != newBoardCoordinate.memoryHeight {
@@ -97,8 +98,8 @@ func (cb *CheckBoard) Init(newBoardCoordinate BoardCoordinate) {
 	}
 
 	// 盤面のクリアー
-	for i := 0; i < len(cb.cells); i++ {
-		cb.cells[i] = 0
+	for p := Point(0); p < Point(len(cb.cells)); p++ {
+		cb.cells[p] = Mark_BitAllZeros
 	}
 }
 
@@ -168,13 +169,13 @@ Removed
 	tempRen *Ren
 //}
 
-// func NewKernel(boardWidht int, boardHeight int) *Kernel {
+// func NewDirtyKernel(boardWidht int, boardHeight int) *Kernel {
 //	var k = new(Kernel)
 //	k.Board = NewBoard(boardWidht, boardHeight)
 
 	// * 以下を追加
 	// [O22o2o3o0]
-	k.CheckBoard = NewCheckBoard(k.Board.coordinate)
+	k.CheckBoard = NewDirtyCheckBoard()
 
 //	return k
 // }
