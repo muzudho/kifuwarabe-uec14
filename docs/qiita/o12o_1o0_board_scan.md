@@ -76,40 +76,25 @@ func (b *Board) Init(width int, height int) {
 	}
 }
 
-// ForeachLikeText - 枠を含めた各セルの石
-func (b *Board) ForeachLikeText(setStone func(Stone), doNewline func()) {
-	for y := 0; y < b.coordinate.memoryHeight; y++ {
-		if y != 0 {
-			doNewline()
-		}
-
-		for x := 0; x < b.coordinate.memoryWidth; x++ {
-			var i = b.coordinate.GetPointFromXy(x, y)
-			var stone = b.cells[i]
-			setStone(stone)
-		}
-	}
-}
-
 // ForeachPayloadLocation - 枠や改行を含めない各セルの番地
-func (b *Board) ForeachPayloadLocation(setLocation func(Point)) {
-	var height = b.coordinate.memoryHeight - 1
-	var width = b.coordinate.memoryWidth - 1
+func (bc *BoardCoordinate) ForeachPayloadLocation(setLocation func(Point)) {
+	var height = bc.memoryHeight - 1
+	var width = bc.memoryWidth - 1
 	for y := 1; y < height; y++ {
 		for x := 1; x < width; x++ {
-			var i = b.coordinate.GetPointFromXy(x, y)
+			var i = bc.GetPointFromXy(x, y)
 			setLocation(i)
 		}
 	}
 }
 
-// ForeachPayloadLocation - 枠や改行を含めない各セルの番地。筋、段の順
-func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
-	var height = b.coordinate.memoryHeight - 1
-	var width = b.coordinate.memoryWidth - 1
+// ForeachPayloadLocationOrderByYx - 枠や改行を含めない各セルの番地。筋、段の順
+func (bc *BoardCoordinate) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
+	var height = bc.memoryHeight - 1
+	var width = bc.memoryWidth - 1
 	for x := 1; x < width; x++ {
 		for y := 1; y < height; y++ {
-			var i = b.coordinate.GetPointFromXy(x, y)
+			var i = bc.GetPointFromXy(x, y)
 			setLocation(i)
 		}
 	}
