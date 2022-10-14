@@ -20,6 +20,7 @@
 📖 [Step [O15o__14o0] 初期盤面を設定する](https://qiita.com/muzudho1/items/0cc500bc18b36bb7cbd2)  
 📖 [Step [O15o_1o0] 座標の定義](https://qiita.com/muzudho1/items/b443433b89dfae8a8098)  
 📖 [Step [O19o_1o0] 石を打つ](https://qiita.com/muzudho1/items/99a3bad83d0f7d2887a6)  
+📖 [Step [O22o2o0] 連の認識と、呼吸点のカウント](https://qiita.com/muzudho1/items/11812095bd95935e7e49)  
 📖 [Step [O22o3o0] 相手の眼に石を置くことの禁止](https://qiita.com/muzudho1/items/507dccd2b3571971b920)  
 📖 [Step [O22o4o0] 自分の眼に石を置くことの任意の禁止](https://qiita.com/muzudho1/items/c60ae6253b1721bc2e17)  
 📖 [Step [O22o5o0] 任意の連の打ち上げ](https://qiita.com/muzudho1/items/f3615ffc11ed2f1c61a0)  
