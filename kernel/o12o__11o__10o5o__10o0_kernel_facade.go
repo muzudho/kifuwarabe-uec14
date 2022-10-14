@@ -111,7 +111,7 @@ func (k *Kernel) FindAllRens() {
 		}
 	}
 	// 盤上の枠の内側をスキャン。筋、段の順
-	k.Board.ForeachPayloadLocationOrderByYx(setLocation)
+	k.Board.GetCoordinate().ForeachPayloadLocationOrderByYx(setLocation)
 }
 
 // EOF [O12o__11o__10o5o__10o0]

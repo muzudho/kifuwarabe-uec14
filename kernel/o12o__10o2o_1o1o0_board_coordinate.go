@@ -254,4 +254,28 @@ func (bc *BoardCoordinate) GetGtpMoveFromPoint(point Point) string {
 	return getCodeFromPointOnBoard(bc.memoryWidth, point)
 }
 
+// ForeachPayloadLocation - 枠や改行を含めない各セルの番地
+func (bc *BoardCoordinate) ForeachPayloadLocation(setLocation func(Point)) {
+	var height = bc.memoryHeight - 1
+	var width = bc.memoryWidth - 1
+	for y := 1; y < height; y++ {
+		for x := 1; x < width; x++ {
+			var i = bc.GetPointFromXy(x, y)
+			setLocation(i)
+		}
+	}
+}
+
+// ForeachPayloadLocationOrderByYx - 枠や改行を含めない各セルの番地。筋、段の順
+func (bc *BoardCoordinate) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
+	var height = bc.memoryHeight - 1
+	var width = bc.memoryWidth - 1
+	for x := 1; x < width; x++ {
+		for y := 1; y < height; y++ {
+			var i = bc.GetPointFromXy(x, y)
+			setLocation(i)
+		}
+	}
+}
+
 // EOF [O12o__10o2o_1o1o0]

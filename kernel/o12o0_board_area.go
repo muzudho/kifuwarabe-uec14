@@ -46,30 +46,6 @@ func (b *Board) Init(width int, height int) {
 	}
 }
 
-// ForeachPayloadLocation - 枠や改行を含めない各セルの番地
-func (b *Board) ForeachPayloadLocation(setLocation func(Point)) {
-	var height = b.coordinate.memoryHeight - 1
-	var width = b.coordinate.memoryWidth - 1
-	for y := 1; y < height; y++ {
-		for x := 1; x < width; x++ {
-			var i = b.coordinate.GetPointFromXy(x, y)
-			setLocation(i)
-		}
-	}
-}
-
-// ForeachPayloadLocation - 枠や改行を含めない各セルの番地。筋、段の順
-func (b *Board) ForeachPayloadLocationOrderByYx(setLocation func(Point)) {
-	var height = b.coordinate.memoryHeight - 1
-	var width = b.coordinate.memoryWidth - 1
-	for x := 1; x < width; x++ {
-		for y := 1; y < height; y++ {
-			var i = b.coordinate.GetPointFromXy(x, y)
-			setLocation(i)
-		}
-	}
-}
-
 // ForeachNeumannNeighborhood - [O13o__10o0] 隣接する４方向の定義
 func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Point)) {
 	// 東、北、西、南
