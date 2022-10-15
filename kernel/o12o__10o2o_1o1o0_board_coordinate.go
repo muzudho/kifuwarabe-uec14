@@ -254,14 +254,16 @@ func (bc *BoardCoordinate) GetGtpMoveFromPoint(point Point) string {
 	return getCodeFromPointOnBoard(bc.memoryWidth, point)
 }
 
-// ForeachPayloadLocation - 枠や改行を含めない各セルの番地
-func (bc *BoardCoordinate) ForeachPayloadLocation(setLocation func(Point)) {
-	var height = bc.memoryHeight - 1
-	var width = bc.memoryWidth - 1
-	for y := 1; y < height; y++ {
-		for x := 1; x < width; x++ {
-			var i = bc.GetPointFromXy(x, y)
-			setLocation(i)
+// ForeachCellWithoutWall - 枠や改行を含めない各セルの番地
+func (bc *BoardCoordinate) ForeachCellWithoutWall(setPoint func(Point)) {
+	// - x,y は枠無しの盤での0から始まる座標
+	// - point は枠無しの盤を配列にしたもので0から始まる配列の添え字
+	var heightNth = bc.memoryHeight - 1
+	var widthNth = bc.memoryWidth - 1
+	for y := 1; y < heightNth; y++ {
+		for x := 1; x < widthNth; x++ {
+			var point = bc.GetPointFromXy(x, y)
+			setPoint(point)
 		}
 	}
 }
