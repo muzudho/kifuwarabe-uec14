@@ -88,7 +88,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	onMasonry func() bool) bool {
 
 	// [O22o1o2o0]
-	if k.IsMasonryError(stoneA, pointB) {
+	if k.Board.IsMasonry(pointB) {
 		return onMasonry()
 	}
 
