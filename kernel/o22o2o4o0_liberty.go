@@ -83,7 +83,7 @@ func (ls *LibertySearchAlgorithm) searchStoneRenRecursive(here Point) {
 
 	ls.tempRen.AddLocation(here)
 
-	var setAdjacent = func(dir int, p Point) {
+	var eachAdjacent = func(dir int, p Point) {
 		// 呼吸点と枠のチェック
 		var stone = ls.board.GetStoneAt(p)
 		switch stone {
@@ -114,7 +114,7 @@ func (ls *LibertySearchAlgorithm) searchStoneRenRecursive(here Point) {
 	}
 
 	// 隣接する４方向
-	ls.board.ForeachNeumannNeighborhood(here, setAdjacent)
+	ls.board.ForeachNeumannNeighborhood(here, eachAdjacent)
 }
 
 // 空点の連の探索
@@ -123,7 +123,7 @@ func (ls *LibertySearchAlgorithm) searchSpaceRen(here Point) {
 	ls.checkBoard.Overwrite(here, Mark_BitStone)
 	ls.tempRen.AddLocation(here)
 
-	var setAdjacent = func(dir int, p Point) {
+	var eachAdjacent = func(dir int, p Point) {
 		// 探索済みならスキップ
 		if ls.checkBoard.Contains(p, Mark_BitStone) {
 			return
@@ -141,7 +141,7 @@ func (ls *LibertySearchAlgorithm) searchSpaceRen(here Point) {
 	}
 
 	// 隣接する４方向
-	ls.board.ForeachNeumannNeighborhood(here, setAdjacent)
+	ls.board.ForeachNeumannNeighborhood(here, eachAdjacent)
 }
 
 // EOF [O22o2o4o0]
