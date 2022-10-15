@@ -89,7 +89,7 @@ func main() {
 			kernel.PositionNumberInt(engineConfig.GetMaxPositionNumber()),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn))
 		// 設定ファイルの内容をカーネルへ反映
-		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
+		kernel1.Position.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())
 
 		// [O11o_1o0] コンソール等からの文字列入力
 		for virtualIo.ScannerScan() {

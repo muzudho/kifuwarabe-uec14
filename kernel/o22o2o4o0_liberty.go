@@ -15,9 +15,9 @@ package kernel
 // - bool is found
 func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.coordinate)
+	k.Position.CheckBoard.Init(k.Position.Board.coordinate)
 
-	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Board, k.CheckBoard, k.tempRen)
+	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.tempRen)
 
 	return libertySearchAlgorithm.findRen(arbitraryPoint)
 }

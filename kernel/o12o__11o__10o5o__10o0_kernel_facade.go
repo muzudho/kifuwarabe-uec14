@@ -59,7 +59,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 
 			var numbers = []Point{}
 			for _, code := range codes {
-				var location = k.Board.coordinate.GetPointFromGtpMove(code)
+				var location = k.Position.Board.coordinate.GetPointFromGtpMove(code)
 				numbers = append(numbers, location)
 			}
 
@@ -74,7 +74,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 
 			var numbers = []Point{}
 			for _, code := range codes {
-				var location = k.Board.coordinate.GetPointFromGtpMove(code)
+				var location = k.Position.Board.coordinate.GetPointFromGtpMove(code)
 				numbers = append(numbers, location)
 			}
 
@@ -89,7 +89,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 func (k *Kernel) RemoveRen(ren *Ren) {
 	// 空点をセット
 	var setLocation = func(i int, location Point) {
-		k.Board.SetStoneAt(location, Stone_Space)
+		k.Position.Board.SetStoneAt(location, Stone_Space)
 	}
 
 	// 場所毎に
@@ -100,13 +100,13 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 // * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.coordinate)
+	k.Position.CheckBoard.Init(k.Position.Board.coordinate)
 
 	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
 
 	var setLocation = func(location Point) {
 
-		var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Board, k.CheckBoard, k.tempRen)
+		var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.tempRen)
 		var ren, isFound = libertySearchAlgorithm.findRen(location)
 
 		if isFound {
@@ -114,7 +114,7 @@ func (k *Kernel) FindAllRens() {
 		}
 	}
 	// 盤上の枠の内側をスキャン。筋、段の順
-	k.Board.GetCoordinate().ForeachPayloadLocationOrderByYx(setLocation)
+	k.Position.Board.GetCoordinate().ForeachPayloadLocationOrderByYx(setLocation)
 }
 
 // EOF [O12o__11o__10o5o__10o0]

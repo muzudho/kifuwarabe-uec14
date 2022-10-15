@@ -13,17 +13,8 @@ const geta = 1 // Japanese wooden clogs. Used to convert bases and ordinals.
 
 // Kernel - カーネル
 type Kernel struct {
-	// Board - 盤
-	Board *Board
-
-	// [O22o2o3o0]
-	// CheckBoard - 呼吸点の探索時に使います
-	CheckBoard *CheckBoard
-	// tempRen - 呼吸点の探索時に使います
-	tempRen *Ren
-
-	// CanNotPutOnMyEye - [O22o4o1o0] 自分の眼に石を置くことはできません
-	CanNotPutOnMyEye bool
+	// Position - 局面
+	Position *Position
 
 	// Record - [O12o__11o_3o0] 棋譜
 	Record Record
@@ -39,16 +30,13 @@ func NewDirtyKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	maxPositionNumber PositionNumberInt, playFirst Stone) *Kernel {
 
 	var k = new(Kernel)
-	k.Board = NewBoard(gameRule, boardWidht, boardHeight)
-
-	// [O22o2o3o0]
-	k.CheckBoard = NewDirtyCheckBoard()
+	k.Position = NewDirtyPosition(gameRule, boardWidht, boardHeight)
 
 	// [O12o__11o_2o0] 棋譜の初期化
-	k.Record = *NewRecord(maxPositionNumber, k.Board.coordinate.GetMemoryArea(), playFirst)
+	k.Record = *NewRecord(maxPositionNumber, k.Position.Board.coordinate.GetMemoryArea(), playFirst)
 
 	// RenDb - [O12o__11o__10o3o0] 連データベース
-	k.renDb = NewRenDb(k.Board.coordinate.GetWidth(), k.Board.coordinate.GetHeight())
+	k.renDb = NewRenDb(k.Position.Board.coordinate.GetWidth(), k.Position.Board.coordinate.GetHeight())
 
 	return k
 }
@@ -82,8 +70,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			// 25行まで対応
 			var rankSimbols = strings.Split("  , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25", ",")
 
-			var filesMax = int(math.Min(25, float64(k.Board.coordinate.GetWidth())))
-			var rowsMax = int(math.Min(25, float64(k.Board.coordinate.GetHeight())))
+			var filesMax = int(math.Min(25, float64(k.Position.Board.coordinate.GetWidth())))
+			var rowsMax = int(math.Min(25, float64(k.Position.Board.coordinate.GetHeight())))
 			var filesLabel = fileSimbols[:filesMax]
 
 			var sb strings.Builder
@@ -94,7 +82,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 			var rowNumber = 1
 			var setPoint = func(point Point) {
-				var stone = k.Board.cells[point]
+				var stone = k.Position.Board.cells[point]
 				sb.WriteString(fmt.Sprintf("%v", stone))
 			}
 			var doNewline = func() {
@@ -108,7 +96,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 				sb.WriteString(fmt.Sprintf("\n. %2s ", rankLabel))
 				rowNumber++
 			}
-			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
+			k.Position.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			sb.WriteString("\n. '''\n")
 			logg.C.Info(sb.String())
 		}
@@ -117,13 +105,13 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			var sb strings.Builder
 
 			var setPoint = func(point Point) {
-				var stone = k.Board.cells[point]
+				var stone = k.Position.Board.cells[point]
 				sb.WriteString(fmt.Sprintf("%v", stone))
 			}
 			var doNewline = func() {
 				// pass
 			}
-			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
+			k.Position.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			logg.J.Infow("output", "board", sb.String())
 		}
 		return true
@@ -138,7 +126,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			return true
 		}
 
-		k.Board.Init(sideLength, sideLength)
+		k.Position.Board.Init(sideLength, sideLength)
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 
@@ -150,7 +138,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		var method = tokens[1]
 		switch method {
 		case "get":
-			var value = k.CanNotPutOnMyEye
+			var value = k.Position.CanNotPutOnMyEye
 			logg.C.Infof("= %t\n", value)
 			logg.J.Infow("ok", "value", value)
 			return true
@@ -159,10 +147,10 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			var value = tokens[2]
 			switch value {
 			case "true":
-				k.CanNotPutOnMyEye = true
+				k.Position.CanNotPutOnMyEye = true
 				return true
 			case "false":
-				k.CanNotPutOnMyEye = false
+				k.Position.CanNotPutOnMyEye = false
 				return true
 			default:
 				logg.C.Infof("? unexpected method:%s value:%s\n", method, value)
@@ -194,7 +182,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 		var setPoint = func(positionNumber int, item *RecordItem) {
 			var positionNth = positionNumber + geta // 基数を序数に変換
-			var coord = k.Board.coordinate.GetGtpMoveFromPoint(item.placePlay)
+			var coord = k.Position.Board.coordinate.GetGtpMoveFromPoint(item.placePlay)
 			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 
 			// [O22o7o4o0] コウを追加
@@ -202,7 +190,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			if item.ko == Point(0) {
 				koStr = ""
 			} else {
-				koStr = fmt.Sprintf("(%s)", k.Board.coordinate.GetGtpMoveFromPoint(item.ko))
+				koStr = fmt.Sprintf("(%s)", k.Position.Board.coordinate.GetGtpMoveFromPoint(item.ko))
 			}
 			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionNth, coord, koStr))
 		}
@@ -220,7 +208,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "remove_ren": // [O22o5o2o0]
 		// Example: `remove_ren B2`
 		var coord = tokens[1]
-		var point = k.Board.coordinate.GetPointFromGtpMove(coord)
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			k.RemoveRen(ren)
@@ -263,7 +251,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		var path = tokens[1]
 
 		var convertLocation = func(location Point) string {
-			return k.Board.coordinate.GetGtpMoveFromPoint(location)
+			return k.Position.Board.coordinate.GetGtpMoveFromPoint(location)
 		}
 
 		var onError = func(err error) bool {
@@ -283,7 +271,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	case "test_coord": // [O12o__10o2o0]
 		// Example: "test_coord A13"
-		var point = k.Board.coordinate.GetPointFromGtpMove(tokens[1])
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(tokens[1])
 		logg.C.Infof("= %d\n", point)
 		logg.J.Infow("output", "point", point)
 		return true
@@ -298,7 +286,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 	case "test_get_liberty": // [O22o2o5o0]
 		// Example: "test_get_liberty B2"
 		var coord = tokens[1]
-		var point = k.Board.coordinate.GetPointFromGtpMove(coord)
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.GetLibertyArea(), ren.adjacentColor)
@@ -312,8 +300,8 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 
 	case "test_get_point_from_code": // [O16o1o0]
 		// Example: "test_get_point_from_code A1"
-		var point = k.Board.coordinate.GetPointFromGtpMove(tokens[1])
-		var code = k.Board.coordinate.GetGtpMoveFromPoint(point)
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(tokens[1])
+		var code = k.Position.Board.coordinate.GetGtpMoveFromPoint(point)
 		logg.C.Infof("= %d %s", point, code)
 		logg.J.Infow("ok", "point", point, "code", code)
 		return true
@@ -333,7 +321,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 			return true
 		}
 
-		var point = k.Board.coordinate.GetPointFromXy(x, y)
+		var point = k.Position.Board.coordinate.GetPointFromXy(x, y)
 		logg.C.Infof("= %d\n", point)
 		logg.J.Infow("output", "point", point)
 		return true
