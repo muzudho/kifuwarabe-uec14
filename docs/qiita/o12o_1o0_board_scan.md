@@ -76,8 +76,8 @@ func (b *Board) Init(width int, height int) {
 	}
 }
 
-// ForeachPayloadLocation - 枠や改行を含めない各セルの番地
-func (bc *BoardCoordinate) ForeachPayloadLocation(setLocation func(Point)) {
+// ForeachCellWithoutWall - 枠や改行を含めない各セルの番地
+func (bc *BoardCoordinate) ForeachCellWithoutWall(setLocation func(Point)) {
 	var height = bc.memoryHeight - 1
 	var width = bc.memoryWidth - 1
 	for y := 1; y < height; y++ {
