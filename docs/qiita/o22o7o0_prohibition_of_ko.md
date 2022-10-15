@@ -98,13 +98,13 @@
 	// [O22o7o1o0] コウの位置
 	ko Point//) {
 
-	// var item = r.items[r.posNum]
+	// var item = r.items[r.positionNumber]
 	// item.placePlay = placePlay
 
 	// [O22o7o1o0] コウの位置
 	item.ko = ko
 
-	// r.posNum++
+	// r.positionNumber++
 // }
 ```
 
