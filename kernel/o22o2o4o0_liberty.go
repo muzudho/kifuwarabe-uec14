@@ -83,7 +83,7 @@ func (ls *LibertySearchAlgorithm) searchStoneRenRecursive(here Point) {
 
 	ls.tempRen.AddLocation(here)
 
-	var eachAdjacent = func(dir int, p Point) {
+	var eachAdjacent = func(dir Cell_4Directions, p Point) {
 		// 呼吸点と枠のチェック
 		var stone = ls.board.GetStoneAt(p)
 		switch stone {
@@ -123,7 +123,7 @@ func (ls *LibertySearchAlgorithm) searchSpaceRen(here Point) {
 	ls.checkBoard.Overwrite(here, Mark_BitStone)
 	ls.tempRen.AddLocation(here)
 
-	var eachAdjacent = func(dir int, p Point) {
+	var eachAdjacent = func(dir Cell_4Directions, p Point) {
 		// 探索済みならスキップ
 		if ls.checkBoard.Contains(p, Mark_BitStone) {
 			return
