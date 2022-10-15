@@ -19,7 +19,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var getDefaultStone = func() (bool, Stone) {
 		logg.C.Infof("? unexpected stone:%s\n", stoneName)
 		logg.J.Infow("error", "stone", stoneName)
-		return false, Space
+		return false, Stone_Space
 	}
 
 	var isOk1, stone = GetStoneFromName(stoneName, getDefaultStone)
@@ -117,7 +117,7 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 			k.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
 			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 			isChecked4rensToRemove = true
-			k.Board.SetStoneAt(pointB, Space) // 石を取り除く
+			k.Board.SetStoneAt(pointB, Stone_Space) // 石を取り除く
 
 			if !isExists4rensToRemove {
 				// `Captured` ルールと被らなければ
