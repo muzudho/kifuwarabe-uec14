@@ -101,9 +101,9 @@ func (bc *BoardCoordinate) ForeachPayloadLocationOrderByYx(setLocation func(Poin
 }
 
 // ForeachNeumannNeighborhood - [O13o__10o0] 隣接する４方向の定義
-func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Point)) {
+func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(Cell_4Directions, Point)) {
 	// 東、北、西、南
-	for dir := 0; dir < 4; dir++ {
+	for dir := Cell_4Directions(0); dir < 4; dir++ {
 		var p = here + b.coordinate.cell4Directions[dir] // 隣接する交点
 
 		// 範囲外チェック
