@@ -187,7 +187,7 @@
 	onKo func() bool//) bool {
 
 	// [O22o1o2o0]
-	// if k.IsMasonryError(stoneA, pointB) {
+	// if k.Board.IsMasonry(pointB) {
 	// 	return onMasonry()
 	// }
 	// ...略...
