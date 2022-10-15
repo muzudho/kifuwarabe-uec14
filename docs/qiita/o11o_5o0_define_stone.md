@@ -32,13 +32,18 @@ package kernel
 
 import "fmt"
 
+// Stone - 石の色
 type Stone uint
 
 const (
-	Space Stone = iota
-	Black
-	White
-	Wall
+	// Stone_Space - 空点
+	Stone_Space Stone = iota
+	// Stone_Black - 黒石
+	Stone_Black
+	// Stone_White - 白石
+	Stone_White
+	// Stone_Wall - 枠
+	Stone_Wall
 )
 
 // GetStoneFromName - 文字列の名前を与えると、Stone値を返します
@@ -50,13 +55,13 @@ const (
 func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (bool, Stone) {
 	switch stoneName {
 	case "space":
-		return true, Space
+		return true, Stone_Space
 	case "black":
-		return true, Black
+		return true, Stone_Black
 	case "white":
-		return true, White
+		return true, Stone_White
 	case "wall":
-		return true, Wall
+		return true, Stone_Wall
 	default:
 		return getDefaultStone()
 	}
@@ -70,9 +75,9 @@ func GetStoneFromName(stoneName string, getDefaultStone func() (bool, Stone)) (b
 func GetStoneOrDefaultFromTurn(stoneName string, getDefaultStone func() Stone) Stone {
 	switch stoneName {
 	case "black":
-		return Black
+		return Stone_Black
 	case "white":
-		return White
+		return Stone_White
 	default:
 		return getDefaultStone()
 	}
@@ -87,13 +92,13 @@ func GetStoneOrDefaultFromTurn(stoneName string, getDefaultStone func() Stone) S
 func GetStoneFromChar(stoneChar string, getDefaultStone func() (bool, Stone)) (bool, Stone) {
 	switch stoneChar {
 	case ".":
-		return true, Space
+		return true, Stone_Space
 	case "x":
-		return true, Black
+		return true, Stone_Black
 	case "o":
-		return true, White
+		return true, Stone_White
 	case "+":
-		return true, Wall
+		return true, Stone_Wall
 	default:
 		return getDefaultStone()
 	}
@@ -102,13 +107,13 @@ func GetStoneFromChar(stoneChar string, getDefaultStone func() (bool, Stone)) (b
 // String - 文字列化
 func (s Stone) String() string {
 	switch s {
-	case Space:
+	case Stone_Space:
 		return "."
-	case Black:
+	case Stone_Black:
 		return "x"
-	case White:
+	case Stone_White:
 		return "o"
-	case Wall:
+	case Stone_Wall:
 		return "+"
 	default:
 		panic(fmt.Sprintf("%d", int(s)))
@@ -118,13 +123,13 @@ func (s Stone) String() string {
 // GetColor - 色の取得
 func (s Stone) GetColor() Color {
 	switch s {
-	case Space:
+	case Stone_Space:
 		return Color_None
-	case Black:
+	case Stone_Black:
 		return Color_Black
-	case White:
+	case Stone_White:
 		return Color_White
-	case Wall:
+	case Stone_Wall:
 		return Color_None
 	default:
 		panic(fmt.Sprintf("%d", int(s)))
