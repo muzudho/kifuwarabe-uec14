@@ -180,7 +180,7 @@ func (k *Kernel) Execute(command string, logg *Logger) bool {
 		// Example: "record"
 		var sb strings.Builder
 
-		var setPoint = func(positionNumber int, item *RecordItem) {
+		var setPoint = func(positionNumber PositionNumberInt, item *RecordItem) {
 			var positionNth = positionNumber + geta // 基数を序数に変換
 			var coord = k.Position.Board.coordinate.GetGtpMoveFromPoint(item.placePlay)
 			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))

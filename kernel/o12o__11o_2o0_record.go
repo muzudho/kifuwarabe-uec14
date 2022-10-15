@@ -13,7 +13,7 @@ type Record struct {
 	playFirst Stone
 
 	// 何手目。基数
-	positionNumber int
+	positionNumber PositionNumberInt
 
 	// 手毎
 	items []*RecordItem
@@ -53,7 +53,7 @@ func (r *Record) GetMaxPosNth() int {
 }
 
 // GetPositionNumber - 何手目。基数
-func (r *Record) GetPositionNumber() int {
+func (r *Record) GetPositionNumber() PositionNumberInt {
 	return r.positionNumber
 }
 
@@ -78,8 +78,8 @@ func (r *Record) RemoveTail(placePlay Point) {
 }
 
 // ForeachItem - 各要素
-func (r *Record) ForeachItem(setItem func(int, *RecordItem)) {
-	for i := 0; i < r.positionNumber; i++ {
+func (r *Record) ForeachItem(setItem func(PositionNumberInt, *RecordItem)) {
+	for i := PositionNumberInt(0); i < r.positionNumber; i++ {
 		setItem(i, r.items[i])
 	}
 }
