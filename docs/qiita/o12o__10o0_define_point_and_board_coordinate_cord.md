@@ -360,7 +360,7 @@ func (bc *BoardCoordinate) GetGtpMoveFromPoint(point Point) string {
 
 	case "test_coord": // [O12o__10o2o0]
 		// Example: "test_coord A13"
-		var point = k.Board.coordinate.GetPointFromGtpMove(tokens[1])
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(tokens[1])
 		logg.C.Infof("= %d\n", point)
 		logg.J.Infow("output", "point", point)
 		return true
