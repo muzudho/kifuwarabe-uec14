@@ -33,15 +33,15 @@ const geta = 1 // Japanese wooden clogs. Used to convert bases and ordinals.
 
 // Kernel - カーネル
 type Kernel struct {
-	// Board - 盤
-	Board *Board
+	// Position - 局面
+	Position *Position
 }
 
 // NewDirtyKernel - カーネルの新規作成
 // - 一部のメンバーは、初期化されていないので、別途初期化処理が要る
 func NewDirtyKernel(gameRule GameRule, boardWidht int, boardHeight int) *Kernel {
 	var k = new(Kernel)
-	k.Board = NewBoard(gameRule, boardWidht, boardHeight)
+	k.Position = NewDirtyPosition(gameRule, boardWidht, boardHeight)
 	return k
 }
 
