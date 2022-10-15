@@ -6,11 +6,11 @@
 
 # Step [O22o0] 囲碁の石を打つルールの実装
 
-# Step [O22o1o0] 空点以外のところ（石または枠の上）に石を置くことの禁止 - IsMasonryError関数作成
+# Step [O22o1o0] 空点以外のところ（石または枠の上）に石を置くことの禁止 - IsMasonry関数作成
 
 とりあえず、 `石または枠の上に石を置く行為` に `Masonry` （メイスンリー）という名前を付ける。  
 従って この主のエラーは `Masonry error` と呼ぶことにする。  
-そのようなエラーであるかどうか判定する関数の名前は `IsMasonryError` と呼ぶことにする  
+そのようなエラーであるかどうか判定する関数の名前は `IsMasonry` と呼ぶことにする  
 
 ## Step [O22o1o1o0] ファイル作成 - masonry.go
 
@@ -44,19 +44,10 @@
 
 package kernel
 
-import "fmt"
-
-func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
-	var target = k.Board.cells[point]
-
-	switch target {
-	case Stone_Space:
-		return false
-	case Stone_Black, Stone_White, Stone_Wall:
-		return true
-	default:
-		panic(fmt.Sprintf("unexpected target cell:%s", target))
-	}
+// IsMasonry - 石の上に石を置こうとしたか？
+func (b *Board) IsMasonry(point Point) bool {
+	// 空点以外に石を置こうとしたら、石の上に石を置いた扱いにする
+	return !b.IsSpaceAt(point)
 }
 
 // EOF [O22o1o1o0]
@@ -118,7 +109,7 @@ func (k *Kernel) IsMasonryError(stone Stone, point Point) bool {
 
 	// * 以下を追加
 	// [O22o1o2o0]
-	if k.IsMasonryError(stone, point) {
+	if k.Board.IsMasonry(point) {
 		return onMasonry()
 	}
 
