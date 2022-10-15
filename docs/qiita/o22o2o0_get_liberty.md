@@ -292,31 +292,36 @@ func (ls *LibertySearchAlgorithm) findRen(arbitraryPoint Point) (*Ren, bool) {
 	// 連の初期化
 	ls.tempRen = NewRen(ls.board.GetStoneAt(arbitraryPoint))
 
-	if ls.tempRen.stone == Space {
+	if ls.tempRen.stone == Stone_Space {
 		ls.searchSpaceRen(arbitraryPoint)
 	} else {
-		ls.searchStoneRen(arbitraryPoint)
+		ls.searchStoneRenRecursive(arbitraryPoint)
 
-		// チェックボードの呼吸点のチェックをクリアー
-		for _, p := range ls.tempRen.libertyLocations {
-			ls.checkBoard.Erase(p, Mark_BitLiberty)
+		// チェックボードの「呼吸点」チェックのみクリアー
+		var eachPoint = func(point Point) {
+			ls.checkBoard.Erase(point, Mark_BitLiberty)
 		}
+		ls.board.coordinate.ForeachCellWithoutWall(eachPoint)
 	}
 
 	return ls.tempRen, true
 }
 
 // 石の連の探索
-// - 再帰関数
-func (ls *LibertySearchAlgorithm) searchStoneRen(here Point) {
+//
+// * 再帰関数
+func (ls *LibertySearchAlgorithm) searchStoneRenRecursive(here Point) {
+
+	// 石のチェック
 	ls.checkBoard.Overwrite(here, Mark_BitStone)
+
 	ls.tempRen.AddLocation(here)
 
 	var setAdjacent = func(dir int, p Point) {
 		// 呼吸点と枠のチェック
 		var stone = ls.board.GetStoneAt(p)
 		switch stone {
-		case Space: // 空点
+		case Stone_Space: // 空点
 			if !ls.checkBoard.Contains(p, Mark_BitLiberty) { // まだチェックしていない呼吸点なら
 				ls.checkBoard.Overwrite(p, Mark_BitLiberty)
 				ls.tempRen.libertyLocations = append(ls.tempRen.libertyLocations, p) // 呼吸点を追加
@@ -324,7 +329,7 @@ func (ls *LibertySearchAlgorithm) searchStoneRen(here Point) {
 
 			return // あとの処理をスキップ
 
-		case Wall: // 枠
+		case Stone_Wall: // 枠
 			return // あとの処理をスキップ
 		}
 
@@ -338,7 +343,7 @@ func (ls *LibertySearchAlgorithm) searchStoneRen(here Point) {
 		ls.tempRen.adjacentColor = ls.tempRen.adjacentColor.GetAdded(color)
 
 		if stone == ls.tempRen.stone { // 同じ石
-			ls.searchStoneRen(p) // 再帰
+			ls.searchStoneRenRecursive(p) // 再帰
 		}
 	}
 
@@ -359,7 +364,7 @@ func (ls *LibertySearchAlgorithm) searchSpaceRen(here Point) {
 		}
 
 		var stone = ls.board.GetStoneAt(p)
-		if stone != Space { // 空点でなければスキップ
+		if stone != Stone_Space { // 空点でなければスキップ
 			return
 		}
 
