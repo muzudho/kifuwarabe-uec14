@@ -155,7 +155,10 @@ func (k *Kernel) FindAllRens() {
 	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
 
 	var setLocation = func(location Point) {
-		var ren, isFound = k.findRen(location)
+
+		var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Board, k.CheckBoard, k.tempRen)
+		var ren, isFound = libertySearchAlgorithm.findRen(location)
+
 		if isFound {
 			k.renDb.RegisterRen(maxPosNthFigure, k.Record.posNum, ren)
 		}
