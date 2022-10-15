@@ -150,13 +150,13 @@
 // * 見つけた連は、連データベースへ入れます
 func (k *Kernel) FindAllRens() {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.coordinate)
+	k.Position.CheckBoard.Init(k.Position.Board.coordinate)
 
 	var maxPosNthFigure = k.Record.GetMaxPosNthFigure()
 
 	var setLocation = func(location Point) {
 
-		var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Board, k.CheckBoard, k.tempRen)
+		var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.tempRen)
 		var ren, isFound = libertySearchAlgorithm.findRen(location)
 
 		if isFound {
@@ -164,7 +164,7 @@ func (k *Kernel) FindAllRens() {
 		}
 	}
 	// 盤上の枠の内側をスキャン。筋、段の順
-	k.Board.GetCoordinate().ForeachPayloadLocationOrderByYx(setLocation)
+	k.Position.Board.GetCoordinate().ForeachPayloadLocationOrderByYx(setLocation)
 }
 
 // ...略...
@@ -286,7 +286,7 @@ func (k *Kernel) FindAllRens() {
 
 		// * 以下を追加
 		// [O23o_2o3o_1o0] 連データベース初期化
-		k.renDb.Init(k.Board.GetWidth(), k.Board.GetHeight())
+		k.renDb.Init(k.Position.Board.GetWidth(), k.Position.Board.GetHeight())
 		k.FindAllRens()
 	// }
 // }
