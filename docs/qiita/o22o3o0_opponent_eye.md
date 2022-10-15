@@ -78,7 +78,7 @@
 
 	// ...略...
 	// // [O22o1o2o0]
-	// if k.IsMasonryError(stone, point) {
+	// if k.Board.IsMasonry(point) {
 	//	return onMasonry()
 	// }
 
