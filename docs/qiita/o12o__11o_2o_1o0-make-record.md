@@ -206,7 +206,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 	// * 以下を追加
 	// [O12o__11o_2o0] 棋譜の初期化
-	k.Record = *NewRecord(maxPositionNumber, k.Board.coordinate.GetMemoryArea(), playFirst)
+	k.Record = *NewRecord(maxPositionNumber, k.Position.Board.coordinate.GetMemoryArea(), playFirst)
 
 	// ...略...
 	// return k
@@ -279,7 +279,7 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 		var setPoint = func(positionNumber int, item *RecordItem) {
 			var positionNth = positionNumber + geta // 基数を序数に変換
-			var coord = k.Board.coordinate.GetGtpMoveFromPoint(item.placePlay)
+			var coord = k.Position.Board.coordinate.GetGtpMoveFromPoint(item.placePlay)
 			sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
 		}
 
