@@ -271,8 +271,8 @@ func (c *Config) GetKomi() float64 {
 	return float64(c.Game.Komi)
 }
 
-// GetMaxMovesNum - 最大手数
-func (c *Config) GetMaxMovesNum() int {
+// GetMaxPositionNumber - 最大手数
+func (c *Config) GetMaxPositionNumber() int {
 	return int(c.Game.MaxMoves)
 }
 
