@@ -60,7 +60,7 @@ func (k *Kernel) DoSetBoard(command string, logg *Logger) {
 		}
 
 		var getDefaultStone = func() (bool, Stone) {
-			return false, Space
+			return false, Stone_Space
 		}
 
 		var size = k.Board.coordinate.GetMemoryArea()
