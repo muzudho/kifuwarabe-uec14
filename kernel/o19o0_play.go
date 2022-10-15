@@ -185,12 +185,12 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	var rensToRemove [4]*Ren
 	var renIds = [4]Point{math.MaxInt, math.MaxInt, math.MaxInt, math.MaxInt}
 
-	var setAdjacentPoint = func(dir int, adjacentP Point) {
+	var setAdjacentPoint = func(dir Cell_4Directions, adjacentP Point) {
 		var adjacentR, isFound = k.GetLiberty(adjacentP)
 		if isFound {
 			// 同じ連を数え上げるのを防止する
 			var renId = adjacentR.GetMinimumLocation()
-			for i := 0; i < dir; i++ {
+			for i := Cell_4Directions(0); i < dir; i++ {
 				if renIds[i] == renId { // Idが既存
 					return
 				}

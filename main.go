@@ -83,10 +83,10 @@ func main() {
 		}
 
 		// [O11o_3o0]
-		var gameRule = kernel.NewGameRule(kernel.KomiFloat(engineConfig.GetKomi()), kernel.PositionNumberInt(engineConfig.GetMaxMovesNum()))
+		var gameRule = kernel.NewGameRule(kernel.KomiFloat(engineConfig.GetKomi()), kernel.PositionNumberInt(engineConfig.GetMaxPositionNumber()))
 		var kernel1 = kernel.NewDirtyKernel(*gameRule, engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
 			// [O12o__11o_4o0] 棋譜の初期化
-			engineConfig.GetMaxMovesNum(),
+			kernel.PositionNumberInt(engineConfig.GetMaxPositionNumber()),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn))
 		// 設定ファイルの内容をカーネルへ反映
 		kernel1.Board.Init(engineConfig.GetBoardSize(), engineConfig.GetBoardSize())

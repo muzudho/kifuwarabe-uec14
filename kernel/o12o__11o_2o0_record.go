@@ -2,7 +2,10 @@
 
 package kernel
 
-import "strconv"
+import (
+	"math"
+	"strconv"
+)
 
 // Record - 棋譜
 type Record struct {
@@ -16,14 +19,21 @@ type Record struct {
 	items []*RecordItem
 }
 
-// NewRecord - 棋譜の新規作成
-func NewRecord(maxMoves int, playFirst Stone) *Record {
+// NewRecord - 新規作成
+//
+// * maxPositionNumber - 手数上限。配列サイズ決定のための判断材料
+// * memoryBoardArea - メモリー盤サイズ。配列サイズ決定のための判断材料
+func NewRecord(maxPositionNumber PositionNumberInt, memoryBoardArea int, playFirst Stone) *Record {
 	var r = new(Record)
 	r.playFirst = playFirst
 
-	// 棋譜の一手分毎
-	r.items = make([]*RecordItem, maxMoves)
-	for i := 0; i < maxMoves; i++ {
+	// 動的に長さがきまる配列を生成、その内容をインスタンスで埋めます
+	// 例えば、0手目が初期局面として、 400 手目まであるとすると、要素数は401要る。だから 1 足す
+	// しかし、プレイアウトでは終局まで打ちたいので、多めにとっておきたいのでは。盤サイズより適当に18倍（>2πe）取る
+	var positionLength = int(math.Max(float64(maxPositionNumber+1), float64(memoryBoardArea*18)))
+	r.items = make([]*RecordItem, positionLength)
+
+	for i := PositionNumberInt(0); i < PositionNumberInt(positionLength); i++ {
 		r.items[i] = NewRecordItem()
 	}
 

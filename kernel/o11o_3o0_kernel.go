@@ -36,7 +36,7 @@ type Kernel struct {
 // - 一部のメンバーは、初期化されていないので、別途初期化処理が要る
 func NewDirtyKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	// [O12o__11o_2o0] 棋譜の初期化
-	maxMoves int, playFirst Stone) *Kernel {
+	maxPositionNumber PositionNumberInt, playFirst Stone) *Kernel {
 
 	var k = new(Kernel)
 	k.Board = NewBoard(gameRule, boardWidht, boardHeight)
@@ -45,7 +45,7 @@ func NewDirtyKernel(gameRule GameRule, boardWidht int, boardHeight int,
 	k.CheckBoard = NewDirtyCheckBoard()
 
 	// [O12o__11o_2o0] 棋譜の初期化
-	k.Record = *NewRecord(maxMoves, playFirst)
+	k.Record = *NewRecord(maxPositionNumber, k.Board.coordinate.GetMemoryArea(), playFirst)
 
 	// RenDb - [O12o__11o__10o3o0] 連データベース
 	k.renDb = NewRenDb(k.Board.coordinate.GetWidth(), k.Board.coordinate.GetHeight())
