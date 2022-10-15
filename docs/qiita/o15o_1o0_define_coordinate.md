@@ -47,8 +47,8 @@ Remove
 	// * アルファベット順になる位置に、以下のケース文を挿入
 	case "test_get_point_from_code": // [O16o1o0]
 		// Example: "test_get_point_from_code A1"
-		var point = k.Board.coordinate.GetPointFromGtpMove(tokens[1])
-		var code = k.Board.coordinate.GetGtpMoveFromPoint(point)
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(tokens[1])
+		var code = k.Position.Board.coordinate.GetGtpMoveFromPoint(point)
 		logg.C.Infof("= %d %s", point, code)
 		logg.J.Infow("ok", "point", point, "code", code)
 		return true
