@@ -92,14 +92,21 @@ type Record struct {
 	items []*RecordItem
 }
 
-// NewRecord - 棋譜の新規作成
-func NewRecord(maxMoves int, playFirst Stone) *Record {
+// NewRecord - 新規作成
+//
+// * maxPositionNumber - 手数上限。配列サイズ決定のための判断材料
+// * memoryBoardArea - メモリー盤サイズ。配列サイズ決定のための判断材料
+func NewRecord(maxPositionNumber PositionNumberInt, memoryBoardArea int, playFirst Stone) *Record {
 	var r = new(Record)
 	r.playFirst = playFirst
 
-	// 棋譜の一手分毎
-	r.items = make([]*RecordItem, maxMoves)
-	for i := 0; i < maxMoves; i++ {
+	// 動的に長さがきまる配列を生成、その内容をインスタンスで埋めます
+	// 例えば、0手目が初期局面として、 400 手目まであるとすると、要素数は401要る。だから 1 足す
+	// しかし、プレイアウトでは終局まで打ちたいので、多めにとっておきたいのでは。盤サイズより適当に18倍（>2πe）取る
+	var positionLength = int(math.Max(float64(maxPositionNumber+1), float64(memoryBoardArea*18)))
+	r.items = make([]*RecordItem, positionLength)
+
+	for i := PositionNumberInt(0); i < PositionNumberInt(positionLength); i++ {
 		r.items[i] = NewRecordItem()
 	}
 
@@ -194,12 +201,12 @@ func (r *Record) IsKo(placePlay Point) bool {
 // NewDirtyKernel - カーネルの新規作成
 // func NewDirtyKernel(boardWidht int, boardHeight int,
 	// [O12o__11o_2o0] ,棋譜の初期化
-	maxMoves int, playFirst Stone//) *Kernel {
+	maxMoves PositionNumberInt, playFirst Stone//) *Kernel {
 	// ...略...
 
 	// * 以下を追加
 	// [O12o__11o_2o0] 棋譜の初期化
-	k.Record = *NewRecord(maxMoves, playFirst)
+	k.Record = *NewRecord(maxPositionNumber, k.Board.coordinate.GetMemoryArea(), playFirst)
 
 	// ...略...
 	// return k
@@ -229,10 +236,10 @@ func (r *Record) IsKo(placePlay Point) bool {
 
 ```go
 		// [O11o_3o0]
-		//var gameRule = kernel.NewGameRule(kernel.KomiFloat(engineConfig.GetKomi()), kernel.PositionNumberInt(engineConfig.GetMaxMovesNum()))
+		//var gameRule = kernel.NewGameRule(kernel.KomiFloat(engineConfig.GetKomi()), kernel.PositionNumberInt(engineConfig.GetMaxPositionNumber()))
 		//var kernel1 = kernel.NewDirtyKernel(*gameRule, engineConfig.GetBoardSize(), engineConfig.GetBoardSize(),
 			// [O12o__11o_4o0] 棋譜の初期化
-			engineConfig.GetMaxMovesNum(),
+			kernel.PositionNumberInt(engineConfig.GetMaxPositionNumber()),
 			kernel.GetStoneOrDefaultFromTurn(engineConfig.GetPlayFirst(), onUnknownTurn)//)
 ```
 
