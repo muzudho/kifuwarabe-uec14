@@ -66,7 +66,7 @@
 			k.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
 			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 			isChecked4rensToRemove = true
-			k.Board.SetStoneAt(pointB, Space) // 石を取り除く
+			k.Board.SetStoneAt(pointB, Stone_Space) // 石を取り除く
 
 			if !isExists4rensToRemove {
 				// `Captured` ルールと被らなければ
