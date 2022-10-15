@@ -45,10 +45,10 @@ func (b *Board) Init(width int, height int) {
 		var y2 = b.coordinate.memoryHeight - 1
 		for x := 0; x < b.coordinate.memoryWidth; x++ {
 			var i = b.coordinate.GetPointFromXy(x, y)
-			b.cells[i] = Wall
+			b.cells[i] = Stone_Wall
 
 			i = b.coordinate.GetPointFromXy(x, y2)
-			b.cells[i] = Wall
+			b.cells[i] = Stone_Wall
 		}
 	}
 	// 枠の左辺、右辺を引く
@@ -57,10 +57,10 @@ func (b *Board) Init(width int, height int) {
 		var x2 = b.coordinate.memoryWidth - 1
 		for y := 1; y < b.coordinate.memoryHeight-1; y++ {
 			var i = b.coordinate.GetPointFromXy(x, y)
-			b.cells[i] = Wall
+			b.cells[i] = Stone_Wall
 
 			i = b.coordinate.GetPointFromXy(x2, y)
-			b.cells[i] = Wall
+			b.cells[i] = Stone_Wall
 		}
 	}
 	// 枠の内側を空点で埋める
@@ -70,7 +70,7 @@ func (b *Board) Init(width int, height int) {
 		for y := 1; y < height; y++ {
 			for x := 1; x < width; x++ {
 				var i = b.coordinate.GetPointFromXy(x, y)
-				b.cells[i] = Space
+				b.cells[i] = Stone_Space
 			}
 		}
 	}
@@ -112,7 +112,7 @@ func (b *Board) ForeachNeumannNeighborhood(here Point, setAdjacent func(int, Poi
 		}
 
 		// 枠チェック
-		if b.GetStoneAt(p) == Wall {
+		if b.GetStoneAt(p) == Stone_Wall {
 			continue
 		}
 
