@@ -59,8 +59,8 @@
 	// ...略...
 	// [O22o4o1o0] 自分の眼に石を置こうとした
 	var onForbiddenMyEye = func() bool {
-		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -95,7 +95,7 @@
 			// 相手の眼に石を置こうとしたとみなす
 	// 		return onOpponentEye()
 
-		} else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
+		} else if k.Position.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
 			// [O22o4o1o0]
 			// かつ、連Cに隣接する連の色が、石Aの色であったなら、
 			// 自分の眼に石を置こうとしたとみなす
@@ -104,7 +104,7 @@
 	// }
 
 	// ...略...
-	// k.Board.cells[point] = stone
+	// k.Position.Board.cells[point] = stone
 	// return true
 ```
 
@@ -156,7 +156,7 @@
 		var method = tokens[1]
 		switch method {
 		case "get":
-			var value = k.CanNotPutOnMyEye
+			var value = k.Position.CanNotPutOnMyEye
 			logg.C.Infof("= %t\n", value)
 			logg.J.Infow("ok", "value", value)
 			return true
@@ -165,10 +165,10 @@
 			var value = tokens[2]
 			switch value {
 			case "true":
-				k.CanNotPutOnMyEye = true
+				k.Position.CanNotPutOnMyEye = true
 				return true
 			case "false":
-				k.CanNotPutOnMyEye = false
+				k.Position.CanNotPutOnMyEye = false
 				return true
 			default:
 				logg.C.Infof("? unexpected method:%s value:%s\n", method, value)

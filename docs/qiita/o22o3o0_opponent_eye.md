@@ -53,8 +53,8 @@
 	// ...略...
 	// [O22o3o1o0] 相手の眼に石を置こうとした
 	var onOpponentEye = func() bool {
-		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -78,7 +78,7 @@
 
 	// ...略...
 	// // [O22o1o2o0]
-	// if k.Board.IsMasonry(point) {
+	// if k.Position.Board.IsMasonry(point) {
 	//	return onMasonry()
 	// }
 
@@ -93,7 +93,7 @@
 	}
 
 	// ...略...
-	// k.Board.cells[point] = stone
+	// k.Position.Board.cells[point] = stone
 	// return true
 ```
 

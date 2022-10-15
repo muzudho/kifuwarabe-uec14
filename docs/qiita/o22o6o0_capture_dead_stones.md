@@ -63,10 +63,10 @@
 
 			// * 以下を追加
 			// [O22o6o1o0] 打ちあげる死に石の連を取得
-			k.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
+			k.Position.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
 			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
 			isChecked4rensToRemove = true
-			k.Board.SetStoneAt(pointB, Stone_Space) // 石を取り除く
+			k.Position.Board.SetStoneAt(pointB, Stone_Space) // 石を取り除く
 
 			if !isExists4rensToRemove {
 				// `Captured` ルールと被らなければ
@@ -76,14 +76,14 @@
 			// * 以下を削除
 			// onOpponentEye()
 
-		// } else if k.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
+		// } else if k.Position.CanNotPutOnMyEye && stoneA.GetColor() == renC.adjacentColor {
 			// ...略...
 		// }
 	// }
 
 	// ...略...
 	// 石を置く
-	// k.Board.SetStoneAt(pointB, stoneA)
+	// k.Position.Board.SetStoneAt(pointB, stoneA)
 
 	// * 以下を追加
 	// [O22o6o1o0] 打ちあげる死に石の連を取得
@@ -137,7 +137,7 @@ func (k *Kernel) GetRenToCapture(placePlay Point) (bool, [4]*Ren) {
 	}
 
 	// 隣接する４方向
-	k.Board.ForeachNeumannNeighborhood(placePlay, setAdjacentPoint)
+	k.Position.Board.ForeachNeumannNeighborhood(placePlay, setAdjacentPoint)
 
 	return isExists, rensToRemove
 }

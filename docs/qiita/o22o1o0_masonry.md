@@ -85,7 +85,7 @@ func (b *Board) IsMasonry(point Point) bool {
 ```go
 // func (k *Kernel) DoPlay(command string, logg *Logger) {
 	// ...略...
-	// var point = k.Board.GetPointFromGtpMove(tokens[2])
+	// var point = k.Position.Board.GetPointFromGtpMove(tokens[2])
 
 	// * 以下を追加
 	// [O22o1o2o0]
@@ -109,11 +109,11 @@ func (b *Board) IsMasonry(point Point) bool {
 
 	// * 以下を追加
 	// [O22o1o2o0]
-	if k.Board.IsMasonry(point) {
+	if k.Position.Board.IsMasonry(point) {
 		return onMasonry()
 	}
 
-//	k.Board.cells[point] = stone
+//	k.Position.Board.cells[point] = stone
 //	return true
 // }
 ```

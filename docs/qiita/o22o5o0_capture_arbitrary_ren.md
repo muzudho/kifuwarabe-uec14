@@ -45,7 +45,7 @@
 func (k *Kernel) RemoveRen(ren *Ren) {
 	// 空点をセット
 	var setLocation = func(i int, location Point) {
-		k.Board.SetStoneAt(location, Space)
+		k.Position.Board.SetStoneAt(location, Space)
 	}
 
 	// 場所毎に
@@ -99,7 +99,7 @@ func (k *Kernel) RemoveRen(ren *Ren) {
 	case "remove_ren": // [O22o5o2o0]
 		// Example: `remove_ren B2`
 		var coord = tokens[1]
-		var point = k.Board.coordinate.GetPointFromGtpMove(coord)
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			k.RemoveRen(ren)

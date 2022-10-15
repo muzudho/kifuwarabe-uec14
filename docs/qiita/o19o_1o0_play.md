@@ -58,12 +58,12 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	}
 
 	var coord = tokens[2]
-	var point = k.Board.coordinate.GetPointFromGtpMove(coord)
+	var point = k.Position.Board.coordinate.GetPointFromGtpMove(coord)
 
 	// [O22o1o2o0] 石（または枠）の上に石を置こうとした
 	var onMasonry = func() bool {
-		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -88,12 +88,12 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	onMasonry func() bool) bool {
 
 	// [O22o1o2o0]
-	if k.Board.IsMasonry(pointB) {
+	if k.Position.Board.IsMasonry(pointB) {
 		return onMasonry()
 	}
 
 	// 石を置く
-	k.Board.SetStoneAt(pointB, stoneA)
+	k.Position.Board.SetStoneAt(pointB, stoneA)
 
 	k.Record.Push(pointB) // 棋譜に追加
 

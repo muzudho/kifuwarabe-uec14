@@ -145,7 +145,7 @@ func (cb *CheckBoard) Contains(point Point, mark Mark) bool {
 
 Removed  
 
-## Step [O22o2o3o0] ファイル編集 - kernel.go
+## Step [O22o2o3o0] ファイル編集 - kernel/o11o_3o_11o0_position.go
 
 👇 以下の既存ファイルを編集してほしい  
 
@@ -153,13 +153,14 @@ Removed
   	📂 kifuwarabe-uec14
 	├── 📂 kernel
 	│	├── 📂 play_rule
+👉	│	├── 📄 o11o_3o_11o0_position.go
   	│	├── 📄 board_area.go
   	│	├── 📄 board_coord.go
   	│	├── 📄 o12o__11o1o0_board.go
  	│	├── 📄 check_board.go
 	│	├── 📄 go.mod
 	│	├── 📄 go.sum
-👉 	│	├── 📄 kernel.go
+ 	│	├── 📄 kernel.go
  	│	├── 📄 logger.go
  	│	├── 📄 masonry.go
  	│	├── 📄 play.go
@@ -178,7 +179,7 @@ Removed
 
 ```go
 // ...略...
-// type Kernel struct {
+// type Position struct {
 //	Board *Board
 
 	// * 以下を追加
@@ -189,13 +190,14 @@ Removed
 	tempRen *Ren
 //}
 
-// func NewDirtyKernel(boardWidht int, boardHeight int) *Kernel {
-//	var k = new(Kernel)
-//	k.Board = NewBoard(boardWidht, boardHeight)
+// func NewDirtyPosition(gameRule GameRule, boardWidht int, boardHeight int) *Position {
+	//var p = new(Position)
+
+	//p.Board = NewBoard(gameRule, boardWidht, boardHeight)
 
 	// * 以下を追加
-	// [O22o2o3o0]
-	k.CheckBoard = NewDirtyCheckBoard()
+	// [O22o2o3o0] チェックボード
+	p.CheckBoard = NewDirtyCheckBoard()
 
 //	return k
 // }
@@ -249,9 +251,9 @@ package kernel
 // - bool is found
 func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
-	k.CheckBoard.Init(k.Board.coordinate)
+	k.Position.CheckBoard.Init(k.Position.Board.coordinate)
 
-	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Board, k.CheckBoard, k.tempRen)
+	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.tempRen)
 
 	return libertySearchAlgorithm.findRen(arbitraryPoint)
 }
@@ -426,7 +428,7 @@ func (ls *LibertySearchAlgorithm) searchSpaceRen(here Point) {
 	case "test_get_liberty": // [O22o2o5o0]
 		// Example: "test_get_liberty B2"
 		var coord = tokens[1]
-		var point = k.Board.coordinate.GetPointFromGtpMove(coord)
+		var point = k.Position.Board.coordinate.GetPointFromGtpMove(coord)
 		var ren, isFound = k.GetLiberty(point)
 		if isFound {
 			logg.C.Infof("= ren stone:%s area:%d libertyArea:%d adjacentColor:%s\n", ren.stone, ren.GetArea(), ren.GetLibertyArea(), ren.adjacentColor)

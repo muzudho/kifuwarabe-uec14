@@ -157,8 +157,8 @@
 
 	// [O22o7o2o0] コウに石を置こうとした
 	var onKo = func() bool {
-		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error ko", "my_stone", stone, "point", k.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.J.Infow("error ko", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
 		return false
 	}
 
@@ -187,7 +187,7 @@
 	onKo func() bool//) bool {
 
 	// [O22o1o2o0]
-	// if k.Board.IsMasonry(pointB) {
+	// if k.Position.Board.IsMasonry(pointB) {
 	// 	return onMasonry()
 	// }
 	// ...略...
@@ -283,7 +283,7 @@
 
 		// var setPoint = func(i int, item *RecordItem) {
 			// var positionNth = i + geta // 基数を序数に変換
-			// var coord = k.Board.GetGtpMoveFromPoint(item.placePlay)
+			// var coord = k.Position.Board.GetGtpMoveFromPoint(item.placePlay)
 
 			// * 以下を削除
 			// sb.WriteString(fmt.Sprintf("[%d]%s ", positionNth, coord))
@@ -294,7 +294,7 @@
 			if item.ko == Point(0) {
 				koStr = ""
 			} else {
-				koStr = fmt.Sprintf("(%s)", k.Board.coordinate.GetGtpMoveFromPoint(item.ko))
+				koStr = fmt.Sprintf("(%s)", k.Position.Board.coordinate.GetGtpMoveFromPoint(item.ko))
 			}
 			sb.WriteString(fmt.Sprintf("[%d]%s%s ", positionNth, coord, koStr))
 		// }
