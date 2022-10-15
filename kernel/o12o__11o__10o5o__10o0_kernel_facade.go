@@ -89,7 +89,7 @@ func (k *Kernel) RefreshRenToInternal(r *Ren) bool {
 func (k *Kernel) RemoveRen(ren *Ren) {
 	// 空点をセット
 	var setLocation = func(i int, location Point) {
-		k.Board.SetStoneAt(location, Space)
+		k.Board.SetStoneAt(location, Stone_Space)
 	}
 
 	// 場所毎に
