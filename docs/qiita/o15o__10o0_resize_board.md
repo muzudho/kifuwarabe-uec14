@@ -45,7 +45,7 @@
 			return true
 		}
 
-		k.Board.Init(sideLength, sideLength)
+		k.Position.Board.Init(sideLength, sideLength)
 		logg.C.Info("=\n")
 		logg.J.Infow("ok")
 
