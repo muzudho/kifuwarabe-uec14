@@ -166,7 +166,7 @@ func (b *Board) resize(width int, height int) {
 			return true
 		}
 
-		var point = k.Board.coordinate.GetPointFromXy(x, y)
+		var point = k.Position.Board.coordinate.GetPointFromXy(x, y)
 		logg.C.Infof("= %d\n", point)
 		logg.J.Infow("output", "point", point)
 		return true
