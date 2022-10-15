@@ -68,6 +68,11 @@ func (b *Board) GetColorAt(i Point) Color {
 	return b.cells[i].GetColor()
 }
 
+// IsEmpty - 指定の交点は空点か？
+func (b *Board) IsSpaceAt(point Point) bool {
+	return b.GetStoneAt(point) == Stone_Space
+}
+
 func getXyFromPointOnBoard(memoryWidth int, point Point) (int, int) {
 	var p = int(point)
 	return p % memoryWidth, p / memoryWidth
