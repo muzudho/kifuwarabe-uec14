@@ -49,7 +49,7 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	var getDefaultStone = func() (bool, Stone) {
 		logg.C.Infof("? unexpected stone:%s\n", stoneName)
 		logg.J.Infow("error", "stone", stoneName)
-		return false, Space
+		return false, Stone_Space
 	}
 
 	var isOk1, stone = GetStoneFromName(stoneName, getDefaultStone)
