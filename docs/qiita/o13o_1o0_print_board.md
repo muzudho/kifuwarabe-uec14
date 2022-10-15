@@ -42,8 +42,8 @@
 			// 25行まで対応
 			var rankSimbols = strings.Split("  , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25", ",")
 
-			var filesMax = int(math.Min(25, float64(k.Board.coordinate.GetWidth())))
-			var rowsMax = int(math.Min(25, float64(k.Board.coordinate.GetHeight())))
+			var filesMax = int(math.Min(25, float64(k.Position.Board.coordinate.GetWidth())))
+			var rowsMax = int(math.Min(25, float64(k.Position.Board.coordinate.GetHeight())))
 			var filesLabel = fileSimbols[:filesMax]
 
 			var sb strings.Builder
@@ -54,7 +54,7 @@
 
 			var rowNumber = 1
 			var setPoint = func(point Point) {
-				var stone = k.Board.cells[point]
+				var stone = k.Position.Board.cells[point]
 				sb.WriteString(fmt.Sprintf("%v", stone))
 			}
 			var doNewline = func() {
@@ -68,7 +68,7 @@
 				sb.WriteString(fmt.Sprintf("\n. %2s ", rankLabel))
 				rowNumber++
 			}
-			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
+			k.Position.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			sb.WriteString("\n. '''\n")
 			logg.C.Info(sb.String())
 		}
@@ -77,13 +77,13 @@
 			var sb strings.Builder
 
 			var setPoint = func(point Point) {
-				var stone = k.Board.cells[point]
+				var stone = k.Position.Board.cells[point]
 				sb.WriteString(fmt.Sprintf("%v", stone))
 			}
 			var doNewline = func() {
 				// pass
 			}
-			k.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
+			k.Position.Board.GetCoordinate().ForeachLikeText(setPoint, doNewline)
 			logg.J.Infow("output", "board", sb.String())
 		}
 		return true
