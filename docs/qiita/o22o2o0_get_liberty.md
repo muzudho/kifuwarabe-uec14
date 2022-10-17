@@ -186,8 +186,6 @@ Removed
 	// [O22o2o3o0]
 	// CheckBoard - 呼吸点の探索時に使います
 	CheckBoard *CheckBoard
-	// foundRen - 呼吸点の探索時に使います
-	foundRen *Ren
 //}
 
 // func NewDirtyPosition(gameRule GameRule, boardWidht int, boardHeight int) *Position {
@@ -253,7 +251,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
 	k.Position.CheckBoard.Init(k.Position.Board.coordinate)
 
-	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.foundRen)
+	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard)
 
 	return libertySearchAlgorithm.findRen(arbitraryPoint)
 }
@@ -269,12 +267,11 @@ type LibertySearchAlgorithm struct {
 }
 
 // NewLibertySearchAlgorithm - 新規作成
-func NewLibertySearchAlgorithm(board *Board, checkBoard *CheckBoard, foundRen *Ren) *LibertySearchAlgorithm {
+func NewLibertySearchAlgorithm(board *Board, checkBoard *CheckBoard) *LibertySearchAlgorithm {
 	var ls = new(LibertySearchAlgorithm)
 
 	ls.board = board
 	ls.checkBoard = checkBoard
-	ls.foundRen = foundRen
 
 	return ls
 }

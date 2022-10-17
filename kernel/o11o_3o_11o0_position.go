@@ -9,8 +9,6 @@ type Position struct {
 	// [O22o2o3o0]
 	// CheckBoard - 呼吸点の探索時に使います
 	CheckBoard *CheckBoard
-	// foundRen - 呼吸点の探索時に使います
-	foundRen *Ren
 
 	// CanNotPutOnMyEye - [O22o4o1o0] 自分の眼に石を置くことはできません
 	CanNotPutOnMyEye bool

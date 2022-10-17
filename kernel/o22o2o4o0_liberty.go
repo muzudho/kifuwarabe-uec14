@@ -17,7 +17,7 @@ func (k *Kernel) GetLiberty(arbitraryPoint Point) (*Ren, bool) {
 	// チェックボードの初期化
 	k.Position.CheckBoard.Init(k.Position.Board.coordinate)
 
-	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.foundRen)
+	var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard)
 
 	return libertySearchAlgorithm.findRen(arbitraryPoint)
 }
@@ -33,12 +33,11 @@ type LibertySearchAlgorithm struct {
 }
 
 // NewLibertySearchAlgorithm - 新規作成
-func NewLibertySearchAlgorithm(board *Board, checkBoard *CheckBoard, foundRen *Ren) *LibertySearchAlgorithm {
+func NewLibertySearchAlgorithm(board *Board, checkBoard *CheckBoard) *LibertySearchAlgorithm {
 	var ls = new(LibertySearchAlgorithm)
 
 	ls.board = board
 	ls.checkBoard = checkBoard
-	ls.foundRen = foundRen
 
 	return ls
 }
