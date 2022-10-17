@@ -28,37 +28,38 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 	}
 
 	var coord = tokens[2]
-	var point = k.Position.Board.coordinate.GetPointFromGtpMove(coord)
+	// 着手点
+	var placePlay = k.Position.Board.coordinate.GetPointFromGtpMove(coord)
 
 	// [O22o1o2o0] 石（または枠）の上に石を置こうとした
 	var onMasonry = func() bool {
-		logg.C.Infof("? masonry my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error masonry", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? masonry my_stone:%s placePlay:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
+		logg.J.Infow("error masonry", "my_stone", stone, "placePlay", k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
 		return false
 	}
 
 	// [O22o3o1o0] 相手の眼に石を置こうとした
 	var onOpponentEye = func() bool {
-		logg.C.Infof("? opponent_eye my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error opponent_eye", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? opponent_eye my_stone:%s placePlay:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
+		logg.J.Infow("error opponent_eye", "my_stone", stone, "placePlay", k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
 		return false
 	}
 
 	// [O22o4o1o0] 自分の眼に石を置こうとした
 	var onForbiddenMyEye = func() bool {
-		logg.C.Infof("? my_eye my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error my_eye", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? my_eye my_stone:%s placePlay:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
+		logg.J.Infow("error my_eye", "my_stone", stone, "placePlay", k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
 		return false
 	}
 
 	// [O22o7o2o0] コウに石を置こうとした
 	var onKo = func() bool {
-		logg.C.Infof("? ko my_stone:%s point:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
-		logg.J.Infow("error ko", "my_stone", stone, "point", k.Position.Board.coordinate.GetGtpMoveFromPoint(point))
+		logg.C.Infof("? ko my_stone:%s placePlay:%s\n", stone, k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
+		logg.J.Infow("error ko", "my_stone", stone, "placePlay", k.Position.Board.coordinate.GetGtpMoveFromPoint(placePlay))
 		return false
 	}
 
-	var isOk = k.Play(stone, point, logg,
+	var isOk = k.Play(stone, placePlay, logg,
 		// [O22o1o2o0] ,onMasonry
 		onMasonry,
 		// [O22o3o1o0] ,onOpponentEye
@@ -76,12 +77,18 @@ func (k *Kernel) DoPlay(command string, logg *Logger) {
 
 // Play - 石を打つ
 //
-// Returns
-// -------
-// isOk : bool
+// Parameters
+// ==========
+// stoneA : Stone
+// -
+// placePlay : Point
+// -
 //
-//	石を置けたら真、置けなかったら偽
-func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
+// Returns
+// =======
+// isOk : bool
+// - 石を置けたら真、置けなかったら偽
+func (k *Kernel) Play(stoneA Stone, placePlay Point, logg *Logger,
 	// [O22o1o2o0] onMasonry
 	onMasonry func() bool,
 	// [O22o3o1o0] onOpponentEye
@@ -92,12 +99,12 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	onKo func() bool) bool {
 
 	// [O22o1o2o0]
-	if k.Position.Board.IsMasonry(pointB) {
+	if k.Position.Board.IsMasonry(placePlay) {
 		return onMasonry()
 	}
 
 	// [O22o7o2o0] コウの判定
-	if k.Record.IsKo(pointB) {
+	if k.Record.IsKo(placePlay) {
 		return onKo()
 	}
 
@@ -106,18 +113,18 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	var o4rensToRemove [4]*Ren
 	var isChecked4rensToRemove = false
 
-	// [O22o3o1o0]
-	var renC, isFound = k.GetLiberty(pointB)
+	// [O22o3o1o0] 連と呼吸点の算出
+	var renC, isFound = k.GetLiberty(placePlay)
 	if isFound && renC.GetArea() == 1 { // 石Aを置いた交点を含む連Cについて、連Cの面積が1である（眼）
 		if stoneA.GetColor() == renC.adjacentColor.GetOpponent() {
 			// かつ、連Cに隣接する連の色が、石Aのちょうど反対側の色であったなら、
 			// 相手の眼に石を置こうとしたとみなす
 
 			// [O22o6o1o0] 打ちあげる死に石の連を取得
-			k.Position.Board.SetStoneAt(pointB, stoneA) // いったん、石を置く
-			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
+			k.Position.Board.SetStoneAt(placePlay, stoneA) // いったん、石を置く
+			isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(placePlay)
 			isChecked4rensToRemove = true
-			k.Position.Board.SetStoneAt(pointB, Stone_Space) // 石を取り除く
+			k.Position.Board.SetStoneAt(placePlay, Stone_Space) // 石を取り除く
 
 			if !isExists4rensToRemove {
 				// `Captured` ルールと被らなければ
@@ -134,11 +141,11 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	}
 
 	// 石を置く
-	k.Position.Board.SetStoneAt(pointB, stoneA)
+	k.Position.Board.SetStoneAt(placePlay, stoneA)
 
 	// [O22o6o1o0] 打ちあげる死に石の連を取得
 	if !isChecked4rensToRemove {
-		isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(pointB)
+		isExists4rensToRemove, o4rensToRemove = k.GetRenToCapture(placePlay)
 	}
 
 	// [O22o7o2o0] コウの判定
@@ -161,11 +168,11 @@ func (k *Kernel) Play(stoneA Stone, pointB Point, logg *Logger,
 	// [O22o7o2o0] コウの判定
 	var ko = Point(0)
 	if capturedCount == 1 {
-		ko = pointB
+		ko = placePlay
 	}
 
 	// 棋譜に追加
-	k.Record.Push(pointB,
+	k.Record.Push(placePlay,
 		// [O22o7o2o0] コウの判定
 		ko)
 
