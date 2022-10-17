@@ -157,7 +157,7 @@ func (k *Kernel) FindAllRens() {
 
 	var setLocation = func(location Point) {
 
-		var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.tempRen)
+		var libertySearchAlgorithm = NewLibertySearchAlgorithm(k.Position.Board, k.Position.CheckBoard, k.Position.foundRen)
 		var ren, isFound = libertySearchAlgorithm.findRen(location)
 
 		if isFound {
