@@ -1,5 +1,11 @@
 # 目次
 
+練習編  
+
+📖 [目指せ！第１４回ＵＥＣ杯コンピューター囲碁大会＜練習編＞](https://qiita.com/muzudho1/items/cea62be01f7418bbf150)  
+
+本編  
+
 📖 [Step [O1o0] 導入](https://qiita.com/muzudho1/items/3a78087f812bab4a511f)  
 📖 [Step [O11o___100o0] カーネル作成 ～ Step [O11o__10o_1o0] 思考エンジン設定ファイル](https://qiita.com/muzudho1/items/6c0b16d3b87ac598fe86)  
 📖 [Step [O11o__10o0] ロガー設定 ～ Step [O11o__10o3o_2o0] welcome プログラム](https://qiita.com/muzudho1/items/26af2c9f5dcc16175acd)  
