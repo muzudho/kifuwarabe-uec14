@@ -101,6 +101,7 @@ go work use .
 
 ```shell
 go work use kernel
+go work use debugger
 ```
 
 
