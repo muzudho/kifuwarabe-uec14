@@ -144,3 +144,16 @@ Input:
 ```shell
 go run .
 ```
+
+
+## 実行ファイルの作成
+
+Input:
+
+```shell
+go build
+```
+
+これで以下の１つの実行ファイルが作成されます：  
+
+📄 `kifuwarabe-uec14.exe`  
