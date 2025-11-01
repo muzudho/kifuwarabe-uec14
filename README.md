@@ -24,9 +24,10 @@ go run .
 📖 [GO](https://go.dev/)  
 
 Go 言語のインストール先は `C:\Program Files\Go\` にした。  
+インストール後、PCの再起動をしておいた方が確実かと思う。  
 
 
-(2) Visual Studio Code の Extensions から、 `Go` （Go Team at Google）をインストールしておく。  
+(2) Visual Studio Code （以下、VSCode と呼称）の Extensions から、 `Go` （Go Team at Google）をインストールしておく。  
 
 
 ## ソースコードのデプロイ先
@@ -51,3 +52,73 @@ Go ではユーザー・ディレクトリーの下に `go/src` というフォ�
 つまり、📁 `C:\Users\muzud\go\src\github.com\muzudho\kifuwarabe-uec14` というフォルダーを作った。  
 
 この中にソースコードを置くことにする。  
+
+
+## 動作確認
+
+VSCode のターミナルに以下のコマンドを打鍵：  
+
+PowerShell ではなく、Command Prompt を使う。  
+
+Input:  
+
+```shell
+go version
+```
+
+Output:  
+
+```
+go version go1.25.3 windows/amd64
+```
+
+
+## Go のワークスペース作成
+
+Go 言語の開発環境は、ワークスペースという名前で呼ぶそう。（C#言語ではソリューションと呼ぶもの）  
+
+📄 `go.work` ファイルが既存でなければ、work コマンドを使って、ワークスペースを作る。  
+
+```shell
+go work init
+```
+
+`go.work` というファイルが作られる。  
+
+`.gitignore` ファイルを作成する。  
+
+📄 `.gitignore`:  
+
+```
+go.work
+```
+
+
+## Go のモジュール作成
+
+📄 `go.mod` ファイルが既存でなければ、以下のコマンドを打鍵：  
+
+```shell
+go mod init github.com/muzudho/kifuwarabe-uec14
+```
+
+
+## 必要なパッケージのダウンロード
+
+以下のコマンドを打鍵：  
+
+```shell
+go mod tidy
+```
+
+📄 `go.sum` というファイルが更新される。パッケージのバージョンなども記載されている。  
+
+
+## ハローワールド
+
+Go言語ではフォルダーを、ファイルを小分けにするただの入れ物として使うには向いていない。  
+大量のファイルをトップレベルに置いておくことも気にしないことにする。  
+
+とりあえず、トップレベルのフォルダーに 📄 `main.go` ファイルを置いておく。  
+その中には `main` 関数がある。  
+これを Go言語のプログラムのエントリー・ポイントとする。  
