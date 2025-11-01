@@ -56,13 +56,14 @@ func main() {
 	// この上に初期設定を追加していく
 	// ---------------------------
 
-	if name == "hello" { // [O9o0]
+	switch name { // [O9o0]
+	case "hello":
 		fmt.Println("Hello, World!")
 
 		// この下に分岐を挟んでいく
 		// ---------------------
 
-	} else if name == "welcome" { // [O11o__10o0]
+	case "welcome": // [O11o__10o0]
 		logg.C.Infof("Welcome! name:'%s' weight:%.1f x:%d", "nihon taro", 92.6, 3)
 		logg.J.Infow("Welcome!",
 			"name", "nihon taro", "weight", 92.6, "x", 3)
@@ -70,8 +71,7 @@ func main() {
 		// この上に分岐を挟んでいく
 		// ---------------------
 
-	} else {
-
+	default:
 		// fmt.Println("go run . {programName}")
 
 		// [O12o__11o_4o0] 棋譜の初期化に利用
